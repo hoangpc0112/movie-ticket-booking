@@ -46,15 +46,20 @@
 </nav>
 <!---->
 
-<h1>NOW_SHOWING</h1>
+<br>
+<h1 class="text-center">Now Showing</h1>
+<br>
 
 <div class="container">
   <div class="row">
     <div th:each="movie : ${movieList}" class="col-md-4 movie-card">
-      <a th:href="@{/test/{id}(id=${movie.id})}" style="text-decoration: none">
-        <img th:src="${movie.posterUrl}" alt="Movie Poster" class="img-fluid">
-        <h2 th:text="${movie.title}" class="text-center"></h2>
-      </a>
+      <form th:action="@{/details}" method="get" style="text-decoration: none">
+        <input type="hidden" name="title" th:value="${movie.title}">
+        <button type="submit" style="border: none; background: none; padding: 0;">
+          <img th:src="${movie.posterUrl}" alt="Movie Poster" class="img-fluid">
+          <h2 th:text="${movie.title}" class="text-center"></h2>
+        </button>
+      </form>
     </div>
   </div>
 </div>

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
 
 @Controller
 public class TheaterController {
@@ -29,18 +32,17 @@ public class TheaterController {
         return "coming-soon";
     }
 
-    @GetMapping("/test/{id}")
-    public String test(@PathVariable("id") long id, Model model) {
-        Movie currentMovie = movieRepository.findById(id);
-        model.addAttribute("movie", currentMovie);
-        return "test";
+    @GetMapping("/details")
+    public String test(@RequestParam("title") String title, Model model) {
+        model.addAttribute("movie", movieRepository.findByTitle(title));
+        return "details";
     }
 
-    @GetMapping("/booking/{id}")
-    public String booking(@PathVariable("id") long id, Model model) {
-        System.out.println(id);
-        Movie currentMovie = movieRepository.findById(id);
-        model.addAttribute("movie", currentMovie);
+    @GetMapping("/booking")
+    public String booking(@RequestParam("title") String title, Model model) {
+        model.addAttribute("movie", movieRepository.findByTitle(title));
+        model.addAttribute("localDate", LocalDate.now());
+        model.addAttribute("localTime", "09:00");
         return "booking";
     }
 }

@@ -17,8 +17,15 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String posterUrl;
+
+    @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String description;
+
+    @Column(nullable = false)
     private String releaseDate;
 }
