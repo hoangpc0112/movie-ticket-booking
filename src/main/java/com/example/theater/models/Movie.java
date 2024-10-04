@@ -1,31 +1,24 @@
 package com.example.theater.models;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+
+@Entity
+@Table(name = "movie")
 public class Movie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String title;
     private String posterUrl;
     private String description;
     private String releaseDate;
-
-    public Movie(String title, String posterUrl, String description, String releaseDate) {
-        this.title = title;
-        this.posterUrl = posterUrl;
-        this.description = description;
-        this.releaseDate = releaseDate;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getPosterUrl() {
-        return posterUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
 }

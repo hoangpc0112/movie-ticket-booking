@@ -22,6 +22,7 @@ public class SecurityConfig {
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/now-showing").permitAll()
                         .requestMatchers("/coming-soon").permitAll()
+                        .requestMatchers("/test/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
