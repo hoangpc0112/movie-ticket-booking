@@ -15,7 +15,6 @@
           background: rgb(71, 165, 209);
           height: 70px;
           width: 75%;
-          margin: 15px 0;
           transform: rotateX(-45deg);
           box-shadow: 0 3px 10px rgba(19, 120, 145, 0.7);
         }
@@ -25,18 +24,45 @@
             width: 100%;
         }
         .checkbox-container label {
-            width: calc(100% / 27);
+            width: calc(100% / 26);
             text-align: center;
-            margin: 5px 5px 5px 5px;
+            margin: 0px 5px 5px 5px;
         }
         .block1 {
-            margin-bottom: 20px;
+            margin-left: 15px;
+            margin-bottom: 40px;
+        }
+        .block2 {
+            margin-left: 15px;
         }
         input [type="checkbox"] {
             display:none;
         }
         input:checked + label {
             background-color: red;
+        }
+        .btn1 {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 15px;
+            margin: 20px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+
+        .btn1:hover {
+            background-color: burlywood;
+            color: black;
+        }
+
+        .btn-success:hover {
+            background-color: yellow;
+            color: black;
         }
     </style>
 </head>
@@ -84,7 +110,7 @@
     <br>
     <div class="date_form text-center">
         <form th:action="@{/select}" method="post" id="form">
-            <input type="hidden" name="title" th:value="${movie.title}">
+        <input type="hidden" name="title" th:value="${movie.title}">
             <label for="timeSelect"></label><select name="localTime" id="timeSelect" onchange="this.form.submit()">
                 <option th:value="${localTime}" th:text="${'=> '+ localTime}"></option>
                 <option value="09:00">09:00</option>
@@ -109,11 +135,10 @@
     </div>
 
     <div class="container mt-5">
-        <form th:action="@{/book-seat}" method="post">
+        <form id="seatForm" th:action="@{/book-seat}" method="post" onsubmit="return validateForm()">
             <div class="checkbox-container">
                 <div class="block1">
                     <th:block th:each="i : ${#numbers.sequence(1, 60)}">
-
                             <input type="checkbox"
                                    name="selectedSeats"
                                    hidden="hidden"
@@ -122,7 +147,9 @@
                                    th:checked="${bookedSeats.contains(i)}"
                                    th:disabled="${bookedSeats.contains(i)}"
                             >
-                        <label class="btn btn-success" th:for="${i}" th:text="${i}"></label>
+                        <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 20}" th:text="'A' + ${(i - 1) % 20 + 1}"></label>
+                        <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 40 && i > 20}" th:text="'B' + ${(i - 1) % 20 + 1}"></label>
+                        <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 60 && i > 40}" th:text="'C' + ${(i - 1) % 20 + 1}"></label>
                     </th:block>
                 </div>
                 <div class="block2">
@@ -135,11 +162,15 @@
                                th:checked="${bookedSeats.contains(i)}"
                                th:disabled="${bookedSeats.contains(i)}"
                         >
-                        <label class="btn btn-success" th:for="${i}" th:text="${i}"></label>
+                        <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 80 && i > 60}" th:text="'D' + ${(i - 1) % 20 + 1}"></label>
+                        <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 100 && i > 80}" th:text="'E' + ${(i - 1) % 20 + 1}"></label>
+                        <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 120 && i > 100}" th:text="'F' + ${(i - 1) % 20 + 1}"></label>
                     </th:block>
                 </div>
             </div>
-            <button type="submit">Book now</button>
+            <div class="text-center">
+                <button type="submit" class="btn1">Book now</button>
+            </div>
         </form>
     </div>
 
@@ -148,5 +179,4 @@
         crossorigin="anonymous">
     </script>
 </body>
-
 </html>

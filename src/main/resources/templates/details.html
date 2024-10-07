@@ -18,6 +18,49 @@
             word-break: break-all; /* Ensures words break at any point */
             hyphens: auto; /* Adds hyphens where appropriate */
         }
+        .container {
+            margin-top: 20px;
+        }
+
+        .movie-details {
+            margin-bottom: 20px;
+            /*border: 1px solid #ddd;*/
+            /*border-radius: 5px;*/
+            /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+            padding-top: 20px;
+        }
+
+        .movie-poster {
+            border-radius: 5px;
+            width: 100%;
+            height: auto;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-style: italic;
+            color: #555;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
     </style>
 </head>
 <body>
@@ -53,21 +96,17 @@
     </div>
 </nav>
 <!---->
-
-<h1>NOW_SHOWING</h1>
-
 <div class="container">
     <div class="row movie-details">
         <div class="col-md-4">
             <img th:src="${movie.posterUrl}" alt="Movie Poster" class="movie-poster" width="360px" height="360px">
         </div>
         <div class="col-md-8 d-flex flex-column">
-            <h1 th:text="${movie.title}"></h1>
-            <p><strong>Release Date: </strong><span th:text="${movie.releaseDate}"></span></p>
-            <p>
-                <strong>Description:</strong>
-                <span class="description" th:text="${movie.description}"></span>
-            </p>
+            <h1><strong>[[${movie.title}]]</strong></h1>
+            <h2><strong>Release date: </strong>[[${movie.releaseDate}]]</h2>
+            <h2>
+                <strong>Description: </strong>[[${movie.description}]]
+            </h2>
             <div class="mt-auto">
                 <form action="/booking" method="get">
                     <input type="hidden" name="title" th:value="${movie.title}">
@@ -77,8 +116,6 @@
         </div>
     </div>
 </div>
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
