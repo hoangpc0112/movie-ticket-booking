@@ -50,13 +50,11 @@ public class AccountController {
             user.setPassword(bCryptEncoder.encode(registerDTO.getPassword()));
 
             userRepo.save(user);
-            System.out.println("User saved successfully: " + user.getUsername());
 
             model.addAttribute("registerDTO", new RegisterDTO());
             model.addAttribute("success", true);
         } catch (Exception e) {
             bindingResult.addError(new FieldError("registerDTO", "username", e.getMessage()));
-            System.err.println("Error saving user: " + e.getMessage());
         }
 
         return "register";

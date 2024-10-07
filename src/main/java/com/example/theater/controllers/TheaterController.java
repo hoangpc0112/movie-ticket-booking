@@ -37,12 +37,4 @@ public class TheaterController {
         model.addAttribute("movie", movieRepository.findByTitle(title));
         return "details";
     }
-
-    @GetMapping("/booking")
-    public String booking(@RequestParam("title") String title, Model model) {
-        model.addAttribute("movie", movieRepository.findByTitle(title));
-        model.addAttribute("localDate", LocalDate.now());
-        model.addAttribute("localTime", "09:00");
-        return "booking";
-    }
 }
