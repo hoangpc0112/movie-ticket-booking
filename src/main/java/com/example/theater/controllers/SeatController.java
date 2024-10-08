@@ -76,7 +76,6 @@ public class SeatController {
 
     @PostMapping("/book-seat")
     public String bookSeat(@RequestParam(value = "selectedSeats", required = false) List<Integer> selectedSeats,@RequestParam("title") String title, Model model) throws UnsupportedEncodingException {
-        if(selectedSeats != null) {
             for(int selectedSeat : selectedSeats) {
                 if(bookedSeatRepo.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, time, date)) { // kiểm tra có người nhanh tay hơn
                     return "redirect:/booking?title=" + URLEncoder.encode(title, "UTF-8");
@@ -88,10 +87,6 @@ public class SeatController {
             bookedSeats.clear();
             bookedSeats.addAll(selectedSeats);
             model.addAttribute("allSelectedSeats", selectedSeats);
-        }
-        else{
-            return "redirect:/booking?title=" + URLEncoder.encode(title, "UTF-8"); // chưa chọn ghế nào
-        }
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("bookedSeats", bookedSeats);
         return "bill";
