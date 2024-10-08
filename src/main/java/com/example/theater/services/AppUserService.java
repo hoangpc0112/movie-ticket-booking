@@ -18,10 +18,8 @@ public class AppUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser appUser = appUserRepo.findByUsername(username);
 
-        if(appUser != null) {
-            return User.withUsername(appUser.getUsername())
-                    .password(appUser.getPassword())
-                    .build();
+        if (appUser != null) {
+            return User.withUsername(appUser.getUsername()).password(appUser.getPassword()).build();
         }
 
         return null;

@@ -1,13 +1,11 @@
 package com.example.theater.controllers;
 
 import com.example.theater.models.AppUser;
-import com.example.theater.models.BookedSeat;
 import com.example.theater.models.RegisterDTO;
 import com.example.theater.repositories.AppUserRepo;
 import com.example.theater.repositories.BookedSeatRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,9 +15,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.security.Security;
-import java.util.List;
 
 @Controller
 public class AccountController {
@@ -40,12 +35,12 @@ public class AccountController {
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("registerDTO") RegisterDTO registerDTO, BindingResult bindingResult, Model model) {
         if (!registerDTO.getPassword().equals(registerDTO.getConfirmPassword())) {
-            bindingResult.addError(new FieldError("registerDTO", "confirmPassword", "Password and Confirm password do not match"));
+            bindingResult.addError(new FieldError("registerDTO", "confirmPassword", "Mật khẩu và mật khẩu xác nhận lại không giống nhau."));
         }
 
         AppUser appUser = userRepo.findByUsername(registerDTO.getUsername());
         if (appUser != null) {
-            bindingResult.addError(new FieldError("registerDTO", "username", "Username is already in use"));
+            bindingResult.addError(new FieldError("registerDTO", "username", "Username đã có người sử dụng"));
         }
 
         if (bindingResult.hasErrors()) {
@@ -63,7 +58,8 @@ public class AccountController {
 
             model.addAttribute("registerDTO", new RegisterDTO());
             model.addAttribute("success", true);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             bindingResult.addError(new FieldError("registerDTO", "username", e.getMessage()));
         }
 

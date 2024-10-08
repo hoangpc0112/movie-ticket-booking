@@ -28,4 +28,28 @@ public class Movie {
 
     @Column(nullable = false)
     private String releaseDate;
+
+    @Column(nullable = false)
+    private boolean nowShowing;
+
+    @Column(nullable = false)
+    private String trailerUrl;
+
+    @Column(nullable = false)
+    private String genre;
+
+    @Column(nullable = false)
+    private String director;
+
+    @Column(nullable = false)
+    private String actors;
+
+    @Column(nullable = false)
+    private int duration;
+
+    @Column(nullable = false)
+    private String language;
+
+    @Column(nullable = false)
+    private String rated;
 }
