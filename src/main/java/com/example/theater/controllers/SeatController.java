@@ -5,12 +5,16 @@ import com.example.theater.repositories.AppUserRepo;
 import com.example.theater.repositories.BookedSeatRepo;
 import com.example.theater.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,20 +75,24 @@ public class SeatController {
     }
 
     @PostMapping("/book-seat")
-    public String bookSeat(@RequestParam(value = "selectedSeats", required = false) List<Integer> selectedSeats, Model model) {
+    public String bookSeat(@RequestParam(value = "selectedSeats", required = false) List<Integer> selectedSeats,@RequestParam("title") String title, Model model) throws UnsupportedEncodingException {
         if(selectedSeats != null) {
-            bookedSeats.addAll(selectedSeats);
             for(int selectedSeat : selectedSeats) {
+                if(bookedSeatRepo.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, time, date)) { // kiểm tra có người nhanh tay hơn
+                    return "redirect:/booking?title=" + URLEncoder.encode(title, "UTF-8");
+                }
                 // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
-                BookedSeat bookedSeat = new BookedSeat(movieTitle, time, date, selectedSeat);
+                BookedSeat bookedSeat = new BookedSeat(movieTitle, time, date, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName());
                 bookedSeatRepo.save(bookedSeat);
             }
+            bookedSeats.clear();
+            bookedSeats.addAll(selectedSeats);
             model.addAttribute("allSelectedSeats", selectedSeats);
         }
-        else {
-            model.addAttribute("allSelectedSeats", new ArrayList<>());
+        else{
+            return "redirect:/booking?title=" + URLEncoder.encode(title, "UTF-8"); // chưa chọn ghế nào
         }
-        model.addAttribute("movie", movieRepository.findByTitle(movieTitle));
+        model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("bookedSeats", bookedSeats);
         return "bill";
     }

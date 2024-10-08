@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -23,13 +24,13 @@ public class SecurityConfig {
                         .requestMatchers("/now-showing").permitAll()
                         .requestMatchers("/coming-soon").permitAll()
                         .requestMatchers("/details/**").permitAll()
-                        .requestMatchers("/test").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .failureUrl("/login?error=true")
-                        .defaultSuccessUrl("/", true)
+//                        .defaultSuccessUrl("/", true)
+                                .successHandler(savedRequestAwareAuthenticationSuccessHandler())
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -38,6 +39,11 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                 )
                 .build();
+    }
+
+    @Bean
+    public SavedRequestAwareAuthenticationSuccessHandler savedRequestAwareAuthenticationSuccessHandler() {
+        return new SavedRequestAwareAuthenticationSuccessHandler();
     }
 
     @Bean

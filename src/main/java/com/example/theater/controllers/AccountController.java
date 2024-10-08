@@ -1,10 +1,14 @@
 package com.example.theater.controllers;
 
 import com.example.theater.models.AppUser;
+import com.example.theater.models.BookedSeat;
 import com.example.theater.models.RegisterDTO;
 import com.example.theater.repositories.AppUserRepo;
+import com.example.theater.repositories.BookedSeatRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +18,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Security;
+import java.util.List;
+
 @Controller
 public class AccountController {
 
     @Autowired
     private AppUserRepo userRepo;
+
+    @Autowired
+    private BookedSeatRepo bookedSeatRepo;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -66,7 +76,10 @@ public class AccountController {
     }
 
     @GetMapping("/profile")
-    public String profile() {
+    public String profile(Model model) {
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("orderHistory", bookedSeatRepo.findByUser(currentUser));
+        model.addAttribute("user", userRepo.findByUsername(currentUser));
         return "profile";
     }
 }

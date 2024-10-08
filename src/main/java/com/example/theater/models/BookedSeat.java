@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,10 +29,14 @@ public class BookedSeat {
     @Column(nullable = false)
     private int seatNo;
 
-    public BookedSeat(String movieTitle, String time, String date, int seatNo) {
+    @Column(nullable = false)
+    private String user;
+
+    public BookedSeat(String movieTitle, String time, String date, int seatNo, String user) {
         this.movieTitle = movieTitle;
         this.time = time;
         this.date = date;
         this.seatNo = seatNo;
+        this.user = user;
     }
 }
