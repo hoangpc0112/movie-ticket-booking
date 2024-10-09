@@ -73,12 +73,6 @@
             align-items: center;
         }
 
-        .footer-links,
-        .footer-social,
-        .footer-contact {
-            margin: 10px 0;
-        }
-
         .footer-links a,
         .footer-social a {
             color: #fff;
@@ -97,6 +91,19 @@
 
         .footer-copy {
             margin-top: 20px;
+        }
+
+        .btn-outline-success {
+            color: #fff;
+            background-color: #28a745;
+            border-color: #28a745;
+            margin-right: 50px;
+        }
+
+        .btn-outline-success:hover {
+            color: #fff;
+            background-color: #218838;
+            border-color: #1e7e34;
         }
     </style>
 </head>
@@ -121,6 +128,12 @@
                         <a class="nav-link text-white" href="/coming-soon">Phim sắp chiếu</a>
                     </li>
                 </ul>
+
+                <form class="d-flex" role="search" th:action="@{/search}" method="get">
+                    <input name="keyword" class="form-control me-2" type="search" placeholder="Search"
+                        aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
 
                 <div sec:authorize="isAuthenticated()" class="d-flex align-items-center">
                     <a class="nav-link text-white me-2" href="/profile">Hồ sơ</a>
@@ -164,9 +177,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <br>
 

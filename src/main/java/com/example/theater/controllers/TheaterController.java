@@ -25,6 +25,14 @@ public class TheaterController {
         return "coming-soon";
     }
 
+    @GetMapping("/search")
+    public String search(@RequestParam("keyword") String keyword, Model model) {
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing(keyword, true));
+        model.addAttribute("comingSoonMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing(keyword, false));
+        return "search";
+    }
+
     @GetMapping("/details")
     public String test(@RequestParam("title") String title, Model model) {
         model.addAttribute("movie", movieRepository.findByTitle(title));

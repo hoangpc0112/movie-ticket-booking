@@ -88,7 +88,7 @@ public class SeatController {
             }
         }
         errorReport = "Ghế ";
-        if(unavailableSeats.size() > 0) {
+        if (!unavailableSeats.isEmpty()) {
             for (int unavailableSeat : unavailableSeats) {
                 if (unavailableSeat <= 20) {
                     errorReport += "A";
