@@ -158,36 +158,57 @@
         <h2>Tổng tiền: <span th:text="${allSelectedSeats.size() * 50}"></span>.000 VNĐ</h2>
         <table class="booking-table">
             <thead>
-                <tr>
-                    <th class="booking-header">Hàng</th>
-                    <th class="booking-header">Số thứ tự</th>
-                </tr>
+            <tr>
+                <th class="booking-header">Tên phim</th>
+                <th class="booking-header">Hàng</th>
+                <th class="booking-header">Số thứ tự</th>
+                <th class="booking-header">Giờ chiếu</th>
+                <th class="booking-header">Ngày chiếu</th>
+            </tr>
             </thead>
             <tbody>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 20}">
-                    <td class="booking-cell">A</td>
-                    <td class="booking-cell" th:text="'A' + ${(seat - 1) % 20 + 1}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 40 && seat > 20}">
-                    <td class="booking-cell">B</td>
-                    <td class="booking-cell" th:text="'B' + ${(seat - 1) % 20 + 1}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 60 && seat > 40}">
-                    <td class="booking-cell">C</td>
-                    <td class="booking-cell" th:text="'C' + ${(seat - 1) % 20 + 1}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 80 && seat > 60}">
-                    <td class="booking-cell">D</td>
-                    <td class="booking-cell" th:text="'D' + ${(seat - 1) % 20 + 1}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 100 && seat > 80}">
-                    <td class="booking-cell">E</td>
-                    <td class="booking-cell" th:text="'E' + ${(seat - 1) % 20 + 1}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 120 && seat > 100}">
-                    <td class="booking-cell">F</td>
-                    <td class="booking-cell" th:text="'F' + ${(seat - 1) % 20 + 1}"></td>
-                </tr>
+            <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 20}">
+                <td class="booking-cell" th:text="${movie.title}"></td>
+                <td class="booking-cell">A</td>
+                <td class="booking-cell" th:text="'A' + ${(seat - 1) % 20 + 1}"></td>
+                <td class="booking-cell" th:text="${showTime}"></td>
+                <td class="booking-cell" th:text="${showDate}"></td>
+            </tr>
+            <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 40 && seat > 20}">
+                <td class="booking-cell" th:text="${movie.title}"></td>
+                <td class="booking-cell">B</td>
+                <td class="booking-cell" th:text="'B' + ${(seat - 1) % 20 + 1}"></td>
+                <td class="booking-cell" th:text="${showTime}"></td>
+                <td class="booking-cell" th:text="${showDate}"></td>
+            </tr>
+            <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 60 && seat > 40}">
+                <td class="booking-cell" th:text="${movie.title}"></td>
+                <td class="booking-cell">C</td>
+                <td class="booking-cell" th:text="'C' + ${(seat - 1) % 20 + 1}"></td>
+                <td class="booking-cell" th:text="${showTime}"></td>
+                <td class="booking-cell" th:text="${showDate}"></td>
+            </tr>
+            <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 80 && seat > 60}">
+                <td class="booking-cell" th:text="${movie.title}"></td>
+                <td class="booking-cell">D</td>
+                <td class="booking-cell" th:text="'D' + ${(seat - 1) % 20 + 1}"></td>
+                <td class="booking-cell" th:text="${showTime}"></td>
+                <td class="booking-cell" th:text="${showDate}"></td>
+            </tr>
+            <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 100 && seat > 80}">
+                <td class="booking-cell" th:text="${movie.title}"></td>
+                <td class="booking-cell">E</td>
+                <td class="booking-cell" th:text="'E' + ${(seat - 1) % 20 + 1}"></td>
+                <td class="booking-cell" th:text="${showTime}"></td>
+                <td class="booking-cell" th:text="${showDate}"></td>
+            </tr>
+            <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 120 && seat > 100}">
+                <td class="booking-cell" th:text="${movie.title}"></td>
+                <td class="booking-cell">F</td>
+                <td class="booking-cell" th:text="'F' + ${(seat - 1) % 20 + 1}"></td>
+                <td class="booking-cell" th:text="${showTime}"></td>
+                <td class="booking-cell" th:text="${showDate}"></td>
+            </tr>
             </tbody>
         </table>
     </div>

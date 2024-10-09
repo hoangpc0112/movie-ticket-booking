@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -80,30 +81,40 @@ public class SeatController {
             errorReport = "Vui lòng chọn ghế.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
+        List<Integer> unavailableSeats = new ArrayList<>();
         for (int selectedSeat : selectedSeats) {
             if (bookedSeatRepo.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, time, date)) { // kiểm tra có người nhanh tay hơn
-                errorReport = "Ghế ";
-                if (selectedSeat <= 20) {
+                unavailableSeats.add(selectedSeat);
+            }
+        }
+        errorReport = "Ghế ";
+        if(unavailableSeats.size() > 0) {
+            for (int unavailableSeat : unavailableSeats) {
+                if (unavailableSeat <= 20) {
                     errorReport += "A";
                 }
-                else if (selectedSeat <= 40) {
+                else if (unavailableSeat <= 40) {
                     errorReport += "B";
                 }
-                else if (selectedSeat <= 60) {
+                else if (unavailableSeat <= 60) {
                     errorReport += "C";
                 }
-                else if (selectedSeat <= 80) {
+                else if (unavailableSeat <= 80) {
                     errorReport += "D";
                 }
-                else if (selectedSeat <= 100) {
+                else if (unavailableSeat <= 100) {
                     errorReport += "E";
                 }
                 else {
                     errorReport += "F";
                 }
-                errorReport += (selectedSeat % 20 == 0 ? 20 : selectedSeat % 20) + " đã có người nhanh tay hơn, vui lòng chọn ghế khác.";
-                return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+                errorReport += (unavailableSeat % 20 == 0 ? 20 : unavailableSeat % 20);
+                if (unavailableSeats.indexOf(unavailableSeat) != unavailableSeats.size() - 1) {
+                    errorReport += ", ";
+                }
             }
+            errorReport += " đã có người đặt trước, vui lòng chọn ghế khác.";
+            return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         for (int selectedSeat : selectedSeats) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
@@ -117,6 +128,8 @@ public class SeatController {
         model.addAttribute("allSelectedSeats", selectedSeats);
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("bookedSeats", bookedSeats);
+        model.addAttribute("showTime", time);
+        model.addAttribute("showDate", date);
         return "bill";
     }
 }
