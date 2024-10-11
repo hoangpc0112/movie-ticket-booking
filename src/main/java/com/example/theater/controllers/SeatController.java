@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,8 +33,9 @@ public class SeatController {
 
     // Thêm biến toàn cục để lưu trữ thông tin vé đã đặt
     private String movieTitle;
-    private String time;
-    private String date;
+    private String showTime;
+    private String showDate;
+    private String bookTime;
 
     // lưu lỗi
     private String errorReport = "";
@@ -41,16 +45,42 @@ public class SeatController {
     @GetMapping("/booking")
     public String booking(@RequestParam("title") String title, Model model) {
         movieTitle = title;
-        time = "09:00";
-        date = LocalDate.now().toString();
+//        time = "09:00";
+//        System.out.println(LocalTime.now());
+        if(LocalTime.now().isBefore(LocalTime.of(9, 0))) {
+            showTime = "09:00";
+            showDate = LocalDate.now().toString();
+        }
+        else if(LocalTime.now().isBefore(LocalTime.of(12, 0))) {
+            showTime = "12:00";
+            showDate = LocalDate.now().toString();
+        }
+        else if(LocalTime.now().isBefore(LocalTime.of(15, 0))) {
+            showTime = "15:00";
+            showDate = LocalDate.now().toString();
+        }
+        else if(LocalTime.now().isBefore(LocalTime.of(18, 0))) {
+            showTime = "18:00";
+            showDate = LocalDate.now().toString();
+        }
+        else if(LocalTime.now().isBefore(LocalTime.of(21, 0))) {
+            showTime = "21:00";
+            showDate = LocalDate.now().toString();
+        }
+        else {
+            showTime = "09:00";
+            showDate = LocalDate.now().plusDays(1).toString();
+//            System.out.println(date);
+        }
         model.addAttribute("movie", movieRepository.findByTitle(title));
-        model.addAttribute("localDate", LocalDate.now());
-        model.addAttribute("localTime", "09:00");
+        model.addAttribute("localDate", showDate);
+        model.addAttribute("localTime", showTime);
         model.addAttribute("errorReport", errorReport);
+        errorReport = "";
 
         // Truy vấn tất cả vé đã đặt của 1 bộ phim trong 1 ngày giờ cụ thể
         bookedSeats.clear();
-        bookedSeats.addAll(bookedSeatRepo.findAllSeatNoBy(title, "09:00", LocalDate.now().toString()));
+        bookedSeats.addAll(bookedSeatRepo.findAllSeatNoBy(title, showTime, showDate));
         model.addAttribute("bookedSeats", bookedSeats);
         return "booking";
     }
@@ -58,9 +88,10 @@ public class SeatController {
     @PostMapping("/select")
     public String index(@RequestParam("title") String title, @RequestParam("localTime") String localTime, @RequestParam("localDate") String localDate,
             Model model) {
+        errorReport = "";
         movieTitle = title;
-        time = localTime;
-        date = localDate;
+        showTime = localTime;
+        showDate = localDate;
         model.addAttribute("title", title);
         model.addAttribute("localTime", localTime);
         model.addAttribute("localDate", localDate);
@@ -77,13 +108,21 @@ public class SeatController {
     @PostMapping("/book-seat")
     public String bookSeat(@RequestParam(value = "selectedSeats", required = false) List<Integer> selectedSeats, @RequestParam("title") String title,
             Model model) {
+        if(LocalDate.now().isAfter(LocalDate.parse(showDate))) {
+            errorReport = "Ngày không hợp lệ.";
+            return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+        }
+        if(LocalTime.now().isAfter(LocalTime.parse(showTime))) {
+            errorReport = "Giờ không hợp lệ.";
+            return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+        }
         if (selectedSeats == null || selectedSeats.isEmpty()) {
             errorReport = "Vui lòng chọn ghế.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         List<Integer> unavailableSeats = new ArrayList<>();
         for (int selectedSeat : selectedSeats) {
-            if (bookedSeatRepo.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, time, date)) { // kiểm tra có người nhanh tay hơn
+            if (bookedSeatRepo.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) { // kiểm tra có người nhanh tay hơn
                 unavailableSeats.add(selectedSeat);
             }
         }
@@ -116,10 +155,11 @@ public class SeatController {
             errorReport += " đã có người đặt trước, vui lòng chọn ghế khác.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
+        bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString();
         for (int selectedSeat : selectedSeats) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
             BookedSeat bookedSeat =
-                    new BookedSeat(movieTitle, time, date, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName());
+                    new BookedSeat(movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
             bookedSeatRepo.save(bookedSeat);
         }
         errorReport = "";
@@ -128,8 +168,9 @@ public class SeatController {
         model.addAttribute("allSelectedSeats", selectedSeats);
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("bookedSeats", bookedSeats);
-        model.addAttribute("showTime", time);
-        model.addAttribute("showDate", date);
+        model.addAttribute("showTime", showTime);
+        model.addAttribute("showDate", showDate);
+        model.addAttribute("bookTime", bookTime);
         return "bill";
     }
 }

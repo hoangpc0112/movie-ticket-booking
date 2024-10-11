@@ -32,11 +32,15 @@ public class BookedSeat {
     @Column(nullable = false)
     private String user;
 
-    public BookedSeat(String movieTitle, String time, String date, int seatNo, String user) {
+    @Column(nullable = false)
+    private String bookTime;
+
+    public BookedSeat(String movieTitle, String time, String date, int seatNo, String user, String bookTime) {
         this.movieTitle = movieTitle;
         this.time = time;
         this.date = date;
         this.seatNo = seatNo;
         this.user = user;
+        this.bookTime = bookTime;
     }
 }

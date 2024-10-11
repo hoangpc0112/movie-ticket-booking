@@ -165,6 +165,7 @@
                     <th>Ghế</th>
                     <th>Giờ chiếu</th>
                     <th>Ngày chiếu</th>
+                    <th>Thời gian đặt</th>
                 </tr>
             </thead>
             <tbody>
@@ -183,6 +184,7 @@
                         th:text="'F' + ${(seat.seatNo - 1) % 20 + 1}"></td>
                     <td th:text="${seat.time}"></td>
                     <td th:text="${seat.date}"></td>
+                    <td th:text="${seat.bookTime}"></td>
                 </tr>
             </tbody>
         </table>
