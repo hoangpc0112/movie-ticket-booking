@@ -1,6 +1,6 @@
 package com.example.theater.services;
 
-import com.example.theater.models.AppUser;
+import com.example.theater.entities.AppUser;
 import com.example.theater.repositories.AppUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -21,7 +21,8 @@ public class AppUserService implements UserDetailsService {
         if (appUser != null) {
             return User.withUsername(appUser.getUsername()).password(appUser.getPassword()).build();
         }
-
-        return null;
+        else {
+            throw new UsernameNotFoundException(username);
+        }
     }
 }

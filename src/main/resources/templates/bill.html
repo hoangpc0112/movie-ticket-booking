@@ -104,6 +104,7 @@
 
         footer {
             min-height: 50px;
+            margin-top: auto;
         }
 
         .btn-outline-success {
@@ -128,6 +129,12 @@
 
         body {
             padding-top: 50px;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        html {
+            height: 100%;
         }
     </style>
 </head>
@@ -137,7 +144,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand text-white" href="/">OOP16</a>
+                <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px" height="33px"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -147,7 +154,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/now-showing">Phim đang chiếu</a>
-                        </li>
+                        </li>&nbsp;
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/coming-soon">Phim sắp chiếu</a>
                         </li>
@@ -183,6 +190,7 @@
     <div class="text-center" th:if="${allSelectedSeats != 0}">
         <h1>Đã đặt: <span th:text="${allSelectedSeats.size()}"></span> ghế.</h1>
         <h2>Tổng tiền: <span th:text="${allSelectedSeats.size() * 50}"></span>.000 VNĐ</h2>
+        <br>
         <table class="booking-table">
             <thead>
                 <tr>
@@ -240,7 +248,7 @@
         </table>
     </div>
     <br>
-    <img th:src="@{https://i.ibb.co/3YdC9mh/QR.jpg}" alt="QR" class="center-img">
+    <img th:src="@{qr.jpg}" alt="qr" class="center-img">
     <br>
     <div class="text-center button-container">
         <a th:href="@{/}"><button type="submit" class="btn btn-primary">Quay về trang chủ</button></a>

@@ -1,6 +1,6 @@
 package com.example.theater.repositories;
 
-import com.example.theater.models.AppUser;
+import com.example.theater.entities.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AppUserRepo extends JpaRepository<AppUser, Long> {

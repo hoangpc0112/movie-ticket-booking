@@ -1,7 +1,7 @@
 package com.example.theater.controllers;
 
-import com.example.theater.models.AppUser;
-import com.example.theater.models.RegisterDTO;
+import com.example.theater.entities.AppUser;
+import com.example.theater.DTOs.RegisterDTO;
 import com.example.theater.repositories.AppUserRepo;
 import com.example.theater.repositories.BookedSeatRepo;
 import jakarta.validation.Valid;

@@ -89,6 +89,7 @@
             color: #fff;
             padding: 20px 0;
             text-align: center;
+            margin-top: auto;
         }
 
         .footer-container {
@@ -139,6 +140,33 @@
 
         body {
             padding-top: 50px;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            align-items: center;
+            column-gap: 1.6rem;
+        }
+
+        .title::before, .title::after {
+            content: "";
+            height: 2px;
+            background-color: black;
+            display: block;
         }
     </style>
 </head>
@@ -149,7 +177,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand text-white" href="/">OOP16</a>
+                <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px" height="33px"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -159,7 +187,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/now-showing">Phim đang chiếu</a>
-                        </li>
+                        </li>&nbsp;
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/coming-soon">Phim sắp chiếu</a>
                         </li>
@@ -193,10 +221,10 @@
     <h1 class="text-center" style="color: green; font-size: 3em;">Tìm kiếm theo: [[${keyword}]]</h1>
 
     <div th:if="${!nowShowingMovieList.isEmpty()}">
-        <hr class="border border-secondary border-3 opacity-50">
-
         <br>
-        <h1 class="text-center">Phim đang chiếu</h1>
+        <div class="title-container">
+            <h1 class="title">Phim đang chiếu</h1>
+        </div>
         <br>
 
         <div class="container">
@@ -216,10 +244,10 @@
     </div>
 
     <div th:if="${!comingSoonMovieList.isEmpty()}">
-        <hr class="border border-secondary border-3 opacity-50">
-
         <br>
-        <h1 class="text-center">Phim sắp chiếu</h1>
+        <div class="title-container">
+            <h1 class="title">Phim sắp chiếu</h1>
+        </div>
         <br>
 
         <div class="container">

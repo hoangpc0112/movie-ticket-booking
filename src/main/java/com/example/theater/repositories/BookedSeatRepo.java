@@ -1,6 +1,6 @@
 package com.example.theater.repositories;
 
-import com.example.theater.models.BookedSeat;
+import com.example.theater.entities.BookedSeat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

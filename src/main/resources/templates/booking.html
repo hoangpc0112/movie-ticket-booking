@@ -58,6 +58,15 @@
             background-color: red;
         }
 
+        input:disabled+label {
+            background-color: grey;
+            cursor: not-allowed;
+        }
+
+        input:disabled+label:hover {
+            background-color: gray;
+        }
+
         .btn1 {
             background-color: #4CAF50;
             border: none;
@@ -78,7 +87,7 @@
         }
 
         .btn-success:hover {
-            background-color: yellow;
+            background-color: #ffa33f;
             color: black;
         }
 
@@ -87,6 +96,7 @@
             color: #fff;
             padding: 20px 0;
             text-align: center;
+            margin-top: auto;
         }
 
         .footer-container {
@@ -137,6 +147,12 @@
 
         body {
             padding-top: 50px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+        html {
+            height: 100%;
         }
     </style>
 </head>
@@ -147,7 +163,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand text-white" href="/">OOP16</a>
+                <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px" height="33px"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -157,7 +173,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/now-showing">Phim đang chiếu</a>
-                        </li>
+                        </li>&nbsp;
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/coming-soon">Phim sắp chiếu</a>
                         </li>
@@ -188,10 +204,11 @@
     <!---->
     <!--    <h1>BOOKING <span th:text="${movie.title}"></span></h1>-->
 
+    <div style="height: 6px"></div>
     <div class="alert alert-danger text-center" role="alert" th:if="${!errorReport.isEmpty()}" th:text="${errorReport}">
     </div>
-
     <br>
+
     <h1 class="text-center">Vui lòng chọn ngày và giờ:</h1>
     <br>
     <div class="date_form text-center">
@@ -226,13 +243,13 @@
     </div>
 
     <div class="container mt-5">
-        <form id="seatForm" th:action="@{/book-seat}" method="post">
+        <form id="seatForm" th:action="@{/bill}" method="post">
             <input type="hidden" name="title" th:value="${movie.title}">
             <div class="checkbox-container">
                 <div class="block1">
                     <th:block th:each="i : ${#numbers.sequence(1, 60)}">
                         <input type="checkbox" name="selectedSeats" hidden="hidden" th:value="${i}" th:id="${i}"
-                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}">
+                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}" class="input-btn">
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 20}"
                             th:text="'A' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 40 && i > 20}"
@@ -244,7 +261,7 @@
                 <div class="block2">
                     <th:block th:each="i : ${#numbers.sequence(61, 120)}">
                         <input type="checkbox" name="selectedSeats" hidden="hidden" th:value="${i}" th:id="${i}"
-                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}">
+                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}" class="input-btn">
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 80 && i > 60}"
                             th:text="'D' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 100 && i > 80}"

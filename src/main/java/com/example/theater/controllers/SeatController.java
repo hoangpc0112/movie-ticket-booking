@@ -1,6 +1,6 @@
 package com.example.theater.controllers;
 
-import com.example.theater.models.BookedSeat;
+import com.example.theater.entities.BookedSeat;
 import com.example.theater.repositories.BookedSeatRepo;
 import com.example.theater.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +44,9 @@ public class SeatController {
 
     @GetMapping("/booking")
     public String booking(@RequestParam("title") String title, Model model) {
+        if(!movieRepository.findByTitle(title).isNowShowing()) { // người dùng cố gắng truy cập vào phần đặt vé của phim sắp chiếu
+            return "redirect:/";
+        }
         movieTitle = title;
 //        time = "09:00";
 //        System.out.println(LocalTime.now());
@@ -92,6 +95,12 @@ public class SeatController {
         movieTitle = title;
         showTime = localTime;
         showDate = localDate;
+//        System.out.println(showTime + " " + showDate);
+        if(LocalDate.now().isAfter(LocalDate.parse(showDate)) || (LocalDate.now().toString().equals(showDate) && LocalTime.now().isAfter(LocalTime.parse(showTime)))) {
+            errorReport = "Xin lỗi, bạn đã chọn một thời gian chiếu đã qua. Vui lòng chọn một thời gian khác.";
+            return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+        }
+        errorReport = "";
         model.addAttribute("title", title);
         model.addAttribute("localTime", localTime);
         model.addAttribute("localDate", localDate);
@@ -105,21 +114,14 @@ public class SeatController {
         return "booking";
     }
 
-    @PostMapping("/book-seat")
+    @PostMapping("/bill")
     public String bookSeat(@RequestParam(value = "selectedSeats", required = false) List<Integer> selectedSeats, @RequestParam("title") String title,
             Model model) {
-        if(LocalDate.now().isAfter(LocalDate.parse(showDate))) {
-            errorReport = "Ngày không hợp lệ.";
-            return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
-        }
-        if(LocalTime.now().isAfter(LocalTime.parse(showTime))) {
-            errorReport = "Giờ không hợp lệ.";
-            return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
-        }
         if (selectedSeats == null || selectedSeats.isEmpty()) {
             errorReport = "Vui lòng chọn ghế.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
+        errorReport = "";
         List<Integer> unavailableSeats = new ArrayList<>();
         for (int selectedSeat : selectedSeats) {
             if (bookedSeatRepo.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) { // kiểm tra có người nhanh tay hơn
@@ -155,6 +157,7 @@ public class SeatController {
             errorReport += " đã có người đặt trước, vui lòng chọn ghế khác.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
+        errorReport = "";
         bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString();
         for (int selectedSeat : selectedSeats) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
@@ -162,7 +165,6 @@ public class SeatController {
                     new BookedSeat(movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
             bookedSeatRepo.save(bookedSeat);
         }
-        errorReport = "";
         bookedSeats.clear();
         bookedSeats.addAll(selectedSeats);
         model.addAttribute("allSelectedSeats", selectedSeats);
