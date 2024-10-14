@@ -42,10 +42,19 @@ public class SeatController {
 
     private final Set<Integer> bookedSeats = new TreeSet<>(); // test
 
+    @GetMapping("/details")
+    public String test(@RequestParam("title") String title, Model model) {
+        model.addAttribute("errorReport", errorReport);
+        model.addAttribute("movie", movieRepository.findByTitle(title));
+        errorReport = "";
+        return "details";
+    }
+
     @GetMapping("/booking")
     public String booking(@RequestParam("title") String title, Model model) {
         if(!movieRepository.findByTitle(title).isNowShowing()) { // người dùng cố gắng truy cập vào phần đặt vé của phim sắp chiếu
-            return "redirect:/";
+            errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
+            return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         movieTitle = title;
 //        time = "09:00";

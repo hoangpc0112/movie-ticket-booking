@@ -94,7 +94,7 @@
         footer {
             background-color: #333;
             color: #fff;
-            padding: 20px 0;
+            padding: 20px 0 0 0;
             text-align: center;
             margin-top: auto;
         }
@@ -215,7 +215,9 @@
         <form th:action="@{/select}" method="post" id="form">
             <input type="hidden" name="title" th:value="${movie.title}">
             <label for="timeSelect"></label><select name="localTime" id="timeSelect" onchange="this.form.submit()">
-                <option th:value="${localTime}" th:text="${'=> '+ localTime}"></option>
+                <option th:value="${localTime}">
+                    &#x2794; <span th:text="${localTime}"></span>
+                </option>
                 <option value="09:00">09:00</option>
                 <option value="12:00">12:00</option>
                 <option value="15:00">15:00</option>

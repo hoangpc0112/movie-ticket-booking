@@ -63,7 +63,7 @@
         footer {
             background-color: #333;
             color: #fff;
-            padding: 20px 0;
+            padding: 20px 0 0 0;
             text-align: center;
             margin-top: auto;
         }
@@ -172,6 +172,9 @@
     </header>
     <!---->
 
+    <div style="height: 6px"></div>
+    <div class="alert alert-danger text-center" role="alert" th:if="${!errorReport.isEmpty()}" th:text="${errorReport}"></div>
+
     <div class="container mt-5">
         <div class="row movie-details">
             <div class="col-md-4 text-center">
@@ -182,20 +185,21 @@
                         <input type="hidden" name="title" th:value="${movie.title}">
                         <button type="submit" class="btn btn-primary" th:if="${movie.nowShowing == true}" style="margin-right: 20px">Chọn ghế</button> <!-- Phim đang chiếu ms cho đặt -->
                     </form>
-                    <a th:href="@{${movie.trailerUrl}}" target="_blank" class="btn btn-secondary">Xem trailer</a>
+                    <a th:href="@{${movie.trailerUrl}}" target="_blank" th:if="${!movie.trailerUrl.isEmpty()}" class="btn btn-secondary">Xem trailer</a>
+                    <div th:if="${movie.trailerUrl.isEmpty()}" class="btn btn-secondary">Xem trailer<span th:if="${movie.trailerUrl.isEmpty()}"> (Đang cập nhật)</span></div>
                 </div>
             </div>
             <div class="col-md-8">
                 <h1 class="h2"><strong>[[${movie.title}]]</strong></h1>
-                <h2 class="h4"><strong>Khởi chiếu: </strong>[[${movie.releaseDate}]]</h2>
-                <h3 class="h5"><strong>Nội dung: </strong>[[${movie.description}]]</h3>
+                <h2 class="h4"><strong>Ngày khởi chiếu: </strong>[[${movie.releaseDate}]]<span th:if="${movie.releaseDate.isEmpty()}"> (Đang cập nhật)</span></h2>
+                <h3 class="h5"><strong>Nội dung: </strong>[[${movie.description}]]<span th:if="${movie.description.isEmpty()}"> (Đang cập nhật)</span></h3>
                 <hr class="my-4">
-                <h4 class="h5"><strong>Diễn viên: </strong>[[${movie.actors}]]</h4>
-                <h4 class="h5"><strong>Đạo diễn: </strong>[[${movie.director}]]</h4>
-                <h4 class="h5"><strong>Thể loại: </strong>[[${movie.genre}]]</h4>
-                <h4 class="h5"><strong>Ngôn ngữ: </strong>[[${movie.language}]]</h4>
-                <h4 class="h5"><strong>Đánh giá: </strong>[[${movie.rated}]]</h4>
-                <h4 class="h5"><strong>Thời lượng: </strong>[[${movie.duration}]] phút</h4>
+                <h4 class="h5"><strong>Diễn viên: </strong>[[${movie.actors}]]<span th:if="${movie.actors.isEmpty()}"> (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Đạo diễn: </strong>[[${movie.director}]]<span th:if="${movie.director.isEmpty()}"> (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Thể loại: </strong>[[${movie.genre}]]<span th:if="${movie.genre.isEmpty()}"> (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Ngôn ngữ: </strong>[[${movie.language}]]<span th:if="${movie.language.isEmpty()}"> (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Phân loại: </strong>[[${movie.rated}]]<span th:if="${movie.rated.isEmpty()}"> (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Thời lượng: </strong>[[${movie.duration}]] phút<span th:if="${movie.duration == 0}"> (Đang cập nhật)</span></h4>
             </div>
         </div>
     </div>

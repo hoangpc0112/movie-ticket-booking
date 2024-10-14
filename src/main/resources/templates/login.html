@@ -24,7 +24,7 @@
         footer {
             background-color: #333;
             color: #fff;
-            padding: 20px 0;
+            padding: 20px 0 0 0;
             text-align: center;
             margin-top: auto;
         }
@@ -134,12 +134,11 @@
     <!---->
 
     <!--Login Form-->
-    <section class="vh-100">
+    <section>
         <div class="container-fluid h-custom">
-            <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100" style="padding-right: 150px; padding-top: 100px;">
                 <div class="col-md-9 col-lg-6 col-xl-5 text-center">
-                    <img src="https://thumbs.dreamstime.com/b/theater-logo-icon-vector-117629601.jpg" class="img-fluid"
-                        alt="Login img">
+                    <img th:src="@{/register_and_login_bg.png}" class="img-fluid" alt="Login img" width="600px" height="600px">
                 </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                     <form th:action="@{/login}" method="post">
@@ -147,22 +146,22 @@
                             <h1>Đăng nhập</h1>
                             <br>
                         </div>
-                        <div th:if="${param.error}" class="alert alert-error">
+                        <div th:if="${param.error}" class="alert alert-error" style="padding-bottom: 0">
                             <p style="color: red">Tài khoản và mật khẩu không hợp lệ.</p>
                         </div>
-                        <div th:if="${param.logout}" class="alert alert-success">
-                            <p style="color: green">Đăng nhập thành công.</p>
-                        </div>
+<!--                        <div th:if="${param.logout}" class="alert alert-success">-->
+<!--                            <p style="color: green">Đăng nhập thành công.</p>-->
+<!--                        </div>-->
 
                         <!-- Username input -->
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="text" class="form-control form-control-lg" placeholder="Enter username"
+                            <input type="text" class="form-control form-control-lg" placeholder="Nhập tên người dùng"
                                 name="username" required />
                         </div>
 
                         <!-- Password input -->
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="password" class="form-control form-control-lg" placeholder="Enter password"
+                            <input type="password" class="form-control form-control-lg" placeholder="Nhập mật khẩu"
                                 name="password" required />
                         </div>
 
@@ -190,7 +189,6 @@
             </div>
         </div>
     </section>
-    <br>
 
     <footer>
         <div class="footer-container">

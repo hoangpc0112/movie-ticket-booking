@@ -32,10 +32,4 @@ public class TheaterController {
         model.addAttribute("comingSoonMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing(keyword, false));
         return "search";
     }
-
-    @GetMapping("/details")
-    public String test(@RequestParam("title") String title, Model model) {
-        model.addAttribute("movie", movieRepository.findByTitle(title));
-        return "details";
-    }
 }
