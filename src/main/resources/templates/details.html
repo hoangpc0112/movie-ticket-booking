@@ -74,6 +74,14 @@
             align-items: center;
         }
 
+        .footer-links,
+        .footer-social {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
         .footer-links a,
         .footer-social a {
             color: #fff;
@@ -98,7 +106,7 @@
             color: #fff;
             background-color: #28a745;
             border-color: #28a745;
-            margin-right: 50px;
+            /*margin-right: 50px;*/
         }
 
         .btn-outline-success:hover {
@@ -120,8 +128,35 @@
             display: flex;
             flex-direction: column;
         }
+
         html {
             height: 100%;
+        }
+
+        @media (max-width: 390px) {
+            footer {
+                font-size: 0.8em;
+            }
+
+            .movie-details {
+                padding-top: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            footer {
+                font-size: 0.9em;
+            }
+
+            .movie-details {
+                padding-top: 0;
+            }
+        }
+
+        @media (min-width: 993px) {
+            .btn-outline-success {
+                margin-right: 50px;
+            }
         }
     </style>
 </head>
@@ -132,7 +167,8 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px" height="33px"></a>
+                <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px"
+                        height="33px"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -142,7 +178,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/now-showing">Phim đang chiếu</a>
-                        </li>&nbsp;
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/coming-soon">Phim sắp chiếu</a>
                         </li>
@@ -173,33 +209,45 @@
     <!---->
 
     <div style="height: 6px"></div>
-    <div class="alert alert-danger text-center" role="alert" th:if="${!errorReport.isEmpty()}" th:text="${errorReport}"></div>
+    <div class="alert alert-danger text-center" role="alert" th:if="${!errorReport.isEmpty()}" th:text="${errorReport}">
+    </div>
 
     <div class="container mt-5">
         <div class="row movie-details">
             <div class="col-md-4 text-center">
                 <img th:src="${movie.posterUrl}" alt="Movie Poster" class="movie-poster img-fluid rounded" width="360px"
                     height="360px">
-                <div class="mt-3 d-flex justify-content-center">
+                <div class="mt-3 d-flex justify-content-center" style="margin-bottom: 20px">
                     <form action="/booking" method="get" class="mr-2">
                         <input type="hidden" name="title" th:value="${movie.title}">
-                        <button type="submit" class="btn btn-primary" th:if="${movie.nowShowing == true}" style="margin-right: 20px">Chọn ghế</button> <!-- Phim đang chiếu ms cho đặt -->
+                        <button type="submit" class="btn btn-primary" th:if="${movie.nowShowing == true}"
+                            style="margin-right: 20px">Chọn ghế</button> <!-- Phim đang chiếu ms cho đặt -->
                     </form>
-                    <a th:href="@{${movie.trailerUrl}}" target="_blank" th:if="${!movie.trailerUrl.isEmpty()}" class="btn btn-secondary">Xem trailer</a>
-                    <div th:if="${movie.trailerUrl.isEmpty()}" class="btn btn-secondary">Xem trailer<span th:if="${movie.trailerUrl.isEmpty()}"> (Đang cập nhật)</span></div>
+                    <a th:href="@{${movie.trailerUrl}}" target="_blank" th:if="${!movie.trailerUrl.isEmpty()}"
+                        class="btn btn-secondary">Xem trailer</a>
+                    <div th:if="${movie.trailerUrl.isEmpty()}" class="btn btn-secondary">Xem trailer<span
+                            th:if="${movie.trailerUrl.isEmpty()}"> (Đang cập nhật)</span></div>
                 </div>
             </div>
             <div class="col-md-8">
                 <h1 class="h2"><strong>[[${movie.title}]]</strong></h1>
-                <h2 class="h4"><strong>Ngày khởi chiếu: </strong>[[${movie.releaseDate}]]<span th:if="${movie.releaseDate.isEmpty()}"> (Đang cập nhật)</span></h2>
-                <h3 class="h5"><strong>Nội dung: </strong>[[${movie.description}]]<span th:if="${movie.description.isEmpty()}"> (Đang cập nhật)</span></h3>
+                <h2 class="h4"><strong>Ngày khởi chiếu: </strong>[[${movie.releaseDate}]]<span
+                        th:if="${movie.releaseDate.isEmpty()}"> (Đang cập nhật)</span></h2>
+                <h3 class="h5"><strong>Nội dung: </strong>[[${movie.description}]]<span
+                        th:if="${movie.description.isEmpty()}"> (Đang cập nhật)</span></h3>
                 <hr class="my-4">
-                <h4 class="h5"><strong>Diễn viên: </strong>[[${movie.actors}]]<span th:if="${movie.actors.isEmpty()}"> (Đang cập nhật)</span></h4>
-                <h4 class="h5"><strong>Đạo diễn: </strong>[[${movie.director}]]<span th:if="${movie.director.isEmpty()}"> (Đang cập nhật)</span></h4>
-                <h4 class="h5"><strong>Thể loại: </strong>[[${movie.genre}]]<span th:if="${movie.genre.isEmpty()}"> (Đang cập nhật)</span></h4>
-                <h4 class="h5"><strong>Ngôn ngữ: </strong>[[${movie.language}]]<span th:if="${movie.language.isEmpty()}"> (Đang cập nhật)</span></h4>
-                <h4 class="h5"><strong>Phân loại: </strong>[[${movie.rated}]]<span th:if="${movie.rated.isEmpty()}"> (Đang cập nhật)</span></h4>
-                <h4 class="h5"><strong>Thời lượng: </strong>[[${movie.duration}]] phút<span th:if="${movie.duration == 0}"> (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Diễn viên: </strong>[[${movie.actors}]]<span th:if="${movie.actors.isEmpty()}">
+                        (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Đạo diễn: </strong>[[${movie.director}]]<span
+                        th:if="${movie.director.isEmpty()}"> (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Thể loại: </strong>[[${movie.genre}]]<span th:if="${movie.genre.isEmpty()}">
+                        (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Ngôn ngữ: </strong>[[${movie.language}]]<span
+                        th:if="${movie.language.isEmpty()}"> (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Phân loại: </strong>[[${movie.rated}]]<span th:if="${movie.rated.isEmpty()}">
+                        (Đang cập nhật)</span></h4>
+                <h4 class="h5"><strong>Thời lượng: </strong>[[${movie.duration}]] phút<span
+                        th:if="${movie.duration == 0}"> (Đang cập nhật)</span></h4>
             </div>
         </div>
     </div>

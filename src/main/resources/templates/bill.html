@@ -22,7 +22,8 @@
         }
 
         .booking-table {
-            width: 50%;
+            width: 100%;
+            /* Change to 100% for full width on smaller screens */
             margin: auto;
             border-collapse: collapse;
         }
@@ -37,6 +38,37 @@
         .booking-table th {
             background-color: #f2f2f2;
         }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 768px) {
+
+            .booking-table th,
+            .booking-table td {
+                font-size: 0.9em;
+                /* Adjust font size for medium screens */
+                padding: 6px;
+                /* Reduce padding for medium screens */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .booking-table {
+                width: 100%;
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                /* Ensure table is scrollable horizontally */
+            }
+
+            .booking-table th,
+            .booking-table td {
+                font-size: 0.8em;
+                /* Further adjust font size for small screens */
+                padding: 4px;
+                /* Reduce padding for small screens */
+            }
+        }
+
 
         .text-center {
             text-align: center;
@@ -111,7 +143,7 @@
             color: #fff;
             background-color: #28a745;
             border-color: #28a745;
-            margin-right: 50px;
+            /*margin-right: 50px;*/
         }
 
         .btn-outline-success:hover {
@@ -133,8 +165,15 @@
             display: flex;
             flex-direction: column;
         }
+
         html {
             height: 100%;
+        }
+
+        @media (min-width: 993px) {
+            .btn-outline-success {
+                margin-right: 50px;
+            }
         }
     </style>
 </head>
@@ -144,7 +183,8 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px" height="33px"></a>
+                <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px"
+                        height="33px"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -191,94 +231,96 @@
         <h1>Đã đặt: <span th:text="${allSelectedSeats.size()}"></span> ghế.</h1>
         <h2>Tổng tiền: <span th:text="${allSelectedSeats.size() * 50}"></span>.000 VNĐ</h2>
         <br>
-        <table class="booking-table">
-            <thead>
-                <tr>
-                    <th class="booking-header">Tên phim</th>
-                    <th class="booking-header">Số thứ tự</th>
-                    <th class="booking-header">Giờ chiếu</th>
-                    <th class="booking-header">Ngày chiếu</th>
-                    <th class="booking-header">Thời gian đặt</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 20}">
-                    <td class="booking-cell" th:text="${movie.title}"></td>
-                    <td class="booking-cell" th:text="'A' + ${(seat - 1) % 20 + 1}"></td>
-                    <td class="booking-cell" th:text="${showTime}"></td>
-                    <td class="booking-cell" th:text="${showDate}"></td>
-                    <td class="booking-cell" th:text="${bookTime}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 40 && seat > 20}">
-                    <td class="booking-cell" th:text="${movie.title}"></td>
-                    <td class="booking-cell" th:text="'B' + ${(seat - 1) % 20 + 1}"></td>
-                    <td class="booking-cell" th:text="${showTime}"></td>
-                    <td class="booking-cell" th:text="${showDate}"></td>
-                    <td class="booking-cell" th:text="${bookTime}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 60 && seat > 40}">
-                    <td class="booking-cell" th:text="${movie.title}"></td>
-                    <td class="booking-cell" th:text="'C' + ${(seat - 1) % 20 + 1}"></td>
-                    <td class="booking-cell" th:text="${showTime}"></td>
-                    <td class="booking-cell" th:text="${showDate}"></td>
-                    <td class="booking-cell" th:text="${bookTime}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 80 && seat > 60}">
-                    <td class="booking-cell" th:text="${movie.title}"></td>
-                    <td class="booking-cell" th:text="'D' + ${(seat - 1) % 20 + 1}"></td>
-                    <td class="booking-cell" th:text="${showTime}"></td>
-                    <td class="booking-cell" th:text="${showDate}"></td>
-                    <td class="booking-cell" th:text="${bookTime}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 100 && seat > 80}">
-                    <td class="booking-cell" th:text="${movie.title}"></td>
-                    <td class="booking-cell" th:text="'E' + ${(seat - 1) % 20 + 1}"></td>
-                    <td class="booking-cell" th:text="${showTime}"></td>
-                    <td class="booking-cell" th:text="${showDate}"></td>
-                    <td class="booking-cell" th:text="${bookTime}"></td>
-                </tr>
-                <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 120 && seat > 100}">
-                    <td class="booking-cell" th:text="${movie.title}"></td>
-                    <td class="booking-cell" th:text="'F' + ${(seat - 1) % 20 + 1}"></td>
-                    <td class="booking-cell" th:text="${showTime}"></td>
-                    <td class="booking-cell" th:text="${showDate}"></td>
-                    <td class="booking-cell" th:text="${bookTime}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <br>
-    <img th:src="@{qr.jpg}" alt="qr" class="center-img">
-    <br>
-    <div class="text-center button-container">
-        <a th:href="@{/}"><button type="submit" class="btn btn-primary">Quay về trang chủ</button></a>
-    </div>
-    <br>
-    <br>
-    <footer contentEditable>
-        <div class="footer-container">
-            <div class="footer-links">
-                <a href="/">Home</a>
-                <a href="/about">Về chúng tôi</a>
-                <a href="/contact">Liên hệ</a>
-                <a href="/privacy">Chính sách bảo mật</a>
-            </div>
-            <div class="footer-social">
-                <a href="https://facebook.com" target="_blank">Facebook</a>
-                <a href="https://twitter.com" target="_blank">Twitter</a>
-                <a href="https://instagram.com" target="_blank">Instagram</a>
-            </div>
-            <div class="footer-copy">
-                <p>&copy; OOP16. All rights reserved.</p>
-            </div>
+        <div class="container">
+            <table class="booking-table">
+                <thead>
+                    <tr>
+                        <th class="booking-header">Tên phim</th>
+                        <th class="booking-header">Số thứ tự</th>
+                        <th class="booking-header">Giờ chiếu</th>
+                        <th class="booking-header">Ngày chiếu</th>
+                        <th class="booking-header">Thời gian đặt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 20}">
+                        <td class="booking-cell" th:text="${movie.title}"></td>
+                        <td class="booking-cell" th:text="'A' + ${(seat - 1) % 20 + 1}"></td>
+                        <td class="booking-cell" th:text="${showTime}"></td>
+                        <td class="booking-cell" th:text="${showDate}"></td>
+                        <td class="booking-cell" th:text="${bookTime}"></td>
+                    </tr>
+                    <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 40 && seat > 20}">
+                        <td class="booking-cell" th:text="${movie.title}"></td>
+                        <td class="booking-cell" th:text="'B' + ${(seat - 1) % 20 + 1}"></td>
+                        <td class="booking-cell" th:text="${showTime}"></td>
+                        <td class="booking-cell" th:text="${showDate}"></td>
+                        <td class="booking-cell" th:text="${bookTime}"></td>
+                    </tr>
+                    <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 60 && seat > 40}">
+                        <td class="booking-cell" th:text="${movie.title}"></td>
+                        <td class="booking-cell" th:text="'C' + ${(seat - 1) % 20 + 1}"></td>
+                        <td class="booking-cell" th:text="${showTime}"></td>
+                        <td class="booking-cell" th:text="${showDate}"></td>
+                        <td class="booking-cell" th:text="${bookTime}"></td>
+                    </tr>
+                    <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 80 && seat > 60}">
+                        <td class="booking-cell" th:text="${movie.title}"></td>
+                        <td class="booking-cell" th:text="'D' + ${(seat - 1) % 20 + 1}"></td>
+                        <td class="booking-cell" th:text="${showTime}"></td>
+                        <td class="booking-cell" th:text="${showDate}"></td>
+                        <td class="booking-cell" th:text="${bookTime}"></td>
+                    </tr>
+                    <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 100 && seat > 80}">
+                        <td class="booking-cell" th:text="${movie.title}"></td>
+                        <td class="booking-cell" th:text="'E' + ${(seat - 1) % 20 + 1}"></td>
+                        <td class="booking-cell" th:text="${showTime}"></td>
+                        <td class="booking-cell" th:text="${showDate}"></td>
+                        <td class="booking-cell" th:text="${bookTime}"></td>
+                    </tr>
+                    <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 120 && seat > 100}">
+                        <td class="booking-cell" th:text="${movie.title}"></td>
+                        <td class="booking-cell" th:text="'F' + {(seat - 1) % 20 + 1}"></td>
+                        <td class="booking-cell" th:text="${showTime}"></td>
+                        <td class="booking-cell" th:text="${showDate}"></td>
+                        <td class="booking-cell" th:text="${bookTime}"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    </footer>
-    <script>
-        window.addEventListener("scroll", function () {
-            var header = document.querySelector("header");
-            header.classList.toggle("sticky", window.scrollY > 0);
-        })
-    </script>
+
+        <br>
+        <img th:src="@{qr.jpg}" alt="qr" class="center-img">
+        <br>
+        <div class="text-center button-container">
+            <a th:href="@{/}"><button type="submit" class="btn btn-primary">Quay về trang chủ</button></a>
+        </div>
+        <br>
+        <br>
+        <footer contentEditable>
+            <div class="footer-container">
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/about">Về chúng tôi</a>
+                    <a href="/contact">Liên hệ</a>
+                    <a href="/privacy">Chính sách bảo mật</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://facebook.com" target="_blank">Facebook</a>
+                    <a href="https://twitter.com" target="_blank">Twitter</a>
+                    <a href="https://instagram.com" target="_blank">Instagram</a>
+                </div>
+                <div class="footer-copy">
+                    <p>&copy; OOP16. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+        <script>
+            window.addEventListener("scroll", function () {
+                var header = document.querySelector("header");
+                header.classList.toggle("sticky", window.scrollY > 0);
+            })
+        </script>
 </body>
 
 </html>

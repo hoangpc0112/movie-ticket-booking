@@ -38,7 +38,34 @@
         .checkbox-container label {
             width: calc(100% / 26);
             text-align: center;
-            margin: 0px 5px 5px 5px;
+            margin: 0 5px 5px 5px;
+            font-size: 1em;
+        }
+
+        @media (max-width: 576px) {
+            .checkbox-container label {
+                font-size: 0.9em;
+            }
+
+            footer {
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .checkbox-container label {
+                font-size: 0.8em;
+            }
+
+            footer {
+                font-size: 0.8em;
+            }
+        }
+
+        @media (min-width: 993px) {
+            .btn-outline-success {
+                margin-right: 50px;
+            }
         }
 
         .block1 {
@@ -105,6 +132,14 @@
             align-items: center;
         }
 
+        .footer-links,
+        .footer-social {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
         .footer-links a,
         .footer-social a {
             color: #fff;
@@ -129,7 +164,7 @@
             color: #fff;
             background-color: #28a745;
             border-color: #28a745;
-            margin-right: 50px;
+            /*margin-right: 50px;*/
         }
 
         .btn-outline-success:hover {
@@ -151,6 +186,7 @@
             flex-direction: column;
             min-height: 100%;
         }
+
         html {
             height: 100%;
         }
@@ -163,7 +199,8 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px" height="33px"></a>
+                <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px"
+                        height="33px"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -173,7 +210,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/now-showing">Phim đang chiếu</a>
-                        </li>&nbsp;
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/coming-soon">Phim sắp chiếu</a>
                         </li>
@@ -251,7 +288,8 @@
                 <div class="block1">
                     <th:block th:each="i : ${#numbers.sequence(1, 60)}">
                         <input type="checkbox" name="selectedSeats" hidden="hidden" th:value="${i}" th:id="${i}"
-                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}" class="input-btn">
+                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}"
+                            class="input-btn">
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 20}"
                             th:text="'A' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 40 && i > 20}"
@@ -263,7 +301,8 @@
                 <div class="block2">
                     <th:block th:each="i : ${#numbers.sequence(61, 120)}">
                         <input type="checkbox" name="selectedSeats" hidden="hidden" th:value="${i}" th:id="${i}"
-                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}" class="input-btn">
+                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}"
+                            class="input-btn">
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 80 && i > 60}"
                             th:text="'D' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 100 && i > 80}"
@@ -278,6 +317,7 @@
             </div>
         </form>
     </div>
+
     <br>
 
     <footer>
