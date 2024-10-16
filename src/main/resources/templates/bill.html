@@ -23,7 +23,6 @@
 
         .booking-table {
             width: 100%;
-            /* Change to 100% for full width on smaller screens */
             margin: auto;
             border-collapse: collapse;
         }
@@ -39,15 +38,12 @@
             background-color: #f2f2f2;
         }
 
-        /* Media Queries for Responsive Design */
         @media (max-width: 768px) {
 
             .booking-table th,
             .booking-table td {
                 font-size: 0.9em;
-                /* Adjust font size for medium screens */
                 padding: 6px;
-                /* Reduce padding for medium screens */
             }
         }
 
@@ -57,15 +53,12 @@
                 display: block;
                 overflow-x: auto;
                 white-space: nowrap;
-                /* Ensure table is scrollable horizontally */
             }
 
             .booking-table th,
             .booking-table td {
                 font-size: 0.8em;
-                /* Further adjust font size for small screens */
                 padding: 4px;
-                /* Reduce padding for small screens */
             }
         }
 
@@ -78,7 +71,6 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            /* Adjust the gap as needed */
         }
 
         .button-container form,
@@ -91,7 +83,6 @@
             margin-left: auto;
             margin-right: auto;
             width: 25%;
-            /* Adjust the width as needed */
         }
 
         footer {
@@ -280,7 +271,7 @@
                     </tr>
                     <tr th:each="seat : ${allSelectedSeats}" th:if="${seat <= 120 && seat > 100}">
                         <td class="booking-cell" th:text="${movie.title}"></td>
-                        <td class="booking-cell" th:text="'F' + {(seat - 1) % 20 + 1}"></td>
+                        <td class="booking-cell" th:text="'F' + ${(seat - 1) % 20 + 1}"></td>
                         <td class="booking-cell" th:text="${showTime}"></td>
                         <td class="booking-cell" th:text="${showDate}"></td>
                         <td class="booking-cell" th:text="${bookTime}"></td>
@@ -288,39 +279,40 @@
                 </tbody>
             </table>
         </div>
+    </div>
 
-        <br>
-        <img th:src="@{qr.jpg}" alt="qr" class="center-img">
-        <br>
-        <div class="text-center button-container">
-            <a th:href="@{/}"><button type="submit" class="btn btn-primary">Quay về trang chủ</button></a>
-        </div>
-        <br>
-        <br>
-        <footer contentEditable>
-            <div class="footer-container">
-                <div class="footer-links">
-                    <a href="/">Home</a>
-                    <a href="/about">Về chúng tôi</a>
-                    <a href="/contact">Liên hệ</a>
-                    <a href="/privacy">Chính sách bảo mật</a>
-                </div>
-                <div class="footer-social">
-                    <a href="https://facebook.com" target="_blank">Facebook</a>
-                    <a href="https://twitter.com" target="_blank">Twitter</a>
-                    <a href="https://instagram.com" target="_blank">Instagram</a>
-                </div>
-                <div class="footer-copy">
-                    <p>&copy; OOP16. All rights reserved.</p>
-                </div>
+    <br>
+    <img th:src="@{qr.jpg}" alt="qr" class="center-img">
+    <br>
+    <div class="text-center button-container">
+        <a th:href="@{/}"><button type="submit" class="btn btn-primary">Quay về trang chủ</button></a>
+    </div>
+    <br>
+    <br>
+    <footer contentEditable>
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/about">Về chúng tôi</a>
+                <a href="/contact">Liên hệ</a>
+                <a href="/privacy">Chính sách bảo mật</a>
             </div>
-        </footer>
-        <script>
-            window.addEventListener("scroll", function () {
-                var header = document.querySelector("header");
-                header.classList.toggle("sticky", window.scrollY > 0);
-            })
-        </script>
+            <div class="footer-social">
+                <a href="https://facebook.com" target="_blank">Facebook</a>
+                <a href="https://twitter.com" target="_blank">Twitter</a>
+                <a href="https://instagram.com" target="_blank">Instagram</a>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; OOP16. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        window.addEventListener("scroll", function () {
+            var header = document.querySelector("header");
+            header.classList.toggle("sticky", window.scrollY > 0);
+        })
+    </script>
 </body>
 
 </html>
