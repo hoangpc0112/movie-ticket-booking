@@ -33,70 +33,41 @@
             display: flex;
             flex-wrap: wrap;
             width: 100%;
+            justify-content: center;
         }
 
         .checkbox-container label {
-            width: calc(100% / 26);
+            width: calc(100% / 24);
             text-align: center;
             margin: 0 5px 5px 5px;
             font-size: 1em;
         }
 
-        @media (max-width: 576px) {
-            .checkbox-container label {
-                font-size: 0.9em;
-            }
-
-            footer {
-                font-size: 0.9em;
-            }
-        }
-
-        @media (max-width: 390px) {
-            .checkbox-container label {
-                font-size: 0.8em;
-            }
-
-            footer {
-                font-size: 0.8em;
-            }
-        }
-
-        @media (max-width: 993px) {
-            .search-container {
-                margin-bottom: 10px;
-            }
-        }
-
-        @media (min-width: 993px) {
-            .btn-outline-success {
-                margin-right: 50px;
-            }
+        .block1, .block2 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-left: 15px;
         }
 
         .block1 {
-            margin-left: 15px;
             margin-bottom: 40px;
         }
 
-        .block2 {
-            margin-left: 15px;
-        }
-
-        input [type="checkbox"] {
+        .input-btn {
             display: none;
         }
 
-        input:checked+label {
+        input:checked + label {
             background-color: red;
         }
 
-        input:disabled+label {
+        input:disabled + label {
             background-color: grey;
             cursor: not-allowed;
         }
 
-        input:disabled+label:hover {
+        input:disabled + label:hover {
             background-color: gray;
         }
 
@@ -124,6 +95,66 @@
             color: black;
         }
 
+        @media (min-width: 993px) {
+            .btn-outline-success {
+                margin-right: 50px;
+            }
+        }
+
+        @media (max-width: 1399px) {
+            .checkbox-container label {
+                width: calc(100% / 18);
+            }
+        }
+
+        @media (max-width: 993px) {
+            .checkbox-container label {
+                width: calc(100% / 16);
+                font-size: 0.9em;
+            }
+            .search-container {
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .checkbox-container label {
+                width: calc(100% / 13);
+                font-size: 0.8em;
+            }
+            .search-container {
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .checkbox-container label {
+                width: calc(100% / 6);
+                font-size: 0.8em;
+            }
+
+            .btn1 {
+                width: 100%;
+                padding: 10px;
+            }
+
+            footer {
+                font-size: 0.9em;
+            }
+            .search-container {
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .search-container {
+                margin-bottom: 10px;
+            }
+            footer {
+                font-size: 0.8em;
+            }
+        }
+
         footer {
             background-color: #333;
             color: #fff;
@@ -136,14 +167,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .footer-links,
-        .footer-social {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 10px;
         }
 
         .footer-links a,
@@ -170,7 +193,7 @@
             color: #fff;
             background-color: #28a745;
             border-color: #28a745;
-            /*margin-right: 50px;*/
+            margin-right: 50px;
         }
 
         .btn-outline-success:hover {
@@ -178,6 +201,7 @@
             background-color: #218838;
             border-color: #1e7e34;
         }
+
 
         header {
             position: fixed;
@@ -252,8 +276,9 @@
     </div>
     <br>
 
-    <h1 class="text-center">Vui lòng chọn ngày và giờ:</h1>
+    <h1 class="text-center">[[${movie.title}]]</h1>
     <br>
+    <h2 class="text-center">Vui lòng chọn ngày và giờ:</h2>
     <div class="date_form text-center">
         <form th:action="@{/select}" method="post" id="form">
             <input type="hidden" name="title" th:value="${movie.title}">
@@ -294,27 +319,25 @@
                 <div class="block1">
                     <th:block th:each="i : ${#numbers.sequence(1, 60)}">
                         <input type="checkbox" name="selectedSeats" hidden="hidden" th:value="${i}" th:id="${i}"
-                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}"
-                            class="input-btn">
+                               th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}" class="input-btn">
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 20}"
-                            th:text="'A' + ${(i - 1) % 20 + 1}"></label>
+                               th:text="'A' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 40 && i > 20}"
-                            th:text="'B' + ${(i - 1) % 20 + 1}"></label>
+                               th:text="'B' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 60 && i > 40}"
-                            th:text="'C' + ${(i - 1) % 20 + 1}"></label>
+                               th:text="'C' + ${(i - 1) % 20 + 1}"></label>
                     </th:block>
                 </div>
                 <div class="block2">
                     <th:block th:each="i : ${#numbers.sequence(61, 120)}">
                         <input type="checkbox" name="selectedSeats" hidden="hidden" th:value="${i}" th:id="${i}"
-                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}"
-                            class="input-btn">
+                               th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}" class="input-btn">
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 80 && i > 60}"
-                            th:text="'D' + ${(i - 1) % 20 + 1}"></label>
+                               th:text="'D' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 100 && i > 80}"
-                            th:text="'E' + ${(i - 1) % 20 + 1}"></label>
+                               th:text="'E' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 120 && i > 100}"
-                            th:text="'F' + ${(i - 1) % 20 + 1}"></label>
+                               th:text="'F' + ${(i - 1) % 20 + 1}"></label>
                     </th:block>
                 </div>
             </div>
@@ -323,6 +346,7 @@
             </div>
         </form>
     </div>
+
 
     <br>
 
