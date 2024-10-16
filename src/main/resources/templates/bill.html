@@ -161,6 +161,12 @@
             height: 100%;
         }
 
+        @media (max-width: 993px) {
+            .search-container {
+                margin-bottom: 10px;
+            }
+        }
+
         @media (min-width: 993px) {
             .btn-outline-success {
                 margin-right: 50px;
@@ -185,13 +191,13 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/now-showing">Phim đang chiếu</a>
-                        </li>&nbsp;
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/coming-soon">Phim sắp chiếu</a>
                         </li>
                     </ul>
 
-                    <form class="d-flex" role="search" th:action="@{/search}" method="get">
+                    <form class="d-flex search-container" role="search" th:action="@{/search}" method="get">
                         <input name="keyword" class="form-control me-2" type="search" placeholder="Search"
                             aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
@@ -289,7 +295,7 @@
     </div>
     <br>
     <br>
-    <footer contentEditable>
+    <footer>
         <div class="footer-container">
             <div class="footer-links">
                 <a href="/">Home</a>

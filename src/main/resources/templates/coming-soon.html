@@ -85,6 +85,11 @@
             footer {
                 font-size: 0.8em;
             }
+
+            .search-container {
+                margin-bottom: 10px;
+            }
+
         }
 
         @media (min-width: 391px) and (max-width: 576px) {
@@ -113,6 +118,11 @@
             footer {
                 font-size: 0.9em;
             }
+
+            .search-container {
+                margin-bottom: 10px;
+            }
+
         }
 
         @media (min-width: 577px) and (max-width: 768px) {
@@ -132,6 +142,11 @@
             .title::after {
                 width: 100%;
             }
+
+            .search-container {
+                margin-bottom: 10px;
+            }
+
         }
 
         @media (min-width: 769px) and (max-width: 992px) {
@@ -142,6 +157,11 @@
             .poster-img {
                 height: 360px;
             }
+
+            .search-container {
+                margin-bottom: 10px;
+            }
+
         }
 
         @media (min-width: 993px) {
@@ -279,7 +299,7 @@
                         </li>
                     </ul>
 
-                    <form class="d-flex" role="search" th:action="@{/search}" method="get">
+                    <form class="d-flex search-container" role="search" th:action="@{/search}" method="get">
                         <input name="keyword" class="form-control me-2" type="search" placeholder="Search"
                             aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
