@@ -56,7 +56,7 @@ public class AccountController {
         }
 
         appUser = userRepo.findByEmail(registerDTO.getEmail());
-        if(appUser != null) {
+        if (appUser != null) {
             bindingResult.addError(new FieldError("registerDTO", "email", "Email đã có người sử dụng"));
         }
 
@@ -126,18 +126,18 @@ public class AccountController {
             mailSenderService.sendMail(email, "OTP cho OOP16", "Mã OTP của bạn là: " + otp + ".\n" + "OTP sẽ hết hạn trong 5 phút.");
             model.addAttribute("email", email);
             return "otp-check";
-        } else {
+        }
+        else {
             model.addAttribute("error", "Email không đúng, vui lòng thử lại.");
             return "forgot-password";
         }
     }
 
-
     @GetMapping("/change-password")
     public String changePassword(@RequestParam("email") String email, @RequestParam("otp") String otp, Model model) {
         AppUser user = userRepo.findByEmail(email);
         model.addAttribute("email", email);
-        if(user.getEmailOtp().isEmpty()) {
+        if (user.getEmailOtp().isEmpty()) {
             model.addAttribute("error", "Mã OTP đã hết hạn, vui lòng thử lại.");
             return "otp-check";
         }
@@ -148,9 +148,9 @@ public class AccountController {
         return "change-password";
     }
 
-
     @PostMapping("/change-password")
-    public String changePasswordProcess(@RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("confirmPassword") String confirmPassword, Model model) {
+    public String changePasswordProcess(@RequestParam("email") String email, @RequestParam("password") String password,
+            @RequestParam("confirmPassword") String confirmPassword, Model model) {
         if (!password.equals(confirmPassword)) {
             model.addAttribute("error", "Mật khẩu và mật khẩu xác nhận không trùng khớp.");
             model.addAttribute("email", email);

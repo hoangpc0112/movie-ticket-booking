@@ -43,7 +43,8 @@
             font-size: 1em;
         }
 
-        .block1, .block2 {
+        .block1,
+        .block2 {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -58,16 +59,16 @@
             display: none;
         }
 
-        input:checked + label {
+        input:checked+label {
             background-color: red;
         }
 
-        input:disabled + label {
+        input:disabled+label {
             background-color: grey;
             cursor: not-allowed;
         }
 
-        input:disabled + label:hover {
+        input:disabled+label:hover {
             background-color: gray;
         }
 
@@ -112,6 +113,7 @@
                 width: calc(100% / 13);
                 font-size: 0.9em;
             }
+
             .search-container {
                 margin-bottom: 10px;
             }
@@ -122,6 +124,7 @@
                 width: calc(100% / 13);
                 font-size: 0.8em;
             }
+
             .search-container {
                 margin-bottom: 10px;
             }
@@ -141,6 +144,7 @@
             footer {
                 font-size: 0.9em;
             }
+
             .search-container {
                 margin-bottom: 10px;
             }
@@ -150,6 +154,7 @@
             .search-container {
                 margin-bottom: 10px;
             }
+
             footer {
                 font-size: 0.8em;
             }
@@ -319,25 +324,27 @@
                 <div class="block1">
                     <th:block th:each="i : ${#numbers.sequence(1, 60)}">
                         <input type="checkbox" name="selectedSeats" hidden="hidden" th:value="${i}" th:id="${i}"
-                               th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}" class="input-btn">
+                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}"
+                            class="input-btn">
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 20}"
-                               th:text="'A' + ${(i - 1) % 20 + 1}"></label>
+                            th:text="'A' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 40 && i > 20}"
-                               th:text="'B' + ${(i - 1) % 20 + 1}"></label>
+                            th:text="'B' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 60 && i > 40}"
-                               th:text="'C' + ${(i - 1) % 20 + 1}"></label>
+                            th:text="'C' + ${(i - 1) % 20 + 1}"></label>
                     </th:block>
                 </div>
                 <div class="block2">
                     <th:block th:each="i : ${#numbers.sequence(61, 120)}">
                         <input type="checkbox" name="selectedSeats" hidden="hidden" th:value="${i}" th:id="${i}"
-                               th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}" class="input-btn">
+                            th:checked="${bookedSeats.contains(i)}" th:disabled="${bookedSeats.contains(i)}"
+                            class="input-btn">
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 80 && i > 60}"
-                               th:text="'D' + ${(i - 1) % 20 + 1}"></label>
+                            th:text="'D' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 100 && i > 80}"
-                               th:text="'E' + ${(i - 1) % 20 + 1}"></label>
+                            th:text="'E' + ${(i - 1) % 20 + 1}"></label>
                         <label class="btn btn-success text-center" th:for="${i}" th:if="${i <= 120 && i > 100}"
-                               th:text="'F' + ${(i - 1) % 20 + 1}"></label>
+                            th:text="'F' + ${(i - 1) % 20 + 1}"></label>
                     </th:block>
                 </div>
             </div>

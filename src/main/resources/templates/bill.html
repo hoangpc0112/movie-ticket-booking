@@ -67,6 +67,7 @@
                 font-size: 0.8em;
                 padding: 4px;
             }
+
             .center-img {
                 width: 40%;
             }
@@ -184,10 +185,10 @@
         <nav class="navbar navbar-expand-lg bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand text-white" href="/"><img th:src="@{logo.png}" alt="" width="100px"
-                                                                 height="33px"></a>
+                        height="33px"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -202,7 +203,7 @@
 
                     <form class="d-flex search-container" role="search" th:action="@{/search}" method="get">
                         <input name="keyword" class="form-control me-2" type="search" placeholder="Search"
-                               aria-label="Search">
+                            aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
 
@@ -216,7 +217,7 @@
                     </div>
                     <div sec:authorize="!isAuthenticated()">
                         <a class="nav-link text-white" href="/login" sec:authorize="!isAuthenticated()"
-                           style="padding-right: 20px">Đăng nhập / Đăng ký</a>
+                            style="padding-right: 20px">Đăng nhập / Đăng ký</a>
                     </div>
                 </div>
             </div>

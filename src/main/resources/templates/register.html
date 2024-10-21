@@ -193,9 +193,9 @@
                         <!-- Email input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <input type="text" class="form-control" placeholder="Nhập email"
-                                   th:field="${registerDTO.email}" />
+                                th:field="${registerDTO.email}" />
                             <p th:if="${#fields.hasErrors('email')}" th:errorclass="text-danger"
-                               th:errors="${registerDTO.email}">
+                                th:errors="${registerDTO.email}">
                             </p>
                         </div>
 

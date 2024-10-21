@@ -52,37 +52,37 @@ public class SeatController {
 
     @GetMapping("/booking")
     public String booking(@RequestParam("title") String title, Model model) {
-        if(!movieRepository.findByTitle(title).isNowShowing()) { // người dùng cố gắng truy cập vào phần đặt vé của phim sắp chiếu
+        if (!movieRepository.findByTitle(title).isNowShowing()) { // người dùng cố gắng truy cập vào phần đặt vé của phim sắp chiếu
             errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
             return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         movieTitle = title;
-//        time = "09:00";
-//        System.out.println(LocalTime.now());
-        if(LocalTime.now().isBefore(LocalTime.of(9, 0))) {
+        // time = "09:00";
+        // System.out.println(LocalTime.now());
+        if (LocalTime.now().isBefore(LocalTime.of(9, 0))) {
             showTime = "09:00";
             showDate = LocalDate.now().toString();
         }
-        else if(LocalTime.now().isBefore(LocalTime.of(12, 0))) {
+        else if (LocalTime.now().isBefore(LocalTime.of(12, 0))) {
             showTime = "12:00";
             showDate = LocalDate.now().toString();
         }
-        else if(LocalTime.now().isBefore(LocalTime.of(15, 0))) {
+        else if (LocalTime.now().isBefore(LocalTime.of(15, 0))) {
             showTime = "15:00";
             showDate = LocalDate.now().toString();
         }
-        else if(LocalTime.now().isBefore(LocalTime.of(18, 0))) {
+        else if (LocalTime.now().isBefore(LocalTime.of(18, 0))) {
             showTime = "18:00";
             showDate = LocalDate.now().toString();
         }
-        else if(LocalTime.now().isBefore(LocalTime.of(21, 0))) {
+        else if (LocalTime.now().isBefore(LocalTime.of(21, 0))) {
             showTime = "21:00";
             showDate = LocalDate.now().toString();
         }
         else {
             showTime = "09:00";
             showDate = LocalDate.now().plusDays(1).toString();
-//            System.out.println(date);
+            // System.out.println(date);
         }
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("localDate", showDate);
@@ -104,8 +104,9 @@ public class SeatController {
         movieTitle = title;
         showTime = localTime;
         showDate = localDate;
-//        System.out.println(showTime + " " + showDate);
-        if(LocalDate.now().isAfter(LocalDate.parse(showDate)) || (LocalDate.now().toString().equals(showDate) && LocalTime.now().isAfter(LocalTime.parse(showTime)))) {
+        // System.out.println(showTime + " " + showDate);
+        if (LocalDate.now().isAfter(LocalDate.parse(showDate))
+                || (LocalDate.now().toString().equals(showDate) && LocalTime.now().isAfter(LocalTime.parse(showTime)))) {
             errorReport = "Xin lỗi, bạn đã chọn một thời gian chiếu đã qua. Vui lòng chọn một thời gian khác.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
@@ -133,7 +134,8 @@ public class SeatController {
         errorReport = "";
         List<Integer> unavailableSeats = new ArrayList<>();
         for (int selectedSeat : selectedSeats) {
-            if (bookedSeatRepo.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) { // kiểm tra có người nhanh tay hơn
+            if (bookedSeatRepo.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) { // kiểm tra có người nhanh tay
+                                                                                                                     // hơn
                 unavailableSeats.add(selectedSeat);
             }
         }
@@ -170,8 +172,8 @@ public class SeatController {
         bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString();
         for (int selectedSeat : selectedSeats) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
-            BookedSeat bookedSeat =
-                    new BookedSeat(movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
+            BookedSeat bookedSeat = new BookedSeat(movieTitle, showTime, showDate, selectedSeat,
+                    SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
             bookedSeatRepo.save(bookedSeat);
         }
         bookedSeats.clear();
