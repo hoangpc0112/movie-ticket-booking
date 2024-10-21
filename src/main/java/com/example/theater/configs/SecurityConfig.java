@@ -31,10 +31,15 @@ public class SecurityConfig {
                         .requestMatchers("/forgot-password").permitAll()
                         .requestMatchers("/change-password").permitAll()
                         .anyRequest().authenticated())
-                .formLogin(form -> form.loginPage("/login").failureUrl("/login?error=true")
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .failureUrl("/login?error=true")
                         // .defaultSuccessUrl("/", true)
                         .successHandler(savedRequestAwareAuthenticationSuccessHandler()))
-                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true)
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID"))
                 .build();
     }

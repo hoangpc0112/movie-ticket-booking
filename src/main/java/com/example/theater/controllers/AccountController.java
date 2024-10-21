@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class AccountController {
@@ -31,6 +34,8 @@ public class AccountController {
 
     @Autowired
     private MailSenderService mailSenderService;
+
+    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -99,6 +104,11 @@ public class AccountController {
         return String.valueOf(otp);
     }
 
+    public void resetOtp(AppUser user) {
+        user.setEmailOtp("");
+        userRepo.save(user);
+    }
+
     @GetMapping("/forgot-password")
     public String forgotPassword(Model model) {
         model.addAttribute("success", false);
@@ -112,6 +122,7 @@ public class AccountController {
             AppUser user = userRepo.findByEmail(email);
             user.setEmailOtp(otp);
             userRepo.save(user);
+            scheduledExecutorService.schedule(() -> resetOtp(user), 5, TimeUnit.MINUTES);
             mailSenderService.sendMail(email, "OTP cho OOP16", "Mã OTP của bạn là: " + otp + ".\n" + "OTP sẽ hết hạn trong 5 phút.");
             model.addAttribute("email", email);
             return "otp-check";
@@ -126,6 +137,10 @@ public class AccountController {
     public String changePassword(@RequestParam("email") String email, @RequestParam("otp") String otp, Model model) {
         AppUser user = userRepo.findByEmail(email);
         model.addAttribute("email", email);
+        if(user.getEmailOtp().isEmpty()) {
+            model.addAttribute("error", "Mã OTP đã hết hạn, vui lòng thử lại.");
+            return "otp-check";
+        }
         if (!user.getEmailOtp().equals(otp)) {
             model.addAttribute("error", "OTP không đúng, vui lòng thử lại.");
             return "otp-check";
