@@ -17,10 +17,19 @@ public class SecurityConfig {
     public DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll().requestMatchers("/logo.png").permitAll().requestMatchers("/register_and_login_bg.png").permitAll()
-                        .requestMatchers("/favicon.ico").permitAll().requestMatchers("/register").permitAll()
-                        .requestMatchers("/login").permitAll().requestMatchers("/logout").permitAll().requestMatchers("/now-showing").permitAll()
-                        .requestMatchers("/coming-soon").permitAll().requestMatchers("/details/**").permitAll().requestMatchers("/search").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/logo.png").permitAll()
+                        .requestMatchers("/register_and_login_bg.png").permitAll()
+                        .requestMatchers("/favicon.ico").permitAll()
+                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/logout").permitAll()
+                        .requestMatchers("/now-showing").permitAll()
+                        .requestMatchers("/coming-soon").permitAll()
+                        .requestMatchers("/details/**").permitAll()
+                        .requestMatchers("/search").permitAll()
+                        .requestMatchers("/forgot-password").permitAll()
+                        .requestMatchers("/change-password").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/login").failureUrl("/login?error=true")
                         // .defaultSuccessUrl("/", true)

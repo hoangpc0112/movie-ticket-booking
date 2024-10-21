@@ -1,5 +1,6 @@
 package com.example.theater.DTOs;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class RegisterDTO {
+
+    @NotEmpty(message = "Email không được để trống.")
+    @Email(message = "Email không đúng định dạng.")
+    private String email;
 
     @NotEmpty(message = "Username không được để trống.")
     private String username;

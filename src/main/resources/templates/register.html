@@ -189,6 +189,16 @@
 
                     <form method="post" th:object="${registerDTO}">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                        <!-- Email input -->
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <input type="text" class="form-control" placeholder="Nhập email"
+                                   th:field="${registerDTO.email}" />
+                            <p th:if="${#fields.hasErrors('email')}" th:errorclass="text-danger"
+                               th:errors="${registerDTO.email}">
+                            </p>
+                        </div>
+
                         <!-- Username input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <input type="text" class="form-control" placeholder="Nhập tên người dùng"
