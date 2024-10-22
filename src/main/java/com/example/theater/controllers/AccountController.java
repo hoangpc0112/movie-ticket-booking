@@ -5,6 +5,7 @@ import com.example.theater.DTOs.RegisterDTO;
 import com.example.theater.repositories.AppUserRepo;
 import com.example.theater.repositories.BookedSeatRepo;
 import com.example.theater.services.MailSenderService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,44 +46,67 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("registerDTO") RegisterDTO registerDTO, BindingResult bindingResult, Model model) {
+    public String register(@Valid @ModelAttribute("registerDTO") RegisterDTO registerDTO, BindingResult bindingResult, Model model, HttpSession session) {
         if (!registerDTO.getPassword().equals(registerDTO.getConfirmPassword())) {
             bindingResult.addError(new FieldError("registerDTO", "confirmPassword", "Mật khẩu và mật khẩu xác nhận lại không giống nhau."));
         }
-
         AppUser appUser = userRepo.findByUsername(registerDTO.getUsername());
         if (appUser != null) {
             bindingResult.addError(new FieldError("registerDTO", "username", "Username đã có người sử dụng"));
         }
-
         appUser = userRepo.findByEmail(registerDTO.getEmail());
         if (appUser != null) {
             bindingResult.addError(new FieldError("registerDTO", "email", "Email đã có người sử dụng"));
         }
-
         if (bindingResult.hasErrors()) {
             return "register";
         }
-
         try {
-            var bCryptEncoder = new BCryptPasswordEncoder();
+            String otp = generateOtp();
+            mailSenderService.sendMail(registerDTO.getEmail(), "Mã tạo tài khoản cho OOP16", "Mã tạo tài khoản của bạn là: " + otp + ".");
 
-            AppUser user = new AppUser();
-            user.setEmail(registerDTO.getEmail());
-            user.setUsername(registerDTO.getUsername());
-            user.setPassword(bCryptEncoder.encode(registerDTO.getPassword()));
-            user.setEmailOtp("");
-
-            userRepo.save(user);
-
-            model.addAttribute("registerDTO", new RegisterDTO());
+            session.setAttribute("otp", otp);
+            session.setAttribute("tempUser", registerDTO);
             model.addAttribute("success", true);
-        }
-        catch (Exception e) {
-            bindingResult.addError(new FieldError("registerDTO", "email", e.getMessage()));
-        }
 
-        return "register";
+            return "verify-email";
+        } catch (Exception e) {
+            bindingResult.addError(new FieldError("registerDTO", "email", e.getMessage()));
+            return "register";
+        }
+    }
+
+    @PostMapping("/verify-email")
+    public String verifyEmail(@RequestParam("otp") String otp, HttpSession session, Model model) {
+        // System.out.println(otp);
+
+        String sessionOtp = (String) session.getAttribute("otp");
+        RegisterDTO registerDTO = (RegisterDTO) session.getAttribute("tempUser");
+
+        if (sessionOtp != null && sessionOtp.equals(otp)) {
+            try {
+                var bCryptEncoder = new BCryptPasswordEncoder();
+                AppUser user = new AppUser();
+                user.setEmail(registerDTO.getEmail());
+                user.setUsername(registerDTO.getUsername());
+                user.setPassword(bCryptEncoder.encode(registerDTO.getPassword()));
+                user.setEmailOtp("");
+                userRepo.save(user);
+
+                session.removeAttribute("otp");
+                session.removeAttribute("tempUser");
+
+                model.addAttribute("registerDTO", new RegisterDTO());
+                model.addAttribute("success", true);
+                return "register";
+            } catch (Exception e) {
+                model.addAttribute("error", e.getMessage());
+                return "verify-email";
+            }
+        } else {
+            model.addAttribute("error", "Mã OTP không hợp lệ.");
+            return "verify-email";
+        }
     }
 
     @GetMapping("/login")

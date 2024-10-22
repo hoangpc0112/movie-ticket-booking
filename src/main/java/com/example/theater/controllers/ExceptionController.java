@@ -9,9 +9,10 @@ public class ExceptionController {
 
     @ExceptionHandler(Exception.class)
     public String handleException(HttpServletRequest request, Exception e) {
+        System.out.println(e.getLocalizedMessage());
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-        if (statusCode != null && statusCode == 999) {
-            return "redirect:/";
+        if (statusCode != null) {
+            System.out.println(statusCode);
         }
         return "redirect:/";
     }
