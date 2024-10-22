@@ -232,8 +232,7 @@
                     </form>
 
                     <div sec:authorize="isAuthenticated()" class="d-flex align-items-center">
-                        <a class="nav-link text-white me-2" href="/profile" style="padding-right: 20px">Lịch sử đặt
-                            vé</a>
+                        <a class="nav-link text-white me-2" href="/profile" style="padding-right: 20px">Hồ sơ</a>
                         <form action="/logout" method="post" class="mb-0">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                             <button type="submit" class="btn btn-danger">Đăng xuất</button>
@@ -248,40 +247,70 @@
         </nav>
     </header>
     <!---->
-    <div class="profile-header">
-        <h1>Lịch sử đặt vé của [[${user.username}]]:</h1>
-    </div>
-    <div class="container">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Tên phim</th>
-                    <th>Ghế</th>
-                    <th>Giờ chiếu</th>
-                    <th>Ngày chiếu</th>
-                    <th>Thời gian đặt</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="seat : ${orderHistory}">
-                    <td th:text="${seat.movieTitle}"></td>
-                    <td th:if="${seat.seatNo <= 20}" th:text="'A' + ${(seat.seatNo - 1) % 20 + 1}"></td>
-                    <td th:if="${seat.seatNo <= 40 && seat.seatNo > 20}" th:text="'B' + ${(seat.seatNo - 1) % 20 + 1}">
-                    </td>
-                    <td th:if="${seat.seatNo <= 60 && seat.seatNo > 40}" th:text="'C' + ${(seat.seatNo - 1) % 20 + 1}">
-                    </td>
-                    <td th:if="${seat.seatNo <= 80 && seat.seatNo > 60}" th:text="'D' + ${(seat.seatNo - 1) % 20 + 1}">
-                    </td>
-                    <td th:if="${seat.seatNo <= 100 && seat.seatNo > 80}" th:text="'E' + ${(seat.seatNo - 1) % 20 + 1}">
-                    </td>
-                    <td th:if="${seat.seatNo <= 120 && seat.seatNo > 100}"
-                        th:text="'F' + ${(seat.seatNo - 1) % 20 + 1}"></td>
-                    <td th:text="${seat.time}"></td>
-                    <td th:text="${seat.date}"></td>
-                    <td th:text="${seat.bookTime}"></td>
-                </tr>
-            </tbody>
-        </table>
+
+    <div class="container mt-5">
+        <ul class="nav nav-tabs" id="tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="change-password-tab" data-bs-toggle="tab" data-bs-target="#change-password" type="button" role="tab" aria-controls="change-password" aria-selected="true">Đổi mật khẩu</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="order-history-tab" data-bs-toggle="tab" data-bs-target="#order-history" type="button" role="tab" aria-controls="order-history" aria-selected="false">Lịch sử đặt vé</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="tabContent">
+            <div class="tab-pane fade show active" id="change-password" role="tabpanel" aria-labelledby="change-password-tab">
+                <div class="profile-header">
+                    <h1>Thông tin của người dùng [[${user.username}]]:</h1>
+                </div>
+
+                <div th:if="${successChangePassword}" class="alert alert-success alert-dismissible fade show"
+                     role="alert">
+                    <strong>Đổi mật khẩu thành công!</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Username: [[${user.username}]]</label>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email: [[${user.email}]]</label>
+                </div>
+                <form th:action="@{/forgot-password}" method="post">
+                    <input type="hidden" th:value="${user.email}" name="email">
+                    <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="order-history" role="tabpanel" aria-labelledby="order-history-tab">
+                <div class="profile-header">
+                    <h1>Lịch sử đặt vé của [[${user.username}]]:</h1>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Tên phim</th>
+                        <th>Ghế</th>
+                        <th>Giờ chiếu</th>
+                        <th>Ngày chiếu</th>
+                        <th>Thời gian đặt</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="seat : ${orderHistory}">
+                        <td th:text="${seat.movieTitle}"></td>
+                        <td th:if="${seat.seatNo <= 20}" th:text="'A' + ${(seat.seatNo - 1) % 20 + 1}"></td>
+                        <td th:if="${seat.seatNo <= 40 && seat.seatNo > 20}" th:text="'B' + ${(seat.seatNo - 1) % 20 + 1}"></td>
+                        <td th:if="${seat.seatNo <= 60 && seat.seatNo > 40}" th:text="'C' + ${(seat.seatNo - 1) % 20 + 1}"></td>
+                        <td th:if="${seat.seatNo <= 80 && seat.seatNo > 60}" th:text="'D' + ${(seat.seatNo - 1) % 20 + 1}"></td>
+                        <td th:if="${seat.seatNo <= 100 && seat.seatNo > 80}" th:text="'E' + ${(seat.seatNo - 1) % 20 + 1}"></td>
+                        <td th:if="${seat.seatNo <= 120 && seat.seatNo > 100}" th:text="'F' + ${(seat.seatNo - 1) % 20 + 1}"></td>
+                        <td th:text="${seat.time}"></td>
+                        <td th:text="${seat.date}"></td>
+                        <td th:text="${seat.bookTime}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <br>

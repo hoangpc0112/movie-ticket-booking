@@ -3,6 +3,8 @@ package com.example.theater.services;
 import com.example.theater.entities.AppUser;
 import com.example.theater.repositories.AppUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

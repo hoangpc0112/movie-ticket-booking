@@ -150,8 +150,7 @@
                 </form>
 
                 <div sec:authorize="isAuthenticated()" class="d-flex align-items-center">
-                    <a class="nav-link text-white me-2" href="/profile" style="padding-right: 20px">Lịch sử đặt
-                        vé</a>
+                    <a class="nav-link text-white me-2" href="/profile" style="padding-right: 20px">Hồ sơ</a>
                     <form action="/logout" method="post" class="mb-0">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <button type="submit" class="btn btn-danger">Đăng xuất</button>

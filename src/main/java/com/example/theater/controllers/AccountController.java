@@ -8,6 +8,7 @@ import com.example.theater.services.MailSenderService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -115,12 +116,18 @@ public class AccountController {
     }
 
     @GetMapping("/profile")
-    public String profile(Model model) {
+    public String profile(Model model, @RequestParam(value = "successChangePassword", required = false) String successChangePassword) {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("orderHistory", bookedSeatRepo.findByUser(currentUser));
         model.addAttribute("user", userRepo.findByUsername(currentUser));
+
+        if ("true".equals(successChangePassword)) {
+            model.addAttribute("successChangePassword", "Đổi mật khẩu thành công!");
+        }
+
         return "profile";
     }
+
 
     public String generateOtp() {
         Random random = new Random();
@@ -172,6 +179,11 @@ public class AccountController {
         return "change-password";
     }
 
+    public boolean isUserLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated();
+    }
+
     @PostMapping("/change-password")
     public String changePasswordProcess(@RequestParam("email") String email, @RequestParam("password") String password,
             @RequestParam("confirmPassword") String confirmPassword, Model model) {
@@ -191,7 +203,9 @@ public class AccountController {
         appUser.setPassword(bCryptEncoder.encode(password));
         userRepo.save(appUser);
         model.addAttribute("successChangePassword", true);
+        if (isUserLoggedIn()) {
+            return "redirect:/profile?successChangePassword=true";
+        }
         return "login";
     }
-
 }
