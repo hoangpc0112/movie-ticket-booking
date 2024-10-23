@@ -35,7 +35,6 @@ public class SeatController {
     private String movieTitle;
     private String showTime;
     private String showDate;
-    private String bookTime;
 
     // lưu lỗi
     private String errorReport = "";
@@ -166,7 +165,7 @@ public class SeatController {
             return "redirect:/booking?title=" + URLEncoder.encode( title, StandardCharsets.UTF_8 );
         }
         errorReport = "";
-        bookTime = LocalDateTime.now().format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) ).toString();
+        String bookTime = LocalDateTime.now().format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
         for ( int selectedSeat : selectedSeats ) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
             BookedSeat bookedSeat = new BookedSeat( movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime );

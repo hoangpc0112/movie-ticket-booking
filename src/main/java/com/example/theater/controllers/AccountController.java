@@ -5,10 +5,10 @@ import com.example.theater.DTOs.RegisterDTO;
 import com.example.theater.repositories.AppUserRepo;
 import com.example.theater.repositories.BookedSeatRepo;
 import com.example.theater.services.MailSenderService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -182,13 +182,8 @@ public class AccountController {
         return "change-password";
     }
 
-    public boolean isUserLoggedIn () {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && authentication.isAuthenticated();
-    }
-
     @PostMapping ( "/change-password" )
-    public String changePasswordProcess ( @RequestParam ( "email" ) String email, @RequestParam ( "password" ) String password, @RequestParam ( "confirmPassword" ) String confirmPassword, Model model ) {
+    public String changePasswordProcess ( @RequestParam ( "email" ) String email, @RequestParam ( "password" ) String password, @RequestParam ( "confirmPassword" ) String confirmPassword, HttpServletRequest request, Model model ) {
         if ( !password.equals( confirmPassword ) ) {
             model.addAttribute( "error", "Mật khẩu và mật khẩu xác nhận không trùng khớp." );
             model.addAttribute( "email", email );
@@ -205,7 +200,9 @@ public class AccountController {
         appUser.setPassword( bCryptEncoder.encode( password ) );
         userRepo.save( appUser );
         model.addAttribute( "successChangePassword", true );
-        if ( isUserLoggedIn() ) {
+
+        HttpSession session = request.getSession( false );
+        if ( session != null && session.getAttribute( "SPRING_SECURITY_CONTEXT" ) != null ) {
             return "redirect:/profile?successChangePassword=true";
         }
         return "login";
