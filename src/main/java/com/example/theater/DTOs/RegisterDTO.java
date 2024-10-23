@@ -13,17 +13,17 @@ import lombok.NoArgsConstructor;
 
 public class RegisterDTO {
 
-    @NotEmpty(message = "Email không được để trống.")
-    @Email(message = "Email không đúng định dạng.")
+    @NotEmpty ( message = "Email không được để trống." )
+    @Email ( message = "Email không đúng định dạng." )
     private String email;
 
-    @NotEmpty(message = "Username không được để trống.")
+    @NotEmpty ( message = "Username không được để trống." )
     private String username;
 
-    @Size(min = 6, message = "Mật khẩu phải có tổi thiếu 6 ký tự.")
-    @NotEmpty(message = "Mật khẩu không thể để trống.")
+    @Size ( min = 6, message = "Mật khẩu phải có tổi thiếu 6 ký tự." )
+    @NotEmpty ( message = "Mật khẩu không thể để trống." )
     private String password;
 
-    @NotEmpty(message = "Không thể để trống.")
+    @NotEmpty ( message = "Không thể để trống." )
     private String confirmPassword;
 }

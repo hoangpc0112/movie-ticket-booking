@@ -10,46 +10,46 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "movie")
+@Table ( name = "movie" )
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue ( strategy = GenerationType.IDENTITY )
     private long id;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String title;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String posterUrl;
 
-    @Column(columnDefinition = "varchar(1000)", nullable = false)
+    @Column ( columnDefinition = "varchar(1000)", nullable = false )
     private String description;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String releaseDate;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private boolean nowShowing;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String trailerUrl;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String genre;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String director;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String actors;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private int duration;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String language;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String rated;
 }

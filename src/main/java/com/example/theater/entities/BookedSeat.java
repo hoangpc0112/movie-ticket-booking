@@ -10,32 +10,32 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "booked_seats")
+@Table ( name = "booked_seats" )
 public class BookedSeat {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue ( strategy = GenerationType.IDENTITY )
     private long id;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String movieTitle;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String time;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String date;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private int seatNo;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String user;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String bookTime;
 
-    public BookedSeat(String movieTitle, String time, String date, int seatNo, String user, String bookTime) {
+    public BookedSeat ( String movieTitle, String time, String date, int seatNo, String user, String bookTime ) {
         this.movieTitle = movieTitle;
         this.time = time;
         this.date = date;

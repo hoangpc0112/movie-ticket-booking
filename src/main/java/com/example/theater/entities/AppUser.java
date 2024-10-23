@@ -10,22 +10,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "users")
+@Table ( name = "users" )
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue ( strategy = GenerationType.IDENTITY )
     private long id;
 
-    @Column(unique = true, nullable = false)
+    @Column ( unique = true, nullable = false )
     private String email;
 
-    @Column(unique = true, nullable = false)
+    @Column ( unique = true, nullable = false )
     private String username;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String password;
 
-    @Column(nullable = false)
+    @Column ( nullable = false )
     private String emailOtp;
 }

@@ -17,14 +17,14 @@ public class AppUserService implements UserDetailsService {
     private AppUserRepo appUserRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = appUserRepo.findByUsername(username);
+    public UserDetails loadUserByUsername ( String username ) throws UsernameNotFoundException {
+        AppUser appUser = appUserRepo.findByUsername( username );
 
-        if (appUser != null) {
-            return User.withUsername(appUser.getUsername()).password(appUser.getPassword()).build();
+        if ( appUser != null ) {
+            return User.withUsername( appUser.getUsername() ).password( appUser.getPassword() ).build();
         }
         else {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException( username );
         }
     }
 }
