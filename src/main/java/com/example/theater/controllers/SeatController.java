@@ -1,8 +1,13 @@
 package com.example.theater.controllers;
 
 import com.example.theater.entities.BookedSeat;
-import com.example.theater.repositories.BookedSeatRepo;
+import com.example.theater.entities.Comment;
+import com.example.theater.entities.Movie;
+import com.example.theater.repositories.BookedSeatRepository;
+import com.example.theater.repositories.CommentRepository;
 import com.example.theater.repositories.MovieRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -29,7 +34,10 @@ public class SeatController {
     private MovieRepository movieRepository;
 
     @Autowired
-    private BookedSeatRepo bookedSeatRepo;
+    private BookedSeatRepository bookedSeatRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     // Thêm biến toàn cục để lưu trữ thông tin vé đã đặt
     private String movieTitle;
@@ -44,9 +52,23 @@ public class SeatController {
     @GetMapping ( "/details" )
     public String test ( @RequestParam ( "title" ) String title, Model model ) {
         model.addAttribute( "errorReport", errorReport );
-        model.addAttribute( "movie", movieRepository.findByTitle( title ) );
+        Movie movie = movieRepository.findByTitle( title );
+        model.addAttribute( "movie", movie );
+        model.addAttribute( "comments", commentRepository.findAllByMovie( movie ) );
         errorReport = "";
         return "details";
+    }
+
+    @PostMapping ( "/details" )
+    public String details ( @RequestParam String title, @RequestParam String content, HttpServletRequest request ) {
+        HttpSession session = request.getSession( false );
+        if ( session != null && session.getAttribute( "SPRING_SECURITY_CONTEXT" ) != null ) {
+            Movie movie = movieRepository.findByTitle( title );
+            commentRepository.save( new Comment( movie, SecurityContextHolder.getContext().getAuthentication().getName(), content ) );
+            return "redirect:/details?title=" + URLEncoder.encode( title, StandardCharsets.UTF_8 );
+        }
+        errorReport = "Vui lòng đăng nhập trước khi bình luận.";
+        return "redirect:/details?title=" + URLEncoder.encode( title, StandardCharsets.UTF_8 );
     }
 
     @GetMapping ( "/booking" )
@@ -91,7 +113,7 @@ public class SeatController {
 
         // Truy vấn tất cả vé đã đặt của 1 bộ phim trong 1 ngày giờ cụ thể
         bookedSeats.clear();
-        bookedSeats.addAll( bookedSeatRepo.findAllSeatNoBy( title, showTime, showDate ) );
+        bookedSeats.addAll( bookedSeatRepository.findAllSeatNoBy( title, showTime, showDate ) );
         model.addAttribute( "bookedSeats", bookedSeats );
         return "booking";
     }
@@ -116,7 +138,7 @@ public class SeatController {
 
         // Truy vấn tất cả vé đã đặt của 1 bộ phim trong 1 ngày giờ cụ thể
         bookedSeats.clear();
-        bookedSeats.addAll( bookedSeatRepo.findAllSeatNoBy( title, localTime, localDate ) );
+        bookedSeats.addAll( bookedSeatRepository.findAllSeatNoBy( title, localTime, localDate ) );
         model.addAttribute( "bookedSeats", bookedSeats );
         return "booking";
     }
@@ -130,7 +152,7 @@ public class SeatController {
         errorReport = "";
         List < Integer > unavailableSeats = new ArrayList <>();
         for ( int selectedSeat : selectedSeats ) {
-            if ( bookedSeatRepo.existsBySeatNoAndMovieTitleAndTimeAndDate( selectedSeat, title, showTime, showDate ) ) { // kiểm tra có người nhanh tay
+            if ( bookedSeatRepository.existsBySeatNoAndMovieTitleAndTimeAndDate( selectedSeat, title, showTime, showDate ) ) { // kiểm tra có người nhanh tay
                 // hơn
                 unavailableSeats.add( selectedSeat );
             }
@@ -169,7 +191,7 @@ public class SeatController {
         for ( int selectedSeat : selectedSeats ) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
             BookedSeat bookedSeat = new BookedSeat( movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime );
-            bookedSeatRepo.save( bookedSeat );
+            bookedSeatRepository.save( bookedSeat );
         }
         bookedSeats.clear();
         bookedSeats.addAll( selectedSeats );

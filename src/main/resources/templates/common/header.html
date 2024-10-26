@@ -22,6 +22,17 @@
                             <li class = "nav-item">
                                 <a class = "nav-link text-white" href = "/coming-soon">Phim sắp chiếu</a>
                             </li>
+                            <li class = "nav-item dropdown">
+                                <a class = "nav-link dropdown-toggle text-white" href = "#" role = "button" data-bs-toggle = "dropdown" aria-expanded = "false">Về OOP6</a>
+                                <ul class = "dropdown-menu">
+                                    <li>
+                                        <a class = "dropdown-item" href = "/about-us">Về chúng tôi</a>
+                                    </li>
+                                    <li>
+                                        <a class = "dropdown-item" href = "/user-manual">Hướng dẫn đặt vé trực tuyến</a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                         <form class = "d-flex search-container" role = "search" th:action = "@{/search}" method = "get">
                             <input name = "keyword" class = "form-control me-2" type = "search" placeholder = "Search" aria-label = "Search">

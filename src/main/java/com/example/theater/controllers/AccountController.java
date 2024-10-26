@@ -2,8 +2,8 @@ package com.example.theater.controllers;
 
 import com.example.theater.entities.AppUser;
 import com.example.theater.DTOs.RegisterDTO;
-import com.example.theater.repositories.AppUserRepo;
-import com.example.theater.repositories.BookedSeatRepo;
+import com.example.theater.repositories.AppUserRepository;
+import com.example.theater.repositories.BookedSeatRepository;
 import com.example.theater.services.MailSenderService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,10 +29,10 @@ import java.util.concurrent.TimeUnit;
 public class AccountController {
 
     @Autowired
-    private AppUserRepo userRepo;
+    private AppUserRepository userRepo;
 
     @Autowired
-    private BookedSeatRepo bookedSeatRepo;
+    private BookedSeatRepository bookedSeatRepository;
 
     @Autowired
     private MailSenderService mailSenderService;
@@ -121,7 +121,7 @@ public class AccountController {
     @GetMapping ( "/profile" )
     public String profile ( Model model, @RequestParam ( value = "successChangePassword", required = false ) String successChangePassword ) {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute( "orderHistory", bookedSeatRepo.findByUser( currentUser ) );
+        model.addAttribute( "orderHistory", bookedSeatRepository.findByUser( currentUser ) );
         model.addAttribute( "user", userRepo.findByUsername( currentUser ) );
 
         if ( "true".equals( successChangePassword ) ) {
@@ -206,5 +206,10 @@ public class AccountController {
             return "redirect:/profile?successChangePassword=true";
         }
         return "login";
+    }
+
+    @GetMapping ( "/user-manual" )
+    public String userManual () {
+        return "user-manual";
     }
 }

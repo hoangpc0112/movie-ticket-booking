@@ -1,10 +1,12 @@
 package com.example.theater.controllers;
 
+import com.example.theater.entities.Movie;
 import com.example.theater.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -31,5 +33,21 @@ public class TheaterController {
         model.addAttribute( "nowShowingMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing( keyword, true ) );
         model.addAttribute( "comingSoonMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing( keyword, false ) );
         return "search";
+    }
+
+    @GetMapping ( "/about-us" )
+    public String aboutUs () {
+        return "about-us";
+    }
+
+    @GetMapping ( "/movie-input" )
+    public String movieInput () {
+        return "movie-input";
+    }
+
+    @PostMapping ( "/movie-input" )
+    public String movieInputProcess ( @RequestParam String title, @RequestParam String posterUrl, @RequestParam String description, @RequestParam String releaseDate, @RequestParam String nowShowing, @RequestParam String trailerUrl, @RequestParam String genre, @RequestParam String director, @RequestParam String actors, @RequestParam String duration, @RequestParam String language, @RequestParam String rated, @RequestParam String bannerUrl ) {
+        movieRepository.save( new Movie( title, posterUrl, description, releaseDate, nowShowing, trailerUrl, genre, director, actors, duration, language, rated, bannerUrl ) );
+        return "movie-input";
     }
 }
