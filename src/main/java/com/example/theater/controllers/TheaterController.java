@@ -47,7 +47,7 @@ public class TheaterController {
 
     @PostMapping ( "/movie-input" )
     public String movieInputProcess ( @RequestParam String title, @RequestParam String posterUrl, @RequestParam String description, @RequestParam String releaseDate, @RequestParam String nowShowing, @RequestParam String trailerUrl, @RequestParam String genre, @RequestParam String director, @RequestParam String actors, @RequestParam String duration, @RequestParam String language, @RequestParam String rated, @RequestParam String bannerUrl ) {
-        movieRepository.save( new Movie( title, posterUrl, description, releaseDate, nowShowing, trailerUrl, genre, director, actors, duration, language, rated, bannerUrl ) );
+        movieRepository.save( new Movie( title.trim(), posterUrl.trim(), description.trim(), releaseDate.trim(), nowShowing.trim(), trailerUrl.trim(), genre.trim(), director.trim(), actors.trim(), duration.trim(), language.trim(), rated.trim(), bannerUrl.trim() ) );
         return "movie-input";
     }
 }

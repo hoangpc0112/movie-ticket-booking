@@ -290,3 +290,62 @@ html {
     background-color: black;
     display: block;
 }
+
+.swiper-slide {
+    padding-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 10px;
+}
+
+.swiper-slide img {
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
+    max-height: 720px;
+    border-radius: 15px;
+}
+
+.swiper-button-next, .swiper-button-prev {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+}
+
+.swiper-button-next {
+    right: 2%;
+}
+
+.swiper-button-prev {
+    left: 2%;
+}
+
+@media (max-width: 1200px) {
+    .swiper-slide img {
+        max-height: 600px;
+    }
+}
+
+@media (max-width: 992px) {
+    .swiper-slide img {
+        max-height: 480px;
+    }
+}
+
+@media (max-width: 768px) {
+    .swiper-slide img {
+        max-height: 360px;
+    }
+}
+
+@media (max-width: 576px) {
+    .swiper-slide img {
+        max-height: 240px;
+    }
+
+    .swiper-button-next, .swiper-button-prev {
+        display: none;
+    }
+}

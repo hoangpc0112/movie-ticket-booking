@@ -14,6 +14,7 @@ public class HomeController {
 
     @GetMapping ( "/" )
     public String home ( Model model ) {
+        model.addAttribute( "movieList", movieRepository.findAll() );
         model.addAttribute( "nowShowingMovieList", movieRepository.getAllMoviesByNowShowing( true ) );
         model.addAttribute( "comingSoonMovieList", movieRepository.getAllMoviesByNowShowing( false ) );
         return "home";
