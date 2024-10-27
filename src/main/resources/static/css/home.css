@@ -37,7 +37,7 @@
 
 .poster-img {
     width: 100%;
-    height: 420px;
+    height: 480px;
     object-fit: cover;
 }
 
@@ -51,7 +51,7 @@
 
 @media (max-width: 390px) {
     .poster-img {
-        height: 240px;
+        height: 260px;
     }
 
     .movie-card {
@@ -119,7 +119,7 @@
     }
 
     .poster-img {
-        height: 320px;
+        height: 360px;
     }
 
     .title {
@@ -152,11 +152,11 @@
 
 @media (min-width: 993px) {
     .movie-card {
-        width: 23%;
+        width: 24%;
     }
 
     .poster-img {
-        height: 400px;
+        height: 480px;
     }
 
     .btn-outline-success {
@@ -292,7 +292,7 @@ html {
 }
 
 .swiper-slide {
-    padding-top: 50px;
+    padding-top: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -301,10 +301,8 @@ html {
 }
 
 .swiper-slide img {
-    width: 90%;
-    height: 100%;
-    object-fit: cover;
-    max-height: 720px;
+    width: 92%;
+    height: auto;
     border-radius: 15px;
 }
 
@@ -315,36 +313,14 @@ html {
 }
 
 .swiper-button-next {
-    right: 2%;
+    right: 1%;
 }
 
 .swiper-button-prev {
-    left: 2%;
-}
-
-@media (max-width: 1200px) {
-    .swiper-slide img {
-        max-height: 600px;
-    }
-}
-
-@media (max-width: 992px) {
-    .swiper-slide img {
-        max-height: 480px;
-    }
-}
-
-@media (max-width: 768px) {
-    .swiper-slide img {
-        max-height: 360px;
-    }
+    left: 1%;
 }
 
 @media (max-width: 576px) {
-    .swiper-slide img {
-        max-height: 240px;
-    }
-
     .swiper-button-next, .swiper-button-prev {
         display: none;
     }

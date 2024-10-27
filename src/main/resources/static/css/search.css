@@ -52,7 +52,7 @@
 
 @media (max-width: 390px) {
     .poster-img {
-        height: 240px;
+        height: 260px;
     }
 
     .movie-card {
@@ -122,7 +122,7 @@
     }
 
     .poster-img {
-        height: 320px;
+        height: 360px;
     }
 
     .title {
@@ -157,11 +157,11 @@
 
 @media (min-width: 993px) {
     .movie-card {
-        width: 23%;
+        width: 24%;
     }
 
     .poster-img {
-        height: 400px;
+        height: 480px;
     }
 
     .btn-outline-success {

@@ -39,7 +39,6 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-left: 15px;
 }
 
 .block1 {
@@ -95,7 +94,7 @@ input:disabled + label:hover {
 
 @media (max-width: 1399px) {
     .checkbox-container label {
-        width: calc(100% / 18);
+        width: calc(100% / 25);
     }
 }
 
