@@ -14,7 +14,12 @@
         <div class = "swiper-container">
             <div class = "swiper-wrapper">
                 <div class = "swiper-slide" th:each = "movie : ${movieList}" th:if = "${!movie.bannerUrl.isEmpty()}">
-                    <img th:src = "${movie.bannerUrl}" alt = "Movie Banner">
+                    <form th:action = "@{/details}" method = "get" style = "text-decoration: none">
+                        <input type = "hidden" name = "title" th:value = "${movie.title}">
+                        <button type = "submit" class = "poster-button">
+                            <img th:src = "${movie.bannerUrl}" alt = "Movie Banner">
+                        </button>
+                    </form>
                     <div class = "swiper-button-next"></div>
                     <div class = "swiper-button-prev"></div>
                 </div>

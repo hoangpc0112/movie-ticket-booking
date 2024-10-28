@@ -300,6 +300,14 @@ html {
     border-radius: 10px;
 }
 
+.swiper-slide .poster-button {
+    cursor: grab;
+}
+
+.swiper-slide .poster-button:active {
+    cursor: grabbing;
+}
+
 .swiper-slide img {
     width: 92%;
     height: auto;

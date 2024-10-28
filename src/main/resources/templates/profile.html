@@ -50,6 +50,7 @@
                             <th>Giờ chiếu</th>
                             <th>Ngày chiếu</th>
                             <th>Thời gian đặt</th>
+                            <th>Huỷ vé</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -64,6 +65,12 @@
                             <td th:text = "${seat.time}"></td>
                             <td th:text = "${seat.date}"></td>
                             <td th:text = "${seat.bookTime}"></td>
+                            <td>
+                                <form th:action = "@{/cancel-ticket}" method = "post">
+                                    <input type = "hidden" th:value = "${seat.id}" name = "seatId">
+                                    <button type = "submit" class = "btn btn-primary">Huỷ vé</button>
+                                </form>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

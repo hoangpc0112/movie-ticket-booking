@@ -203,4 +203,17 @@ public class SeatController {
         model.addAttribute( "bookTime", bookTime );
         return "bill";
     }
+
+    @PostMapping ( "/cancel-ticket" )
+    public String cancelTicket ( @RequestParam ( "seatId" ) String seatId ) {
+        BookedSeat seat = bookedSeatRepository.findById( Long.parseLong( seatId ) );
+        if ( LocalDate.now().isAfter( LocalDate.parse( seat.getDate() ) ) ) {
+            return "redirect:/profile";
+        }
+        if ( LocalTime.now().isAfter( LocalTime.parse( seat.getTime() ) ) ) {
+            return "redirect:/profile";
+        }
+        bookedSeatRepository.delete( seat );
+        return "redirect:/profile";
+    }
 }

@@ -14,4 +14,6 @@ public interface BookedSeatRepository extends JpaRepository < BookedSeat, Long >
     List < BookedSeat > findByUser ( String user );
 
     boolean existsBySeatNoAndMovieTitleAndTimeAndDate ( int seatNo, String movieTitle, String time, String date );
+
+    BookedSeat findById ( long id );
 }

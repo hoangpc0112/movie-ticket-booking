@@ -48,16 +48,20 @@ public class AccountController {
 
     @PostMapping ( "/register" )
     public String register ( @Valid @ModelAttribute ( "registerDTO" ) RegisterDTO registerDTO, BindingResult bindingResult, Model model, HttpSession session ) {
+        if ( registerDTO.getUsername().contains( " " ) ) {
+            bindingResult.addError( new FieldError( "registerDTO", "username", "Username không được chứa dấu cách." ) );
+        }
+
         if ( !registerDTO.getPassword().equals( registerDTO.getConfirmPassword() ) ) {
             bindingResult.addError( new FieldError( "registerDTO", "confirmPassword", "Mật khẩu và mật khẩu xác nhận lại không giống nhau." ) );
         }
         AppUser appUser = userRepo.findByUsername( registerDTO.getUsername() );
         if ( appUser != null ) {
-            bindingResult.addError( new FieldError( "registerDTO", "username", "Username đã có người sử dụng" ) );
+            bindingResult.addError( new FieldError( "registerDTO", "username", "Username đã có người sử dụng." ) );
         }
         appUser = userRepo.findByEmail( registerDTO.getEmail() );
         if ( appUser != null ) {
-            bindingResult.addError( new FieldError( "registerDTO", "email", "Email đã có người sử dụng" ) );
+            bindingResult.addError( new FieldError( "registerDTO", "email", "Email đã có người sử dụng." ) );
         }
         if ( bindingResult.hasErrors() ) {
             return "register";
