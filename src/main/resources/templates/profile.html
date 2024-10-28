@@ -18,14 +18,22 @@
                     <button class = "nav-link" id = "order-history-tab" data-bs-toggle = "tab" data-bs-target = "#order-history" type = "button" role = "tab" aria-controls = "order-history" aria-selected = "false">Lịch sử đặt vé</button>
                 </li>
             </ul>
+            <div th:if = "${successChangePassword}" class = "alert alert-success alert-dismissible fade show" role = "alert">
+                <strong>Đổi mật khẩu thành công!</strong>
+                <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
+            </div>
+            <div th:if = "${cancelTicket}" class = "alert alert-success alert-dismissible fade show" role = "alert">
+                <strong>Huỷ vé thành công!</strong>
+                <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
+            </div>
+            <div th:if = "${expiredTicket}" class = "alert alert-success alert-dismissible fade show" role = "alert">
+                <strong>Không thể huỷ vé do đã qua thời gian chiếu.</strong>
+                <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
+            </div>
             <div class = "tab-content" id = "tabContent">
                 <div class = "tab-pane fade show active" id = "change-password" role = "tabpanel" aria-labelledby = "change-password-tab">
                     <div class = "profile-header">
                         <h1>Thông tin của người dùng [[${user.username}]]:</h1>
-                    </div>
-                    <div th:if = "${successChangePassword}" class = "alert alert-success alert-dismissible fade show" role = "alert">
-                        <strong>Đổi mật khẩu thành công!</strong>
-                        <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
                     </div>
                     <div class = "mb-3">
                         <label class = "form-label">Username: [[${user.username}]]</label>

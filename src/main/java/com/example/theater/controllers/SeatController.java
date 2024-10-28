@@ -207,13 +207,13 @@ public class SeatController {
     @PostMapping ( "/cancel-ticket" )
     public String cancelTicket ( @RequestParam ( "seatId" ) String seatId ) {
         BookedSeat seat = bookedSeatRepository.findById( Long.parseLong( seatId ) );
-        if ( LocalDate.now().isAfter( LocalDate.parse( seat.getDate() ) ) ) {
-            return "redirect:/profile";
+
+        // không cho huỷ vé nếu đã qua tgian chiếu
+        if ( LocalDate.now().isAfter( LocalDate.parse( seat.getDate() ) ) || ( LocalDate.now().equals( LocalDate.parse( seat.getDate() ) ) && LocalTime.now().isAfter( LocalTime.parse( seat.getTime() ) ) ) ) {
+            return "redirect:/profile?expiredTicket=true";
         }
-        if ( LocalTime.now().isAfter( LocalTime.parse( seat.getTime() ) ) ) {
-            return "redirect:/profile";
-        }
+
         bookedSeatRepository.delete( seat );
-        return "redirect:/profile";
+        return "redirect:/profile?cancelTicket=true";
     }
 }
