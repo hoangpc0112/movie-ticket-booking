@@ -4,7 +4,6 @@
         <meta charset = "utf-8">
         <meta name = "viewport" content = "width=device-width, initial-scale=1">
         <link href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel = "stylesheet" integrity = "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin = "anonymous">
-        <title></title>
     </head>
     <body>
         <header th:fragment = "header">
@@ -21,6 +20,77 @@
                             </li>
                             <li class = "nav-item">
                                 <a class = "nav-link text-white" href = "/coming-soon">Phim sắp chiếu</a>
+                            </li>
+                            <li class = "nav-item dropdown">
+                                <a class = "nav-link dropdown-toggle text-white" href = "#" role = "button" data-bs-toggle = "dropdown" aria-expanded = "false">Thể loại</a>
+                                <ul class = "dropdown-menu">
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Hành Động'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Hành Động</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Tình Cảm'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Tình Cảm</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Hài'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Hài Hước</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Tâm Lý'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Tâm Lý</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Chiến Tranh'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Chiến Tranh</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Thể Thao'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Thể Thao</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Hoạt Hình'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Hoạt Hình</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Viễn Tưởng'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Viễn Tưởng</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Phiêu Lưu'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Phiêu Lưu</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Khoa Học'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Khoa Học</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form th:action = "@{/genre}" method = "post">
+                                            <input type = "hidden" th:value = "'Kinh Dị'" name = "genre">
+                                            <button class = "dropdown-item" type = "submit">Kinh Dị</button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                             <li class = "nav-item dropdown">
                                 <a class = "nav-link dropdown-toggle text-white" href = "#" role = "button" data-bs-toggle = "dropdown" aria-expanded = "false">Về OOP6</a>

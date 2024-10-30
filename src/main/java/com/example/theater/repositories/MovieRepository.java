@@ -6,11 +6,21 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface MovieRepository extends JpaRepository < Movie, Long > {
-    Movie findByTitle ( String title );
+public interface MovieRepository extends JpaRepository <Movie, Long> {
+    Movie findByTitle (String title);
 
-    List < Movie > getAllMoviesByNowShowing ( boolean nowShowing );
+    List <Movie> getAllMoviesByNowShowing (boolean nowShowing);
 
-    @Query ( "select m from Movie m where (lower(m.title) like lower(concat('%', :keyword, '%')) or " + "lower(m.director) like lower(concat('%', :keyword, '%')) or " + "lower(m.genre) like lower(concat('%', :keyword, '%')) or " + "lower(m.actors) like lower(concat('%', :keyword, '%')) or " + "lower(m.language) like lower(concat('%', :keyword, '%'))) " + "and m.nowShowing = :nowShowing" )
-    List < Movie > getAllMoviesByKeyWordAndNowShowing ( String keyword, boolean nowShowing );
+    @Query (value = "SELECT * FROM movie " +
+            "WHERE (lower(title) REGEXP CONCAT('\\\\b', lower(:keyword), '[\\\\b\\\\s:,.\\\\;]*') OR " +
+            "lower(director) REGEXP CONCAT('\\\\b', lower(:keyword), '[\\\\b\\\\s:,.\\\\;]*') OR " +
+            "lower(genre) REGEXP CONCAT('\\\\b', lower(:keyword), '[\\\\b\\\\s:,.\\\\;]*') OR " +
+            "lower(actors) REGEXP CONCAT('\\\\b', lower(:keyword), '[\\\\b\\\\s:,.\\\\;]*') OR " +
+            "lower(language) REGEXP CONCAT('\\\\b', lower(:keyword), '[\\\\b\\\\s:,.\\\\;]*')) " +
+            "AND now_showing = :nowShowing", nativeQuery = true)
+    List <Movie> getAllMoviesByKeyWordAndNowShowing (String keyword, boolean nowShowing);
+
+
+    @Query ("select m from Movie m where m.genre like concat('%', :genre, '%') and m.nowShowing = :nowShowing ")
+    List <Movie> getAllMoviesByGenreAAndNowShowing (String genre, boolean nowShowing);
 }

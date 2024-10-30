@@ -10,63 +10,63 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 @Entity
-@Table ( name = "movie" )
+@Table (name = "movie")
 public class Movie {
 
     @Id
-    @GeneratedValue ( strategy = GenerationType.IDENTITY )
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String title;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String posterUrl;
 
-    @Column ( columnDefinition = "text", nullable = false )
+    @Column (columnDefinition = "text", nullable = false)
     private String description;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String releaseDate;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private boolean nowShowing;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String trailerUrl;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String genre;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String director;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String actors;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private int duration;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String language;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String rated;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String bannerUrl;
 
-    public Movie ( String title, String posterUrl, String description, String releaseDate, String nowShowing, String trailerUrl, String genre, String director, String actors, String duration, String language, String rated, String bannerUrl ) {
+    public Movie (String title, String posterUrl, String description, String releaseDate, String nowShowing, String trailerUrl, String genre, String director, String actors, String duration, String language, String rated, String bannerUrl) {
         this.title = title;
         this.posterUrl = posterUrl;
         this.description = description;
         this.releaseDate = releaseDate;
-        this.nowShowing = Boolean.parseBoolean( nowShowing );
+        this.nowShowing = Boolean.parseBoolean(nowShowing);
         this.trailerUrl = trailerUrl;
         this.genre = genre;
         this.director = director;
         this.actors = actors;
-        this.duration = Integer.parseInt( duration );
+        this.duration = Integer.parseInt(duration);
         this.language = language;
         this.rated = rated;
         this.bannerUrl = bannerUrl;

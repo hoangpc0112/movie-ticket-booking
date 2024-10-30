@@ -12,24 +12,24 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 
 @Entity
-@Table ( name = "comments" )
+@Table (name = "comments")
 public class Comment {
 
     @Id
-    @GeneratedValue ( strategy = GenerationType.IDENTITY )
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    @JoinColumn ( name = "movie_id", referencedColumnName = "id" )
+    @JoinColumn (name = "movie_id", referencedColumnName = "id")
     private Movie movie;
 
-    @Column ( nullable = false )
+    @Column (nullable = false)
     private String commenter;
 
-    @Column ( columnDefinition = "TEXT", nullable = false )
+    @Column (columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    public Comment ( Movie movie, String commenter, String content ) {
+    public Comment (Movie movie, String commenter, String content) {
         this.movie = movie;
         this.commenter = commenter;
         this.content = content;

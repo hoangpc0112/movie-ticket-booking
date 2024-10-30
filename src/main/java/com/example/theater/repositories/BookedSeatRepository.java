@@ -6,14 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface BookedSeatRepository extends JpaRepository < BookedSeat, Long > {
+public interface BookedSeatRepository extends JpaRepository <BookedSeat, Long> {
 
-    @Query ( value = "select seat_no from booked_seats " + "where movie_title = ? and time = ? and date = ?", nativeQuery = true )
-    List < Integer > findAllSeatNoBy ( String movieTitle, String time, String date );
+    @Query (value = "select seat_no from booked_seats " + "where movie_title = ? and time = ? and date = ?", nativeQuery = true)
+    List <Integer> findAllSeatNoBy (String movieTitle, String time, String date);
 
-    List < BookedSeat > findByUser ( String user );
+    List <BookedSeat> findByUser (String user);
 
-    boolean existsBySeatNoAndMovieTitleAndTimeAndDate ( int seatNo, String movieTitle, String time, String date );
+    boolean existsBySeatNoAndMovieTitleAndTimeAndDate (int seatNo, String movieTitle, String time, String date);
 
-    BookedSeat findById ( long id );
+    BookedSeat findById (long id);
 }

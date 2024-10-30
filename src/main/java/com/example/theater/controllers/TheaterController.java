@@ -15,39 +15,47 @@ public class TheaterController {
     @Autowired
     private MovieRepository movieRepository;
 
-    @GetMapping ( "/now-showing" )
-    public String nowShowing ( Model model ) {
-        model.addAttribute( "movieList", movieRepository.getAllMoviesByNowShowing( true ) );
+    @GetMapping ("/now-showing")
+    public String nowShowing (Model model) {
+        model.addAttribute("movieList", movieRepository.getAllMoviesByNowShowing(true));
         return "now-showing";
     }
 
-    @GetMapping ( "/coming-soon" )
-    public String comingSoon ( Model model ) {
-        model.addAttribute( "movieList", movieRepository.getAllMoviesByNowShowing( false ) );
+    @GetMapping ("/coming-soon")
+    public String comingSoon (Model model) {
+        model.addAttribute("movieList", movieRepository.getAllMoviesByNowShowing(false));
         return "coming-soon";
     }
 
-    @GetMapping ( "/search" )
-    public String search ( @RequestParam ( "keyword" ) String keyword, Model model ) {
-        model.addAttribute( "keyword", keyword );
-        model.addAttribute( "nowShowingMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing( keyword, true ) );
-        model.addAttribute( "comingSoonMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing( keyword, false ) );
+    @GetMapping ("/search")
+    public String search (@RequestParam ("keyword") String keyword, Model model) {
+        model.addAttribute("keyword", keyword.trim());
+        model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing(keyword.trim(), true));
+        model.addAttribute("comingSoonMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing(keyword.trim(), false));
         return "search";
     }
 
-    @GetMapping ( "/about-us" )
+    @GetMapping ("/about-us")
     public String aboutUs () {
         return "about-us";
     }
 
-    @GetMapping ( "/movie-input" )
+    @GetMapping ("/movie-input")
     public String movieInput () {
         return "movie-input";
     }
 
-    @PostMapping ( "/movie-input" )
-    public String movieInputProcess ( @RequestParam String title, @RequestParam String posterUrl, @RequestParam String description, @RequestParam String releaseDate, @RequestParam String nowShowing, @RequestParam String trailerUrl, @RequestParam String genre, @RequestParam String director, @RequestParam String actors, @RequestParam String duration, @RequestParam String language, @RequestParam String rated, @RequestParam String bannerUrl ) {
-        movieRepository.save( new Movie( title.trim(), posterUrl.trim(), description.trim(), releaseDate.trim(), nowShowing.trim(), trailerUrl.trim(), genre.trim(), director.trim(), actors.trim(), duration.trim(), language.trim(), rated.trim(), bannerUrl.trim() ) );
+    @PostMapping ("/movie-input")
+    public String movieInputProcess (@RequestParam String title, @RequestParam String posterUrl, @RequestParam String description, @RequestParam String releaseDate, @RequestParam String nowShowing, @RequestParam String trailerUrl, @RequestParam String genre, @RequestParam String director, @RequestParam String actors, @RequestParam String duration, @RequestParam String language, @RequestParam String rated, @RequestParam String bannerUrl) {
+        movieRepository.save(new Movie(title.trim(), posterUrl.trim(), description.trim(), releaseDate.trim(), nowShowing.trim(), trailerUrl.trim(), genre.trim(), director.trim(), actors.trim(), duration.trim(), language.trim(), rated.trim(), bannerUrl.trim()));
         return "movie-input";
+    }
+
+    @PostMapping ("/genre")
+    public String genre (@RequestParam String genre, Model model) {
+        model.addAttribute("genre", genre);
+        model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByGenreAAndNowShowing(genre, true));
+        model.addAttribute("comingSoonMovieList", movieRepository.getAllMoviesByGenreAAndNowShowing(genre, false));
+        return "genre";
     }
 }
