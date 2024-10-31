@@ -170,7 +170,6 @@
     background-color: #f9f9f9;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin: 20px;
 }
 
 .intro h2 {
@@ -335,7 +334,7 @@ html {
 }
 
 .google-map {
-    padding-bottom: 30%;
+    padding-bottom: 40%;
     position: relative;
     width: 80%;
     height: 50%;
@@ -351,6 +350,55 @@ html {
     left: 0;
     top: 0;
     position: absolute;
+}
+
+.intro {
+    text-align: center;
+}
+
+#reason {
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+.reasons-list {
+    text-align: -moz-center;
+    margin: 0 auto;
+    padding-left: 2rem;
+    max-width: 700px;
+    list-style-position: inside;
+}
+
+.reasons-list {
+    text-align: left;
+    margin: 0 auto;
+    padding-left: 2rem;
+    max-width: 700px;
+    list-style-position: inside;
+    counter-reset: list-counter;
+}
+
+.reasons-list li {
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    position: relative;
+    padding-left: 1.5em;
+}
+
+.reasons-list li::before {
+    counter-increment: list-counter;
+    content: counter(list-counter) ".";
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.mt-4 {
+    font-size: 3em;
 }
 
 @media (max-width: 768px) {

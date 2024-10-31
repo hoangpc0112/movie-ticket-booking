@@ -9,31 +9,33 @@
     </head>
     <body>
         <header th:replace = "~{common/header :: header}"></header>
-        <section class = "intro text-center">
-            <h1>Chào mừng đến với OOP16!</h1>
-            <p>
-                Chúng tôi rất vui mừng được chào đón bạn đến với OOP16 - điểm đến lý tưởng cho những người yêu thích điện ảnh.
-            </p>
-            <p>
-                <strong>Tại sao chọn OOP16?</strong>
-            </p>
-            <ul>
-                <li>
-                    <strong>Cập nhật liên tục:</strong> Chúng tôi luôn cập nhật những bộ phim mới nhất để bạn không bỏ lỡ bất kỳ tác phẩm điện ảnh nào.
-                </li>
-                <li>
-                    <strong>Đánh giá chân thực:</strong> Những đánh giá từ các chuyên gia và người xem giúp bạn có cái nhìn tổng quan trước khi quyết định xem phim.
-                </li>
-                <li>
-                    <strong>Trải nghiệm tuyệt vời:</strong> Giao diện thân thiện, dễ sử dụng giúp bạn dễ dàng tìm kiếm và đặt vé xem phim.
-                </li>
-            </ul>
-            <p>
-                Hãy cùng khám phá và trải nghiệm những bộ phim tuyệt vời tại OOP16. Chúng tôi cam kết mang đến cho bạn những giây phút giải trí tuyệt vời nhất!
-            </p>
+        <section class = "intro text-center py-5 mb-5 container-fluid">
+            <div class = "container">
+                <h1>Chào mừng đến với OOP16!</h1>
+                <p class = "mb-4">
+                    Chào mừng bạn đến với rạp chiếu phim OOP16 – điểm đến lý tưởng cho những tín đồ yêu thích nghệ thuật điện ảnh! Tại OOP16, chúng tôi tự hào mang đến trải nghiệm điện ảnh cao cấp, với hệ thống màn hình IMAX cực lớn, độ phân giải siêu nét và âm thanh Dolby Atmos sống động. Không gian rạp hiện đại, tiện nghi cùng ghế ngồi rộng rãi giúp bạn tận hưởng từng khoảnh khắc phim một cách thoải mái nhất. OOP16 luôn cập nhật những bộ phim mới nhất từ Hollywood, phim độc lập nghệ thuật từ các nhà làm phim độc lập, cho đến các siêu phẩm trong nước, đảm bảo đáp ứng mọi sở thích của bạn.
+                </p>
+                <p id = "reason" class = "mb-3">
+                    <strong>Tại sao chọn OOP16?</strong>
+                </p>
+                <ul class = "reasons-list">
+                    <li>
+                        <strong>Cập nhật liên tục:</strong> Chúng tôi luôn cập nhật những bộ phim mới nhất để bạn không bỏ lỡ bất kỳ tác phẩm điện ảnh nào.
+                    </li>
+                    <li>
+                        <strong>Đánh giá chân thực:</strong> Những đánh giá từ các chuyên gia và người xem giúp bạn có cái nhìn tổng quan trước khi quyết định xem phim.
+                    </li>
+                    <li>
+                        <strong>Trải nghiệm tuyệt vời:</strong> Giao diện thân thiện, dễ sử dụng giúp bạn dễ dàng tìm kiếm và đặt vé xem phim.
+                    </li>
+                </ul>
+                <p class = "mt-4">
+                    <a href = "/now-showing" style = "text-decoration: none; font-size: 1.3em"><strong>Đặt vé ngay</strong></a> để trải nghiệm cảm giác tuyệt vời của thế giới điện ảnh rộng lớn tại OOP16!
+                </p>
+            </div>
         </section>
         <div class = "google-map">
-            <iframe src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.292401303916!2d105.78484157600731!3d20.980912980656537!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accdd8a1ad71%3A0xa2f9b16036648187!2zSOG7jWMgdmnhu4duIEPDtG5nIG5naOG7hyBCxrB1IGNow61uaCB2aeG7hW4gdGjDtG5n!5e0!3m2!1svi!2s!4v1730133245027!5m2!1svi!2s" width = "600" height = "450" allowfullscreen = "" loading = "lazy" referrerpolicy = "no-referrer-when-downgrade"></iframe>
+            <iframe src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.292401303916!2d105.78484157600731!3d20.980912980656537!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accdd8a1ad71%3A0xa2f9b16036648187!2zSOG7jWMgdmnhu4duIEPDtG5nIG5naOG7hyBCxrB1IGNow61uaCB2aeG7hW4gdGjDtG5n!5e0!3m2!1svi!2s!4v1730133245027!5m2!1svi!2s" style = "border:0;" allowfullscreen = "" loading = "lazy" referrerpolicy = "no-referrer-when-downgrade"></iframe>
         </div>
         <br>
         <footer th:replace = "~{common/footer :: footer}"></footer>

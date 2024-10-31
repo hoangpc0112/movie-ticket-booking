@@ -59,7 +59,12 @@
             </div>
         </div>
         <br>
-        <div class = "comment-form">
+        <div sec:authorize = "!isAuthenticated()">
+            <div class = "login-notification">
+                Vui lòng đăng nhập để có thể bình luận.
+            </div>
+        </div>
+        <div class = "comment-form" sec:authorize = "isAuthenticated()">
             <form th:action = "@{/details}" method = "post">
                 <div>
                     <input type = "hidden" name = "title" th:value = "${movie.title}"/>

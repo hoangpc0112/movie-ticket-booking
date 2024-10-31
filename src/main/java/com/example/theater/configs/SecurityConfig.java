@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/verify-email").permitAll()
                         .requestMatchers("/user-manual").permitAll()
                         .requestMatchers("/about-us").permitAll()
-                        .requestMatchers("/genre").permitAll()
+                        .requestMatchers("/genre/**").permitAll()
                         .anyRequest()
                         .authenticated())
                 .formLogin(form -> form
