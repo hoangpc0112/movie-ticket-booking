@@ -232,11 +232,17 @@ html {
 }
 
 .login-notification {
-    padding: 25px;
     background-color: #f8d7da;
     color: #721c24;
+    padding: 15px;
     border: 1px solid #f5c6cb;
     border-radius: 5px;
     text-align: center;
-    font-size: 1.5em;
+    font-size: 20px;
+}
+
+@media (max-width: 600px) {
+    .login-notification {
+        padding: 10px;
+    }
 }
