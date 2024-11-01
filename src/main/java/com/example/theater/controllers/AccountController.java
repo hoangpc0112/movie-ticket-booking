@@ -123,21 +123,13 @@ public class AccountController {
     }
 
     @GetMapping ("/profile")
-    public String profile (Model model, @RequestParam (value = "successChangePassword", required = false) String successChangePassword, @RequestParam (value = "cancelTicket", required = false) String cancelTicket, @RequestParam (name = "expiredTicket", required = false) String expiredTicket) {
+    public String profile (Model model, @RequestParam (value = "successChangePassword", required = false, defaultValue = "false") String successChangePassword, @RequestParam (value = "cancelTicket", required = false, defaultValue = "false") String cancelTicket, @RequestParam (name = "expiredTicket", required = false) String expiredTicket) {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("orderHistory", ticketRepository.findByUser(currentUser));
         model.addAttribute("user", userRepo.findByUsername(currentUser));
-
-        if ("true".equals(successChangePassword)) {
-            model.addAttribute("successChangePassword", "Đổi mật khẩu thành công!");
-        }
-        if ("true".equals(cancelTicket)) {
-            model.addAttribute("cancelTicket", "Huỷ vé thành công!");
-        }
-        if ("true".equals(expiredTicket)) {
-            model.addAttribute("expiredTicket", "Đã qua thời gian chiếu trên vé!");
-        }
-
+        model.addAttribute("successChangePassword", successChangePassword);
+        model.addAttribute("cancelTicket", cancelTicket);
+        model.addAttribute("expiredTicket", expiredTicket);
         return "profile";
     }
 
