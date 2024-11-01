@@ -24,7 +24,7 @@
                             <input type = "hidden" name = "title" th:value = "${movie.title}">
                             <button type = "submit" class = "btn btn-primary" th:if = "${movie.nowShowing == true}" style = "margin-right: 20px">Chọn ghế</button> <!-- Phim đang chiếu ms cho đặt -->
                         </form>
-                        <a th:href = "@{${movie.trailerUrl}}" target = "_blank" th:if = "${!movie.trailerUrl.isEmpty()}" class = "btn btn-secondary">Xem trailer</a>
+                        <a id = "showTrailerBtn" th:href = "@{${movie.trailerUrl}}" target = "_blank" th:if = "${!movie.trailerUrl.isEmpty()}" class = "btn btn-secondary">Xem trailer</a>
                         <div th:if = "${movie.trailerUrl.isEmpty()}" class = "btn btn-secondary">Xem trailer<span th:if = "${movie.trailerUrl.isEmpty()}"> (Đang cập nhật)</span>
                         </div>
                     </div>
@@ -90,7 +90,40 @@
                 <span th:text = "${comment.content}"></span>
             </div>
         </div>
+        <div id = "cboxOverlay" class = "cboxOverlay"></div>
+        <div id = "colorbox" class = "colorbox">
+            <button id = "cboxClose" class = "cboxClose">Close</button>
+            <iframe id = "movieTrailer" width = "640" height = "360" th:src = "'https://www.youtube.com/embed/' + ${#strings.substring(movie.trailerUrl, movie.trailerUrl.indexOf('=') + 1)}" frameborder = "0" allow = "autoplay; encrypted-media" allowfullscreen>
+            </iframe>
+        </div>
         <footer th:replace = "~{common/footer :: footer}"></footer>
+        <script>
+            document.getElementById('showTrailerBtn').addEventListener('click', function (event) {
+                if (window.innerWidth < 640) {
+                    window.open(this.href, '_blank');
+                } else {
+                    event.preventDefault();
+                    document.getElementById('cboxOverlay').style.display = 'block';
+                    document.getElementById('colorbox').style.display = 'block';
+                    var iframe = document.getElementById('movieTrailer');
+                    iframe.src = iframe.src;
+                }
+            });
+
+            document.getElementById('cboxClose').addEventListener('click', function () {
+                document.getElementById('cboxOverlay').style.display = 'none';
+                document.getElementById('colorbox').style.display = 'none';
+                var iframe = document.getElementById('movieTrailer');
+                iframe.src = iframe.src;
+            });
+
+            document.getElementById('cboxOverlay').addEventListener('click', function () {
+                document.getElementById('cboxOverlay').style.display = 'none';
+                document.getElementById('colorbox').style.display = 'none';
+                var iframe = document.getElementById('movieTrailer');
+                iframe.src = iframe.src;
+            });
+        </script>
         <script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin = "anonymous"></script>
     </body>
 </html>
