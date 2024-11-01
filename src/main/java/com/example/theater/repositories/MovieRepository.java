@@ -12,11 +12,11 @@ public interface MovieRepository extends JpaRepository <Movie, Long> {
     List <Movie> getAllMoviesByNowShowing (boolean nowShowing);
 
     @Query (value = "SELECT * FROM movie " +
-            "WHERE (lower(title) REGEXP CONCAT('\\\\b', lower(:keyword), '\\\\b') OR " +
-            "lower(director) REGEXP CONCAT('\\\\b', lower(:keyword), '\\\\b') OR " +
-            "lower(genre) REGEXP CONCAT('\\\\b', lower(:keyword), '\\\\b') OR " +
-            "lower(actors) REGEXP CONCAT('\\\\b', lower(:keyword), '\\\\b') OR " +
-            "lower(language) REGEXP CONCAT('\\\\b', lower(:keyword), '\\\\b')) " +
+            "WHERE (title REGEXP CONCAT('\\\\b', :keyword, '\\\\b') OR " +
+            "director REGEXP CONCAT('\\\\b', :keyword, '\\\\b') OR " +
+            "genre REGEXP CONCAT('\\\\b', :keyword, '\\\\b') OR " +
+            "actors REGEXP CONCAT('\\\\b', :keyword, '\\\\b') OR " +
+            "language REGEXP CONCAT('\\\\b', :keyword, '\\\\b')) " +
             "AND now_showing = :nowShowing",
             nativeQuery = true)
     List <Movie> getAllMoviesByKeyWordAndNowShowing (String keyword, boolean nowShowing);

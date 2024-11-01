@@ -72,7 +72,7 @@
                             </li>
                         </ul>
                         <form class = "d-flex search-container" role = "search" th:action = "@{/search}" method = "get">
-                            <input name = "keyword" class = "form-control me-2" type = "search" placeholder = "Search" aria-label = "Search">
+                            <input name = "keyword" class = "form-control me-2" type = "search" placeholder = "Search" aria-label = "Search" required>
                             <button class = "btn btn-outline-success" type = "submit">Search</button>
                         </form>
                         <div sec:authorize = "isAuthenticated()" class = "d-flex align-items-center">

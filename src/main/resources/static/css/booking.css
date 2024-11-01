@@ -1,16 +1,3 @@
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-}
-
-.navbar .nav-link {
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s;
-}
-
-.navbar .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
 .screen {
     background: rgb(71, 165, 209);
     height: 70px;
@@ -102,20 +89,12 @@ input:disabled + label:hover {
         width: calc(100% / 13);
         font-size: 0.9em;
     }
-
-    .search-container {
-        margin-bottom: 10px;
-    }
 }
 
 @media (max-width: 768px) {
     .checkbox-container label {
         width: calc(100% / 13);
         font-size: 0.8em;
-    }
-
-    .search-container {
-        margin-bottom: 10px;
     }
 }
 
@@ -129,87 +108,4 @@ input:disabled + label:hover {
         width: 100%;
         padding: 10px;
     }
-
-    footer {
-        font-size: 0.9em;
-    }
-
-    .search-container {
-        margin-bottom: 10px;
-    }
-}
-
-@media (max-width: 390px) {
-    .search-container {
-        margin-bottom: 10px;
-    }
-
-    footer {
-        font-size: 0.8em;
-    }
-}
-
-footer {
-    background-color: #333;
-    color: #fff;
-    padding: 20px 0 0 0;
-    text-align: center;
-    margin-top: auto;
-}
-
-.footer-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.footer-links a,
-.footer-social a {
-    color: #fff;
-    margin: 0 10px;
-    text-decoration: none;
-}
-
-.footer-links a:hover,
-.footer-social a:hover {
-    text-decoration: underline;
-}
-
-.footer-contact p {
-    margin: 5px 0;
-}
-
-.footer-copy {
-    margin-top: 20px;
-}
-
-.btn-outline-success {
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-    margin-right: 50px;
-}
-
-.btn-outline-success:hover {
-    color: #fff;
-    background-color: #218838;
-    border-color: #1e7e34;
-}
-
-header {
-    position: fixed;
-    width: 100%;
-    z-index: 9999;
-    top: 0;
-}
-
-body {
-    padding-top: 50px;
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-}
-
-html {
-    height: 100%;
 }
