@@ -62,12 +62,8 @@ public class SeatController {
     @PostMapping ("/details")
     public String details (@RequestParam String title, @RequestParam String content, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("SPRING_SECURITY_CONTEXT") != null) {
-            Movie movie = movieRepository.findByTitle(title);
-            commentRepository.save(new Comment(movie, SecurityContextHolder.getContext().getAuthentication().getName(), content.trim()));
-            return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
-        }
-        errorReport = "Vui lòng đăng nhập trước khi bình luận.";
+        Movie movie = movieRepository.findByTitle(title);
+        commentRepository.save(new Comment(movie, SecurityContextHolder.getContext().getAuthentication().getName(), content.trim()));
         return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
     }
 
