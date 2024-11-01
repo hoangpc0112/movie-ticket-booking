@@ -72,12 +72,6 @@ input:disabled + label:hover {
     color: black;
 }
 
-@media (min-width: 993px) {
-    .btn-outline-success {
-        margin-right: 50px;
-    }
-}
-
 @media (max-width: 1399px) {
     .checkbox-container label {
         width: calc(100% / 25);
