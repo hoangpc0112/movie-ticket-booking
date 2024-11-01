@@ -6,8 +6,6 @@ import com.example.theater.entities.Movie;
 import com.example.theater.repositories.BookedSeatRepository;
 import com.example.theater.repositories.CommentRepository;
 import com.example.theater.repositories.MovieRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -60,8 +58,7 @@ public class SeatController {
     }
 
     @PostMapping ("/details")
-    public String details (@RequestParam String title, @RequestParam String content, HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
+    public String details (@RequestParam String title, @RequestParam String content) {
         Movie movie = movieRepository.findByTitle(title);
         commentRepository.save(new Comment(movie, SecurityContextHolder.getContext().getAuthentication().getName(), content.trim()));
         return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
