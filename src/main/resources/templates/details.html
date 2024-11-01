@@ -93,7 +93,7 @@
         <div id = "cboxOverlay" class = "cboxOverlay"></div>
         <div id = "colorbox" class = "colorbox">
             <button id = "cboxClose" class = "cboxClose">Close</button>
-            <iframe id = "movieTrailer" width = "640" height = "360" th:src = "'https://www.youtube.com/embed/' + ${#strings.substring(movie.trailerUrl, movie.trailerUrl.indexOf('=') + 1)}" frameborder = "0" allow = "autoplay; encrypted-media" allowfullscreen>
+            <iframe th:if = "${!movie.trailerUrl.isEmpty()}" id = "movieTrailer" width = "640" height = "360" th:src = "'https://www.youtube.com/embed/' + ${#strings.substring(movie.trailerUrl, movie.trailerUrl.indexOf('=') + 1)}" frameborder = "0" allow = "autoplay; encrypted-media" allowfullscreen>
             </iframe>
         </div>
         <footer th:replace = "~{common/footer :: footer}"></footer>
