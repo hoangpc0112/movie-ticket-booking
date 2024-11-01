@@ -10,7 +10,9 @@
     <body>
         <header th:replace = "~{common/header :: header}"></header>
         <div style = "height: 6px"></div>
-        <div class = "alert alert-danger text-center" role = "alert" th:if = "${!errorReport.isEmpty()}" th:text = "${errorReport}">
+        <div th:if = "${!errorReport.isEmpty()}" class = "alert alert-danger alert-dismissible fade show text-center" role = "alert" style = "padding-right: 0">
+            <strong style = "font-size: 1.25rem">[[${errorReport}]]</strong>
+            <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
         </div>
         <div class = "container mt-5">
             <div class = "row movie-details">

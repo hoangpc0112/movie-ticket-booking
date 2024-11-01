@@ -112,7 +112,11 @@ public class SeatController {
     }
 
     @GetMapping ("/select")
-    public String index (@RequestParam ("title") String title, @RequestParam ("localTime") String localTime, @RequestParam ("localDate") String localDate, Model model) {
+    public String select (@RequestParam ("title") String title, @RequestParam ("localTime") String localTime, @RequestParam ("localDate") String localDate, Model model) {
+        if (!movieRepository.findByTitle(title).isNowShowing()) { // người dùng cố gắng truy cập vào phần đặt vé của phim sắp chiếu
+            errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
+            return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+        }
         errorReport = "";
         movieTitle = title;
         showTime = localTime;
@@ -138,6 +142,10 @@ public class SeatController {
 
     @GetMapping ("/bill")
     public String bookSeat (@RequestParam (value = "selectedSeats", required = false) List <Integer> selectedSeats, @RequestParam ("title") String title, Model model) {
+        if (!movieRepository.findByTitle(title).isNowShowing()) { // người dùng cố gắng truy cập vào phần đặt vé của phim sắp chiếu
+            errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
+            return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+        }
         if (selectedSeats == null || selectedSeats.isEmpty()) {
             errorReport = "Vui lòng chọn ghế.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
@@ -145,8 +153,7 @@ public class SeatController {
         errorReport = "";
         List <Integer> unavailableSeats = new ArrayList <>();
         for (int selectedSeat : selectedSeats) {
-            if (ticketRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) { // kiểm tra có người nhanh tay
-                // hơn
+            if (ticketRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) { // kiểm tra có người nhanh tay hơn
                 unavailableSeats.add(selectedSeat);
             }
         }
