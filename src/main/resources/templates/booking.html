@@ -16,7 +16,7 @@
         <br>
         <h2 class = "text-center">Vui lòng chọn ngày và giờ:</h2>
         <div class = "date_form text-center">
-            <form th:action = "@{/select}" method = "post" id = "form">
+            <form th:action = "@{/select}" method = "get" id = "form">
                 <input type = "hidden" name = "title" th:value = "${movie.title}">
                 <label for = "timeSelect"></label><select name = "localTime" id = "timeSelect" onchange = "this.form.submit()">
                 <option th:value = "${localTime}">
@@ -43,7 +43,7 @@
             <div class = "screen"></div>
         </div>
         <div class = "container mt-5">
-            <form id = "seatForm" th:action = "@{/bill}" method = "post">
+            <form id = "seatForm" th:action = "@{/bill}" method = "get">
                 <input type = "hidden" name = "title" th:value = "${movie.title}">
                 <div class = "checkbox-container">
                     <div class = "block1">

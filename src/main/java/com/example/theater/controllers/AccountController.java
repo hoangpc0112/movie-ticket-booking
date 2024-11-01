@@ -3,7 +3,7 @@ package com.example.theater.controllers;
 import com.example.theater.entities.AppUser;
 import com.example.theater.DTOs.RegisterDTO;
 import com.example.theater.repositories.AppUserRepository;
-import com.example.theater.repositories.BookedSeatRepository;
+import com.example.theater.repositories.TicketRepository;
 import com.example.theater.services.MailSenderService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -32,7 +32,7 @@ public class AccountController {
     private AppUserRepository userRepo;
 
     @Autowired
-    private BookedSeatRepository bookedSeatRepository;
+    private TicketRepository ticketRepository;
 
     @Autowired
     private MailSenderService mailSenderService;
@@ -125,7 +125,7 @@ public class AccountController {
     @GetMapping ("/profile")
     public String profile (Model model, @RequestParam (value = "successChangePassword", required = false) String successChangePassword, @RequestParam (value = "cancelTicket", required = false) String cancelTicket, @RequestParam (name = "expiredTicket", required = false) String expiredTicket) {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute("orderHistory", bookedSeatRepository.findByUser(currentUser));
+        model.addAttribute("orderHistory", ticketRepository.findByUser(currentUser));
         model.addAttribute("user", userRepo.findByUsername(currentUser));
 
         if ("true".equals(successChangePassword)) {
@@ -140,7 +140,6 @@ public class AccountController {
 
         return "profile";
     }
-
 
     public String generateOtp () {
         Random random = new Random();

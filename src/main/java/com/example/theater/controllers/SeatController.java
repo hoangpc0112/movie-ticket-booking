@@ -1,9 +1,9 @@
 package com.example.theater.controllers;
 
-import com.example.theater.entities.BookedSeat;
+import com.example.theater.entities.Ticket;
 import com.example.theater.entities.Comment;
 import com.example.theater.entities.Movie;
-import com.example.theater.repositories.BookedSeatRepository;
+import com.example.theater.repositories.TicketRepository;
 import com.example.theater.repositories.CommentRepository;
 import com.example.theater.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class SeatController {
     private MovieRepository movieRepository;
 
     @Autowired
-    private BookedSeatRepository bookedSeatRepository;
+    private TicketRepository ticketRepository;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -106,12 +106,12 @@ public class SeatController {
 
         // Truy vấn tất cả vé đã đặt của 1 bộ phim trong 1 ngày giờ cụ thể
         bookedSeats.clear();
-        bookedSeats.addAll(bookedSeatRepository.findAllSeatNoBy(title, showTime, showDate));
+        bookedSeats.addAll(ticketRepository.findAllSeatNoBy(title, showTime, showDate));
         model.addAttribute("bookedSeats", bookedSeats);
         return "booking";
     }
 
-    @PostMapping ("/select")
+    @GetMapping ("/select")
     public String index (@RequestParam ("title") String title, @RequestParam ("localTime") String localTime, @RequestParam ("localDate") String localDate, Model model) {
         errorReport = "";
         movieTitle = title;
@@ -131,12 +131,12 @@ public class SeatController {
 
         // Truy vấn tất cả vé đã đặt của 1 bộ phim trong 1 ngày giờ cụ thể
         bookedSeats.clear();
-        bookedSeats.addAll(bookedSeatRepository.findAllSeatNoBy(title, localTime, localDate));
+        bookedSeats.addAll(ticketRepository.findAllSeatNoBy(title, localTime, localDate));
         model.addAttribute("bookedSeats", bookedSeats);
         return "booking";
     }
 
-    @PostMapping ("/bill")
+    @GetMapping ("/bill")
     public String bookSeat (@RequestParam (value = "selectedSeats", required = false) List <Integer> selectedSeats, @RequestParam ("title") String title, Model model) {
         if (selectedSeats == null || selectedSeats.isEmpty()) {
             errorReport = "Vui lòng chọn ghế.";
@@ -145,7 +145,7 @@ public class SeatController {
         errorReport = "";
         List <Integer> unavailableSeats = new ArrayList <>();
         for (int selectedSeat : selectedSeats) {
-            if (bookedSeatRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) { // kiểm tra có người nhanh tay
+            if (ticketRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) { // kiểm tra có người nhanh tay
                 // hơn
                 unavailableSeats.add(selectedSeat);
             }
@@ -183,8 +183,8 @@ public class SeatController {
         String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         for (int selectedSeat : selectedSeats) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
-            BookedSeat bookedSeat = new BookedSeat(movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
-            bookedSeatRepository.save(bookedSeat);
+            Ticket ticket = new Ticket(movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
+            ticketRepository.save(ticket);
         }
         bookedSeats.clear();
         bookedSeats.addAll(selectedSeats);
@@ -199,14 +199,14 @@ public class SeatController {
 
     @PostMapping ("/cancel-ticket")
     public String cancelTicket (@RequestParam ("seatId") String seatId) {
-        BookedSeat seat = bookedSeatRepository.findById(Long.parseLong(seatId));
+        Ticket seat = ticketRepository.findById(Long.parseLong(seatId));
 
         // không cho huỷ vé nếu đã qua tgian chiếu
         if (LocalDate.now().isAfter(LocalDate.parse(seat.getDate())) || (LocalDate.now().equals(LocalDate.parse(seat.getDate())) && LocalTime.now().isAfter(LocalTime.parse(seat.getTime())))) {
             return "redirect:/profile?expiredTicket=true";
         }
 
-        bookedSeatRepository.delete(seat);
+        ticketRepository.delete(seat);
         return "redirect:/profile?cancelTicket=true";
     }
 }
