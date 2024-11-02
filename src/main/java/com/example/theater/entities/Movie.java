@@ -56,7 +56,10 @@ public class Movie {
     @Column (nullable = false)
     private String bannerUrl;
 
-    public Movie (String title, String posterUrl, String description, String releaseDate, String nowShowing, String trailerUrl, String genre, String director, String actors, String duration, String language, String rated, String bannerUrl) {
+    @Column (nullable = false)
+    private String keywords;
+
+    public Movie (String title, String posterUrl, String description, String releaseDate, String nowShowing, String trailerUrl, String genre, String director, String actors, String duration, String language, String rated, String bannerUrl, String keywords) {
         this.title = title;
         this.posterUrl = posterUrl;
         this.description = description;
@@ -70,5 +73,6 @@ public class Movie {
         this.language = language;
         this.rated = rated;
         this.bannerUrl = bannerUrl;
+        this.keywords = keywords;
     }
 }
