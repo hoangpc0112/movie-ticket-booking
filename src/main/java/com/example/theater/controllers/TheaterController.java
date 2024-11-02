@@ -1,8 +1,10 @@
 package com.example.theater.controllers;
 
 import com.example.theater.entities.Movie;
+import com.example.theater.repositories.AppUserRepository;
 import com.example.theater.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ public class TheaterController {
 
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private AppUserRepository appUserRepository;
 
     @GetMapping ("/")
     public String home (Model model) {
@@ -50,6 +54,9 @@ public class TheaterController {
 
     @GetMapping ("/movie-input")
     public String movieInput () {
+        if (!appUserRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getEmail().equals("phamchinhhoang@gmail.com")) {
+            return "redirect:/";
+        }
         return "movie-input";
     }
 
