@@ -9,6 +9,7 @@
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
+    vertical-align: middle;
 }
 
 .booking-table th {

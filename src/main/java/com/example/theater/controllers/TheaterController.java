@@ -69,8 +69,8 @@ public class TheaterController {
     @GetMapping ("/genre")
     public String genre (@RequestParam String genre, Model model) {
         model.addAttribute("genre", genre);
-        model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByGenreAAndNowShowing(genre, true));
-        model.addAttribute("comingSoonMovieList", movieRepository.getAllMoviesByGenreAAndNowShowing(genre, false));
+        model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByGenreAndNowShowing(genre, true));
+        model.addAttribute("comingSoonMovieList", movieRepository.getAllMoviesByGenreAndNowShowing(genre, false));
         return "genre";
     }
 }

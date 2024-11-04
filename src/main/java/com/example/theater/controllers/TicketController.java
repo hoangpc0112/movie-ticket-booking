@@ -187,10 +187,10 @@ public class TicketController {
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         errorReport = "";
-        String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
         for (int selectedSeat : selectedSeats) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
-            Ticket ticket = new Ticket(movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
+            Ticket ticket = new Ticket(movieTitle, showTime, LocalDate.parse(showDate).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
             ticketRepository.save(ticket);
         }
         bookedSeats.clear();
@@ -199,7 +199,7 @@ public class TicketController {
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("bookedSeats", bookedSeats);
         model.addAttribute("showTime", showTime);
-        model.addAttribute("showDate", showDate);
+        model.addAttribute("showDate", LocalDate.parse(showDate).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         model.addAttribute("bookTime", bookTime);
         return "bill";
     }
@@ -209,7 +209,7 @@ public class TicketController {
         Ticket seat = ticketRepository.findById(Long.parseLong(seatId));
 
         // không cho huỷ vé nếu đã qua tgian chiếu
-        if (LocalDate.now().isAfter(LocalDate.parse(seat.getDate())) || (LocalDate.now().equals(LocalDate.parse(seat.getDate())) && LocalTime.now().isAfter(LocalTime.parse(seat.getTime())))) {
+        if (LocalDate.now().isAfter(LocalDate.parse(seat.getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))) || (LocalDate.now().equals(LocalDate.parse(seat.getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))) && LocalTime.now().isAfter(LocalTime.parse(seat.getTime())))) {
             return "redirect:/profile?expiredTicket=true";
         }
 

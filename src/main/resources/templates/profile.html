@@ -21,25 +21,25 @@
                     </li>
                 </ul>
             </div>
-            <div th:if = "${successChangePassword}" class = "alert alert-success alert-dismissible fade show" role = "alert">
-                <strong>Đổi mật khẩu thành công!</strong>
+            <div th:if = "${successChangePassword}" class = "alert alert-success alert-dismissible fade show text-center" role = "alert">
+                <strong class = "fs-5 fs-md-4 fs-lg-3">Đổi mật khẩu thành công!</strong>
                 <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
             </div>
-            <div th:if = "${cancelTicket}" class = "alert alert-success alert-dismissible fade show" role = "alert">
-                <strong>Huỷ vé thành công!</strong>
+            <div th:if = "${cancelTicket}" class = "alert alert-success alert-dismissible fade show text-center" role = "alert">
+                <strong class = "fs-5 fs-md-4 fs-lg-3">Huỷ vé thành công!</strong>
                 <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
             </div>
-            <div th:if = "${expiredTicket}" class = "alert alert-danger alert-dismissible fade show" role = "alert">
-                <strong>Không thể huỷ vé do đã qua thời gian chiếu.</strong>
+            <div th:if = "${expiredTicket}" class = "alert alert-danger alert-dismissible fade show text-center" role = "alert">
+                <strong class = "fs-5 fs-md-4 fs-lg-3">Không thể huỷ vé do đã qua thời gian chiếu.</strong>
                 <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
             </div>
             <div class = "tab-content" id = "tabContent">
                 <div class = "tab-pane fade show active" id = "change-password" role = "tabpanel" aria-labelledby = "change-password-tab">
                     <div class = "profile-header">
-                        <h1>Thông tin của người dùng [[${user.username}]]:</h1>
+                        <h1>Thông tin của người dùng</h1>
                     </div>
                     <div class = "mb-3">
-                        <h2>Username: [[${user.username}]]</h2>
+                        <h2>Tên tài khoản: [[${user.username}]]</h2>
                     </div>
                     <div class = "mb-3">
                         <h2>Email: [[${user.email}]]</h2>
@@ -51,7 +51,7 @@
                 </div>
                 <div class = "tab-pane fade" id = "order-history" role = "tabpanel" aria-labelledby = "order-history-tab">
                     <div class = "profile-header">
-                        <h1>Lịch sử đặt vé của [[${user.username}]]:</h1>
+                        <h1>Lịch sử đặt vé</h1>
                     </div>
                     <table class = "table table-striped">
                         <thead>

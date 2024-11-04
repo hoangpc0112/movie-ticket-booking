@@ -19,8 +19,6 @@
 body {
     min-height: 100vh;
     margin: 0;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
 }
 
 @media (max-width: 576px) {
@@ -56,6 +54,7 @@ body {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
+    vertical-align: middle;
 }
 
 .table th {
