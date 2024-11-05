@@ -24,7 +24,7 @@
                         <form th:action = "@{/details}" method = "get" style = "text-decoration: none">
                             <input type = "hidden" name = "title" th:value = "${movie.title}">
                             <button type = "submit" class = "poster-button">
-                                <img th:src = "${movie.posterUrl}" th:alt = "${movie.title}" class = "img-fluid poster-img" decoding = "async" fetchpriority = "high">
+                                <img th:src = "'/images/posters/' + ${movie.id} + '.jpg'" th:alt = "${movie.title}" class = "img-fluid poster-img" decoding = "async" fetchpriority = "high">
                                 <br>
                                 <h5 th:text = "${movie.title}" class = "text-center poster-title"></h5>
                             </button>
@@ -46,7 +46,7 @@
                         <form th:action = "@{/details}" method = "get" style = "text-decoration: none">
                             <input type = "hidden" name = "title" th:value = "${movie.title}">
                             <button type = "submit" class = "poster-button">
-                                <img th:src = "${movie.posterUrl}" alt = "Movie Poster" class = "img-fluid poster-img">
+                                <img th:src = "'/images/posters/' + ${movie.id} + '.jpg'" alt = "Movie Poster" class = "img-fluid poster-img">
                                 <br>
                                 <h5 th:text = "${movie.title}" class = "text-center poster-title"></h5>
                             </button>
