@@ -1,31 +1,31 @@
 <!doctype html>
-<html lang = "en" xmlns:th = "https://www.thymeleaf.org" xmlns:sec = "https://www.thymeleaf.org">
+<html lang = "en" xmlns:sec = "https://www.thymeleaf.org" xmlns:th = "https://www.thymeleaf.org">
     <head>
         <meta charset = "utf-8">
-        <meta name = "viewport" content = "width=device-width, initial-scale=1">
+        <meta content = "width=device-width, initial-scale=1" name = "viewport">
         <title>[[${movie.title}]]</title>
-        <link href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel = "stylesheet" integrity = "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin = "anonymous">
-        <link th:href = "@{/css/common/styles.css}" rel = "stylesheet"/>
-        <link th:href = "@{/css/details.css}" rel = "stylesheet"/>
+        <link crossorigin = "anonymous" href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity = "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel = "stylesheet">
+        <link rel = "stylesheet" th:href = "@{/css/common/styles.css}"/>
+        <link rel = "stylesheet" th:href = "@{/css/details.css}"/>
     </head>
     <body>
         <header th:replace = "~{common/header :: header}"></header>
         <div style = "height: 6px"></div>
-        <div th:if = "${!errorReport.isEmpty()}" class = "alert alert-danger alert-dismissible fade show text-center" role = "alert" style = "padding-right: 0">
+        <div class = "alert alert-danger alert-dismissible fade show text-center" role = "alert" style = "padding-right: 0" th:if = "${!errorReport.isEmpty()}">
             <strong style = "font-size: 1.25rem">[[${errorReport}]]</strong>
-            <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
+            <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
         </div>
         <div class = "container mt-5">
             <div class = "row movie-details">
                 <div class = "col-md-4 text-center">
-                    <img th:src = "${movie.posterUrl}" th:alt = "${movie.title}" class = "movie-poster img-fluid rounded" width = "360px" height = "360px" decoding = "async" fetchpriority = "high">
+                    <img class = "movie-poster img-fluid rounded" decoding = "async" fetchpriority = "high" height = "360px" th:alt = "${movie.title}" th:src = "${movie.posterUrl}" width = "360px">
                     <div class = "mt-3 d-flex justify-content-center" style = "margin-bottom: 20px">
-                        <form action = "/booking" method = "get" class = "mr-2">
-                            <input type = "hidden" name = "title" th:value = "${movie.title}">
-                            <button type = "submit" class = "btn btn-primary" th:if = "${movie.nowShowing == true}" style = "margin-right: 20px">Chọn ghế</button> <!-- Phim đang chiếu ms cho đặt -->
+                        <form action = "/booking" class = "mr-2" method = "get">
+                            <input name = "title" th:value = "${movie.title}" type = "hidden">
+                            <button class = "btn btn-primary" style = "margin-right: 20px" th:if = "${movie.nowShowing == true}" type = "submit">Chọn ghế</button> <!-- Phim đang chiếu ms cho đặt -->
                         </form>
-                        <a id = "showTrailerBtn" th:href = "@{${movie.trailerUrl}}" target = "_blank" th:if = "${!movie.trailerUrl.isEmpty()}" class = "btn btn-secondary">Xem trailer</a>
-                        <div th:if = "${movie.trailerUrl.isEmpty()}" class = "btn btn-secondary">Xem trailer<span th:if = "${movie.trailerUrl.isEmpty()}"> (Đang cập nhật)</span>
+                        <a class = "btn btn-secondary" id = "showTrailerBtn" target = "_blank" th:href = "@{${movie.trailerUrl}}" th:if = "${!movie.trailerUrl.isEmpty()}">Xem trailer</a>
+                        <div class = "btn btn-secondary" th:if = "${movie.trailerUrl.isEmpty()}">Xem trailer<span th:if = "${movie.trailerUrl.isEmpty()}"> (Đang cập nhật)</span>
                         </div>
                     </div>
                 </div>
@@ -68,9 +68,9 @@
             </div>
         </div>
         <div class = "comment-form" sec:authorize = "isAuthenticated()">
-            <form th:action = "@{/details}" method = "post">
+            <form method = "post" th:action = "@{/details}">
                 <div>
-                    <input type = "hidden" name = "title" th:value = "${movie.title}"/>
+                    <input name = "title" th:value = "${movie.title}" type = "hidden"/>
                 </div>
                 <div>
                     <label for = "content">Viết bình luận của bạn:</label>
@@ -90,10 +90,10 @@
                 <span th:text = "${comment.content}"></span>
             </div>
         </div>
-        <div id = "cboxOverlay" class = "cboxOverlay"></div>
-        <div id = "colorbox" class = "colorbox">
-            <button id = "cboxClose" class = "cboxClose">Close</button>
-            <iframe th:if = "${!movie.trailerUrl.isEmpty()}" id = "movieTrailer" width = "640" height = "360" th:src = "'https://www.youtube.com/embed/' + ${#strings.substring(movie.trailerUrl, movie.trailerUrl.indexOf('=') + 1)}" frameborder = "0" loading = "lazy" allow = "autoplay; encrypted-media" allowfullscreen>
+        <div class = "cboxOverlay" id = "cboxOverlay"></div>
+        <div class = "colorbox" id = "colorbox">
+            <button class = "cboxClose" id = "cboxClose">Close</button>
+            <iframe allow = "autoplay; encrypted-media" allowfullscreen frameborder = "0" height = "360" id = "movieTrailer" loading = "lazy" th:if = "${!movie.trailerUrl.isEmpty()}" th:src = "'https://www.youtube.com/embed/' + ${#strings.substring(movie.trailerUrl, movie.trailerUrl.indexOf('=') + 1)}" width = "640">
             </iframe>
         </div>
         <footer th:replace = "~{common/footer :: footer}"></footer>
@@ -124,6 +124,6 @@
                 iframe.src = iframe.src;
             });
         </script>
-        <script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin = "anonymous"></script>
+        <script crossorigin = "anonymous" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

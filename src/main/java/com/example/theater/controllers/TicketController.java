@@ -1,11 +1,11 @@
 package com.example.theater.controllers;
 
-import com.example.theater.entities.Ticket;
 import com.example.theater.entities.Comment;
 import com.example.theater.entities.Movie;
-import com.example.theater.repositories.TicketRepository;
+import com.example.theater.entities.Ticket;
 import com.example.theater.repositories.CommentRepository;
 import com.example.theater.repositories.MovieRepository;
+import com.example.theater.repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,6 +28,10 @@ import java.util.TreeSet;
 @Controller
 public class TicketController {
 
+    private final Set <Integer> bookedSeats = new TreeSet <>();
+
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     @Autowired
     private MovieRepository movieRepository;
 
@@ -37,15 +41,10 @@ public class TicketController {
     @Autowired
     private CommentRepository commentRepository;
 
-    // Thêm biến toàn cục để lưu trữ thông tin vé đã đặt
     private String movieTitle;
     private String showTime;
     private String showDate;
-
-    // lưu lỗi
     private String errorReport = "";
-
-    private final Set <Integer> bookedSeats = new TreeSet <>(); // test
 
     @GetMapping ("/details")
     public String test (@RequestParam ("title") String title, Model model) {
@@ -66,37 +65,34 @@ public class TicketController {
 
     @GetMapping ("/booking")
     public String booking (@RequestParam ("title") String title, Model model) {
-        if (!movieRepository.findByTitle(title).isNowShowing()) { // người dùng cố gắng truy cập vào phần đặt vé của phim sắp chiếu
+        if (!movieRepository.findByTitle(title).isNowShowing()) {
             errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
             return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         movieTitle = title;
-        // time = "09:00";
-        // System.out.println(LocalTime.now());
         if (LocalTime.now().isBefore(LocalTime.of(9, 0))) {
             showTime = "09:00";
-            showDate = LocalDate.now().toString();
+            showDate = LocalDate.now().format(dateFormatter);
         }
         else if (LocalTime.now().isBefore(LocalTime.of(12, 0))) {
             showTime = "12:00";
-            showDate = LocalDate.now().toString();
+            showDate = LocalDate.now().format(dateFormatter);
         }
         else if (LocalTime.now().isBefore(LocalTime.of(15, 0))) {
             showTime = "15:00";
-            showDate = LocalDate.now().toString();
+            showDate = LocalDate.now().format(dateFormatter);
         }
         else if (LocalTime.now().isBefore(LocalTime.of(18, 0))) {
             showTime = "18:00";
-            showDate = LocalDate.now().toString();
+            showDate = LocalDate.now().format(dateFormatter);
         }
         else if (LocalTime.now().isBefore(LocalTime.of(21, 0))) {
             showTime = "21:00";
-            showDate = LocalDate.now().toString();
+            showDate = LocalDate.now().format(dateFormatter);
         }
         else {
             showTime = "09:00";
-            showDate = LocalDate.now().plusDays(1).toString();
-            // System.out.println(date);
+            showDate = LocalDate.now().plusDays(1).format(dateFormatter);
         }
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("localDate", showDate);
@@ -104,7 +100,6 @@ public class TicketController {
         model.addAttribute("errorReport", errorReport);
         errorReport = "";
 
-        // Truy vấn tất cả vé đã đặt của 1 bộ phim trong 1 ngày giờ cụ thể
         bookedSeats.clear();
         bookedSeats.addAll(ticketRepository.findAllSeatNoBy(title, showTime, showDate));
         model.addAttribute("bookedSeats", bookedSeats);
@@ -113,7 +108,7 @@ public class TicketController {
 
     @GetMapping ("/select")
     public String select (@RequestParam ("title") String title, @RequestParam ("localTime") String localTime, @RequestParam ("localDate") String localDate, Model model) {
-        if (!movieRepository.findByTitle(title).isNowShowing()) { // người dùng cố gắng truy cập vào phần đặt vé của phim sắp chiếu
+        if (!movieRepository.findByTitle(title).isNowShowing()) {
             errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
             return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
@@ -121,21 +116,19 @@ public class TicketController {
         movieTitle = title;
         showTime = localTime;
         showDate = localDate;
-        // System.out.println(showTime + " " + showDate);
-        if (LocalDate.now().isAfter(LocalDate.parse(showDate)) || (LocalDate.now().toString().equals(showDate) && LocalTime.now().isAfter(LocalTime.parse(showTime)))) {
+        if (LocalDate.now().isAfter(LocalDate.parse(showDate, dateFormatter)) || (LocalDate.now().format(dateFormatter).equals(showDate) && LocalTime.now().isAfter(LocalTime.parse(showTime)))) {
             errorReport = "Xin lỗi, bạn đã chọn một thời gian chiếu đã qua. Vui lòng chọn một thời gian khác.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         errorReport = "";
         model.addAttribute("title", title);
         model.addAttribute("localTime", localTime);
-        model.addAttribute("localDate", localDate);
+        model.addAttribute("localDate", showDate);
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("errorReport", errorReport);
 
-        // Truy vấn tất cả vé đã đặt của 1 bộ phim trong 1 ngày giờ cụ thể
         bookedSeats.clear();
-        bookedSeats.addAll(ticketRepository.findAllSeatNoBy(title, localTime, localDate));
+        bookedSeats.addAll(ticketRepository.findAllSeatNoBy(title, localTime, showDate));
         model.addAttribute("bookedSeats", bookedSeats);
         return "booking";
     }
@@ -190,7 +183,7 @@ public class TicketController {
         String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
         for (int selectedSeat : selectedSeats) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
-            Ticket ticket = new Ticket(movieTitle, showTime, LocalDate.parse(showDate).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
+            Ticket ticket = new Ticket(movieTitle, showTime, LocalDate.parse(showDate, dateFormatter).format(dateFormatter), selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
             ticketRepository.save(ticket);
         }
         bookedSeats.clear();
@@ -199,7 +192,7 @@ public class TicketController {
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("bookedSeats", bookedSeats);
         model.addAttribute("showTime", showTime);
-        model.addAttribute("showDate", LocalDate.parse(showDate).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        model.addAttribute("showDate", LocalDate.parse(showDate, dateFormatter).format(dateFormatter));
         model.addAttribute("bookTime", bookTime);
         return "bill";
     }
@@ -209,7 +202,7 @@ public class TicketController {
         Ticket seat = ticketRepository.findById(Long.parseLong(seatId));
 
         // không cho huỷ vé nếu đã qua tgian chiếu
-        if (LocalDate.now().isAfter(LocalDate.parse(seat.getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))) || (LocalDate.now().equals(LocalDate.parse(seat.getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))) && LocalTime.now().isAfter(LocalTime.parse(seat.getTime())))) {
+        if (LocalDate.now().isAfter(LocalDate.parse(seat.getDate(), dateFormatter)) || (LocalDate.now().equals(LocalDate.parse(seat.getDate(), dateFormatter)) && LocalTime.now().isAfter(LocalTime.parse(seat.getTime())))) {
             return "redirect:/profile?expiredTicket=true";
         }
 

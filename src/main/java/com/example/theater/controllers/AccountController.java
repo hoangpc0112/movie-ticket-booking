@@ -1,7 +1,7 @@
 package com.example.theater.controllers;
 
-import com.example.theater.entities.AppUser;
 import com.example.theater.DTOs.RegisterDTO;
+import com.example.theater.entities.AppUser;
 import com.example.theater.repositories.AppUserRepository;
 import com.example.theater.repositories.TicketRepository;
 import com.example.theater.services.MailSenderService;
@@ -28,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 @Controller
 public class AccountController {
 
+    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+
     @Autowired
     private AppUserRepository userRepo;
 
@@ -36,8 +38,6 @@ public class AccountController {
 
     @Autowired
     private MailSenderService mailSenderService;
-
-    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     @GetMapping ("/register")
     public String register (Model model) {

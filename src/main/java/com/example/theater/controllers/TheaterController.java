@@ -16,6 +16,7 @@ public class TheaterController {
 
     @Autowired
     private MovieRepository movieRepository;
+
     @Autowired
     private AppUserRepository appUserRepository;
 

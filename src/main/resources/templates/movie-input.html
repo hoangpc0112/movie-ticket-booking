@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang = "en" xmlns:th = "https://www.thymeleaf.org" xmlns:sec = "https://www.thymeleaf.org">
+<html lang = "en" xmlns:th = "https://www.thymeleaf.org">
     <head>
         <meta charset = "utf-8">
-        <meta name = "viewport" content = "width=device-width, initial-scale=1">
+        <meta content = "width=device-width, initial-scale=1" name = "viewport">
         <title>Thêm phim</title>
-        <link href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel = "stylesheet" integrity = "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin = "anonymous">
-        <link th:href = "@{/css/common/styles.css}" rel = "stylesheet"/>
+        <link crossorigin = "anonymous" href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity = "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel = "stylesheet">
+        <link rel = "stylesheet" th:href = "@{/css/common/styles.css}"/>
     </head>
     <body>
         <header th:replace = "~{common/header :: header}"></header>
@@ -13,55 +13,55 @@
             <div class = "container-fluid h-custom">
                 <div class = "row d-flex justify-content-center align-items-center h-100">
                     <div class = "col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                        <form th:action = "@{/movie-input}" method = "post">
+                        <form method = "post" th:action = "@{/movie-input}">
                             <br><br>
                             <div class = "text-center">
                                 <strong>Thêm phim:</strong>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập title" name = "title" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "title" placeholder = "Nhập title" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập posterUrl" name = "posterUrl" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "posterUrl" placeholder = "Nhập posterUrl" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập description" name = "description" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "description" placeholder = "Nhập description" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập releaseDate" name = "releaseDate" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "releaseDate" placeholder = "Nhập releaseDate" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập nowShowing" name = "nowShowing" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "nowShowing" placeholder = "Nhập nowShowing" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập trailerUrl" name = "trailerUrl" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "trailerUrl" placeholder = "Nhập trailerUrl" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập genre" name = "genre" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "genre" placeholder = "Nhập genre" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập director" name = "director" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "director" placeholder = "Nhập director" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập actors" name = "actors" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "actors" placeholder = "Nhập actors" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập duration" name = "duration" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "duration" placeholder = "Nhập duration" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập language" name = "language" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "language" placeholder = "Nhập language" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập rated" name = "rated" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "rated" placeholder = "Nhập rated" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập bannerUrl" name = "bannerUrl" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "bannerUrl" placeholder = "Nhập bannerUrl" type = "text"/>
                             </div>
-                            <div data-mdb-input-init class = "form-outline mb-4">
-                                <input class = "form-control form-control-lg" placeholder = "Nhập keywords" name = "keywords" type = "text"/>
+                            <div class = "form-outline mb-4" data-mdb-input-init>
+                                <input class = "form-control form-control-lg" name = "keywords" placeholder = "Nhập keywords" type = "text"/>
                             </div>
                             <div class = "text-center text-lg-start mt-4 pt-2 mb-5">
-                                <button type = "submit" data-mdb-button-init data-mdb-ripple-init class = "btn btn-primary btn-lg" style = "padding-left: 2.5rem; padding-right: 2.5rem;">Thêm phim</button>
+                                <button class = "btn btn-primary btn-lg" data-mdb-button-init data-mdb-ripple-init style = "padding-left: 2.5rem; padding-right: 2.5rem;" type = "submit">Thêm phim</button>
                             </div>
                         </form>
                     </div>
@@ -69,6 +69,6 @@
             </div>
         </section>
         <footer th:replace = "~{common/footer :: footer}"></footer>
-        <script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin = "anonymous"></script>
+        <script crossorigin = "anonymous" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
