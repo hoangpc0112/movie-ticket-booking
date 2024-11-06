@@ -116,7 +116,7 @@ public class TicketController {
         movieTitle = title;
         showTime = localTime;
         showDate = LocalDate.parse(localDate).format(dateFormatter);
-        if (LocalDate.now().isAfter(LocalDate.parse(showDate, dateFormatter)) || (LocalDate.now().format(dateFormatter).equals(showDate) && LocalTime.now().isAfter(LocalTime.parse(showTime)))) {
+        if (LocalDate.now().isAfter(LocalDate.parse(showDate, dateFormatter)) || (LocalDate.now().equals(LocalDate.parse(showDate, dateFormatter)) && LocalTime.now().isAfter(LocalTime.parse(showTime)))) {
             errorReport = "Xin lỗi, bạn đã chọn một thời gian chiếu đã qua. Vui lòng chọn một thời gian khác.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
@@ -183,7 +183,7 @@ public class TicketController {
         String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
         for (int selectedSeat : selectedSeats) {
             // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
-            Ticket ticket = new Ticket(movieTitle, showTime, LocalDate.parse(showDate, dateFormatter).format(dateFormatter), selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
+            Ticket ticket = new Ticket(movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
             ticketRepository.save(ticket);
         }
         bookedSeats.clear();
