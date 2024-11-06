@@ -18,7 +18,7 @@
         <div class = "container mt-5">
             <div class = "row movie-details">
                 <div class = "col-md-4 text-center">
-                    <img th:src = "'/images/posters/' + ${movie.id} + '.jpg'" th:alt = "${movie.title}" class = "movie-poster img-fluid rounded" width = "360px" height = "360px" decoding = "async" fetchpriority = "high">
+                    <img th:src = "${movie.posterUrl}" th:alt = "${movie.title}" class = "movie-poster img-fluid rounded" width = "360px" height = "360px" decoding = "async" fetchpriority = "high">
                     <div class = "mt-3 d-flex justify-content-center" style = "margin-bottom: 20px">
                         <form action = "/booking" method = "get" class = "mr-2">
                             <input type = "hidden" name = "title" th:value = "${movie.title}">

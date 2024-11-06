@@ -20,6 +20,9 @@ public class Movie {
     @Column (nullable = false)
     private String title;
 
+    @Column (nullable = false)
+    private String posterUrl;
+
     @Column (columnDefinition = "text", nullable = false)
     private String description;
 
@@ -51,13 +54,14 @@ public class Movie {
     private String rated;
 
     @Column (nullable = false)
-    private boolean bannerUrl;
+    private String bannerUrl;
 
     @Column (nullable = false)
     private String keywords;
 
-    public Movie (String title, String description, String releaseDate, String nowShowing, String trailerUrl, String genre, String director, String actors, String duration, String language, String rated, boolean bannerUrl, String keywords) {
+    public Movie (String title, String posterUrl, String description, String releaseDate, String nowShowing, String trailerUrl, String genre, String director, String actors, String duration, String language, String rated, String bannerUrl, String keywords) {
         this.title = title;
+        this.posterUrl = posterUrl;
         this.description = description;
         this.releaseDate = releaseDate;
         this.nowShowing = Boolean.parseBoolean(nowShowing);
