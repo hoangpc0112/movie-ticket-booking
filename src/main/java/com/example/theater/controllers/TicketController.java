@@ -95,7 +95,7 @@ public class TicketController {
             showDate = LocalDate.now().plusDays(1).format(dateFormatter);
         }
         model.addAttribute("movie", movieRepository.findByTitle(title));
-        model.addAttribute("localDate", showDate);
+        model.addAttribute("localDate", LocalDate.parse(showDate, dateFormatter));
         model.addAttribute("localTime", showTime);
         model.addAttribute("errorReport", errorReport);
         errorReport = "";
@@ -115,7 +115,7 @@ public class TicketController {
         errorReport = "";
         movieTitle = title;
         showTime = localTime;
-        showDate = localDate;
+        showDate = LocalDate.parse(localDate).format(dateFormatter);
         if (LocalDate.now().isAfter(LocalDate.parse(showDate, dateFormatter)) || (LocalDate.now().format(dateFormatter).equals(showDate) && LocalTime.now().isAfter(LocalTime.parse(showTime)))) {
             errorReport = "Xin lỗi, bạn đã chọn một thời gian chiếu đã qua. Vui lòng chọn một thời gian khác.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
@@ -123,7 +123,7 @@ public class TicketController {
         errorReport = "";
         model.addAttribute("title", title);
         model.addAttribute("localTime", localTime);
-        model.addAttribute("localDate", showDate);
+        model.addAttribute("localDate", LocalDate.parse(showDate, dateFormatter));
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("errorReport", errorReport);
 
