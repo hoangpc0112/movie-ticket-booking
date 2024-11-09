@@ -4,52 +4,42 @@
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-.navbar .nav-link {
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s;
-}
-
-.navbar .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
 @media (max-width: 390px) {
     footer {
-        font-size: 0.8em;
+        font-size: .8em
     }
 
     .search-container {
-        margin-bottom: 10px;
+        margin-bottom: 10px
     }
 }
 
 @media (min-width: 391px) and (max-width: 576px) {
     footer {
-        font-size: 0.9em;
+        font-size: .9em
     }
 
     .search-container {
-        margin-bottom: 10px;
+        margin-bottom: 10px
     }
 }
 
 @media (min-width: 577px) and (max-width: 768px) {
     .search-container {
-        margin-bottom: 10px;
+        margin-bottom: 10px
     }
 }
 
 @media (min-width: 769px) and (max-width: 992px) {
     .search-container {
-        margin-bottom: 10px;
+        margin-bottom: 10px
     }
 }
 
 @media (min-width: 993px) {
     .btn-outline-success {
-        margin-right: 50px;
+        margin-right: 50px
     }
-
 }
 
 footer {
@@ -57,61 +47,49 @@ footer {
     color: #fff;
     padding: 20px 0 0 0;
     text-align: center;
-    margin-top: auto;
+    margin-top: auto
 }
 
 .footer-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center
 }
 
-.footer-links,
-.footer-social {
+.footer-links, .footer-social {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 10px
 }
 
-.footer-links a,
-.footer-social a {
+.footer-links a, .footer-social a {
     color: #fff;
     margin: 0 10px;
-    text-decoration: none;
-}
-
-.footer-links a:hover,
-.footer-social a:hover {
-    text-decoration: underline;
-}
-
-.footer-contact p {
-    margin: 5px 0;
+    text-decoration: none
 }
 
 .footer-copy {
-    margin-top: 20px;
+    margin-top: 20px
 }
 
 .btn-outline-success {
     color: #fff;
     background-color: #28a745;
-    border-color: #28a745;
-    /*margin-right: 50px;*/
+    border-color: #28a745
 }
 
 .btn-outline-success:hover {
     color: #fff;
     background-color: #218838;
-    border-color: #1e7e34;
+    border-color: #1e7e34
 }
 
 header {
     position: fixed;
     width: 100%;
     z-index: 9997;
-    top: 0;
+    top: 0
 }
 
 body {
@@ -119,13 +97,13 @@ body {
     min-height: 100%;
     display: flex;
     flex-direction: column;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif
 }
 
 html {
-    height: 100%;
+    height: 100%
 }
 
 img {
-    content-visibility: auto;
+    content-visibility: auto
 }

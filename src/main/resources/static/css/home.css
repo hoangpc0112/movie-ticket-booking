@@ -4,20 +4,18 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    border-radius: 10px;
+    border-radius: 10px
 }
 
 .swiper-slide .poster-button {
-    cursor: grab;
+    cursor: grab
 }
 
 .swiper-slide .poster-button:active {
-    cursor: grabbing;
+    cursor: grabbing
 }
 
 .swiper-slide img {
-    width: 92%;
-    height: auto;
     border-radius: 15px;
 }
 
@@ -28,19 +26,19 @@
     position: absolute;
     width: 4%;
     height: 100%;
-    top: 5%;
+    top: 5%
 }
 
 .swiper-button-next {
-    right: 0;
+    right: 0
 }
 
 .swiper-button-prev {
-    left: 0;
+    left: 0
 }
 
 @media (max-width: 576px) {
     .swiper-button-next, .swiper-button-prev {
-        display: none;
+        display: none
     }
 }

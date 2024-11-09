@@ -1,51 +1,48 @@
 .container {
-    margin-top: 20px;
+    margin-top: 20px
 }
 
 .movie-details {
     margin-bottom: 20px;
-    /*border: 1px solid #ddd;*/
-    /*border-radius: 5px;*/
-    /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
-    padding-top: 20px;
+    padding-top: 20px
 }
 
 .movie-poster {
     border-radius: 5px;
     width: 100%;
-    height: auto;
+    height: auto
 }
 
 h1 {
     font-size: 2em;
-    margin-bottom: 10px;
+    margin-bottom: 10px
 }
 
 h2 {
     font-size: 1.5em;
-    margin-bottom: 10px;
+    margin-bottom: 10px
 }
 
 .btn-primary {
     background-color: #007bff;
     border-color: #007bff;
-    transition: background-color 0.3s, border-color 0.3s;
+    transition: background-color 0.3s, border-color 0.3s
 }
 
 .btn-primary:hover {
     background-color: #0056b3;
-    border-color: #004085;
+    border-color: #004085
 }
 
 @media (max-width: 390px) {
     .movie-details {
-        padding-top: 0;
+        padding-top: 0
     }
 }
 
 @media (max-width: 576px) {
     .movie-details {
-        padding-top: 0;
+        padding-top: 0
     }
 }
 
@@ -54,15 +51,15 @@ h2 {
     border: 1px solid #ddd;
     border-radius: 10px;
     background-color: #f7f7f7;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgb(0 0 0 / .1)
 }
 
 .comment-form label {
-    font-weight: bold;
+    font-weight: 700;
     margin-bottom: 10px;
     display: block;
     color: #333;
-    font-size: 18px;
+    font-size: 18px
 }
 
 .comment-form textarea {
@@ -73,21 +70,21 @@ h2 {
     border-radius: 5px;
     margin-bottom: 10px;
     font-size: 16px;
-    resize: vertical;
+    resize: vertical
 }
 
 .comment-form button {
     background-color: #007BFF;
-    color: white;
+    color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 16px
 }
 
 .comment-form button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3
 }
 
 .comments-section {
@@ -95,24 +92,24 @@ h2 {
     border: 1px solid #ddd;
     border-radius: 10px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgb(0 0 0 / .1)
 }
 
 .comment {
     border-bottom: 1px solid #eee;
     padding: 10px 0;
     word-wrap: break-word;
-    overflow-wrap: break-word;
+    overflow-wrap: break-word
 }
 
 .comment:last-child {
-    border-bottom: none;
+    border-bottom: none
 }
 
 .comment h5 {
     margin: 0;
     font-size: 1.3em;
-    color: #007BFF;
+    color: #007BFF
 }
 
 .comment span {
@@ -121,7 +118,7 @@ h2 {
     color: #555;
     font-size: 16px;
     word-wrap: break-word;
-    overflow-wrap: break-word;
+    overflow-wrap: break-word
 }
 
 .login-notification {
@@ -131,12 +128,12 @@ h2 {
     border: 1px solid #f5c6cb;
     border-radius: 5px;
     text-align: center;
-    font-size: 20px;
+    font-size: 20px
 }
 
 @media (max-width: 600px) {
     .login-notification {
-        padding: 10px;
+        padding: 10px
     }
 }
 
@@ -146,9 +143,9 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgb(0 0 0 / .9);
     display: none;
-    z-index: 9998;
+    z-index: 9998
 }
 
 .colorbox {
@@ -161,12 +158,12 @@ h2 {
     background-color: #fff;
     display: none;
     z-index: 9999;
-    overflow: hidden;
+    overflow: hidden
 }
 
 .colorbox iframe {
     width: 100%;
-    height: 100%;
+    height: 100%
 }
 
 .cboxClose {
@@ -177,26 +174,26 @@ h2 {
     color: #fff;
     border: none;
     padding: 5px 10px;
-    cursor: pointer;
+    cursor: pointer
 }
 
 @media (min-width: 1280px) {
     .colorbox {
         width: 1024px;
-        height: 576px;
+        height: 576px
     }
 }
 
 @media (max-width: 1280px) {
     .colorbox {
         width: 768px;
-        height: 432px;
+        height: 432px
     }
 }
 
 @media (max-width: 780px) {
     .colorbox {
         width: 650px;
-        height: 420px;
+        height: 420px
     }
 }

@@ -1,62 +1,59 @@
 .profile-header {
     text-align: center;
-    margin: 2rem 0;
+    margin: 2rem 0
 }
 
 .profile-header h1 {
     font-size: 2.5rem;
-    color: #343a40;
+    color: #343a40
 }
 
 .order-history li {
     background-color: #f8f9fa;
-    margin: 0.5rem 0;
+    margin: .5rem 0;
     padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-radius: .5rem;
+    box-shadow: 0 .125rem .25rem rgb(0 0 0 / .075)
 }
 
 body {
     min-height: 100vh;
-    margin: 0;
+    margin: 0
 }
 
 @media (max-width: 576px) {
     .table {
         display: block;
         overflow-x: auto;
-        white-space: nowrap;
+        white-space: nowrap
     }
 
-    .table th,
-    .table td {
-        font-size: 0.8em;
-        padding: 4px;
+    .table th, .table td {
+        font-size: .8em;
+        padding: 4px
     }
 }
 
 @media (max-width: 768px) {
-    .table th,
-    .table td {
-        font-size: 0.9em;
-        padding: 6px;
+    .table th, .table td {
+        font-size: .9em;
+        padding: 6px
     }
 }
 
 .table {
     width: 100%;
     margin: auto;
-    border-collapse: collapse;
+    border-collapse: collapse
 }
 
-.table th,
-.table td {
+.table th, .table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: middle
 }
 
 .table th {
-    background-color: #f2f2f2;
+    background-color: #f2f2f2
 }
