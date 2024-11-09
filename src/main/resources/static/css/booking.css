@@ -35,16 +35,16 @@
     display: none;
 }
 
-input:checked + label {
+.checkbox-container input:checked + label {
     background-color: red;
 }
 
-input:disabled + label {
+.checkbox-container input:disabled + label {
     background-color: grey;
     cursor: not-allowed;
 }
 
-input:disabled + label:hover {
+.checkbox-container input:disabled + label:hover {
     background-color: gray;
 }
 

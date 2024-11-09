@@ -11,8 +11,6 @@ public interface TicketRepository extends JpaRepository <Ticket, Long> {
     @Query (value = "select seat_no from tickets " + "where movie_title = ? and time = ? and date = ?", nativeQuery = true)
     List <Integer> findAllSeatNoBy (String movieTitle, String time, String date);
 
-    List <Ticket> findByUser (String user);
-
     boolean existsBySeatNoAndMovieTitleAndTimeAndDate (int seatNo, String movieTitle, String time, String date);
 
     Ticket findById (long id);

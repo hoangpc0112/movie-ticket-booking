@@ -10,17 +10,13 @@
     </head>
     <body>
         <header th:replace = "~{common/header :: header}"></header>
-        <br>
-        <br>
+        <br> <br>
         <h1 class = "text-center">Đặt vé thành công!</h1>
         <br>
-        <div class = "text-center" th:if = "${allSelectedSeats != 0}">
-            <h1>Đã đặt:
-                <span th:text = "${allSelectedSeats.size()}"></span> ghế.
-            </h1>
-            <h2>Tổng tiền:
-                <span th:text = "${allSelectedSeats.size() * 50}"></span>.000 VNĐ
-            </h2>
+        <div class = "text-center">
+            <h1>Đã đặt: [[${bill.tickets.size()}]] ghế.</h1>
+            <h2>Tổng tiền: [[${bill.totalPrice}]].000 VNĐ</h2>
+            <h2>Thời gian đặt: [[${bill.dateCreated}]]</h2>
             <br>
             <div class = "container">
                 <table class = "booking-table">
@@ -30,51 +26,31 @@
                         <th class = "booking-header">Số thứ tự</th>
                         <th class = "booking-header">Giờ chiếu</th>
                         <th class = "booking-header">Ngày chiếu</th>
-                        <th class = "booking-header">Thời gian đặt</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each = "seat : ${allSelectedSeats}" th:if = "${seat <= 20}">
-                        <td class = "booking-cell" th:text = "${movie.title}"></td>
-                        <td class = "booking-cell" th:text = "'A' + ${(seat - 1) % 20 + 1}"></td>
-                        <td class = "booking-cell" th:text = "${showTime}"></td>
-                        <td class = "booking-cell" th:text = "${showDate}"></td>
-                        <td class = "booking-cell" th:text = "${bookTime}"></td>
+                    <tr th:each = "ticket : ${bill.tickets}">
+                        <td class = "booking-cell" th:text = "${ticket.movieTitle}"></td>
+                        <td class = "booking-cell" th:text = "${ticket.seatLabel}"></td>
+                        <td class = "booking-cell" th:text = "${ticket.time}"></td>
+                        <td class = "booking-cell" th:text = "${ticket.date}"></td>
                     </tr>
-                    <tr th:each = "seat : ${allSelectedSeats}" th:if = "${seat <= 40 && seat > 20}">
-                        <td class = "booking-cell" th:text = "${movie.title}"></td>
-                        <td class = "booking-cell" th:text = "'B' + ${(seat - 1) % 20 + 1}"></td>
-                        <td class = "booking-cell" th:text = "${showTime}"></td>
-                        <td class = "booking-cell" th:text = "${showDate}"></td>
-                        <td class = "booking-cell" th:text = "${bookTime}"></td>
+                    </tbody>
+                </table>
+            </div>
+            <br th:if = "${!bill.foods.isEmpty()}">
+            <div class = "container" th:if = "${!bill.foods.isEmpty()}">
+                <table class = "booking-table">
+                    <thead>
+                    <tr>
+                        <th class = "booking-header">Tên đồ ăn</th>
+                        <th class = "booking-header">Số lượng</th>
                     </tr>
-                    <tr th:each = "seat : ${allSelectedSeats}" th:if = "${seat <= 60 && seat > 40}">
-                        <td class = "booking-cell" th:text = "${movie.title}"></td>
-                        <td class = "booking-cell" th:text = "'C' + ${(seat - 1) % 20 + 1}"></td>
-                        <td class = "booking-cell" th:text = "${showTime}"></td>
-                        <td class = "booking-cell" th:text = "${showDate}"></td>
-                        <td class = "booking-cell" th:text = "${bookTime}"></td>
-                    </tr>
-                    <tr th:each = "seat : ${allSelectedSeats}" th:if = "${seat <= 80 && seat > 60}">
-                        <td class = "booking-cell" th:text = "${movie.title}"></td>
-                        <td class = "booking-cell" th:text = "'D' + ${(seat - 1) % 20 + 1}"></td>
-                        <td class = "booking-cell" th:text = "${showTime}"></td>
-                        <td class = "booking-cell" th:text = "${showDate}"></td>
-                        <td class = "booking-cell" th:text = "${bookTime}"></td>
-                    </tr>
-                    <tr th:each = "seat : ${allSelectedSeats}" th:if = "${seat <= 100 && seat > 80}">
-                        <td class = "booking-cell" th:text = "${movie.title}"></td>
-                        <td class = "booking-cell" th:text = "'E' + ${(seat - 1) % 20 + 1}"></td>
-                        <td class = "booking-cell" th:text = "${showTime}"></td>
-                        <td class = "booking-cell" th:text = "${showDate}"></td>
-                        <td class = "booking-cell" th:text = "${bookTime}"></td>
-                    </tr>
-                    <tr th:each = "seat : ${allSelectedSeats}" th:if = "${seat <= 120 && seat > 100}">
-                        <td class = "booking-cell" th:text = "${movie.title}"></td>
-                        <td class = "booking-cell" th:text = "'F' + ${(seat - 1) % 20 + 1}"></td>
-                        <td class = "booking-cell" th:text = "${showTime}"></td>
-                        <td class = "booking-cell" th:text = "${showDate}"></td>
-                        <td class = "booking-cell" th:text = "${bookTime}"></td>
+                    </thead>
+                    <tbody>
+                    <tr th:each = "food : ${bill.foods.entrySet()}">
+                        <td class = "booking-cell" th:text = "${food.key}"></td>
+                        <td class = "booking-cell" th:text = "${food.value}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -88,8 +64,7 @@
                 <button class = "btn btn-primary" type = "submit">Quay về trang chủ</button>
             </a>
         </div>
-        <br>
-        <br>
+        <br> <br>
         <footer th:replace = "~{common/footer :: footer}"></footer>
         <script crossorigin = "anonymous" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>

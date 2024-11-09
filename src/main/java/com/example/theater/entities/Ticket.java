@@ -30,17 +30,13 @@ public class Ticket {
     private int seatNo;
 
     @Column (nullable = false)
-    private String user;
+    private String seatLabel;
 
-    @Column (nullable = false)
-    private String bookTime;
-
-    public Ticket (String movieTitle, String time, String date, int seatNo, String user, String bookTime) {
+    public Ticket (String movieTitle, String time, String date, int seatNo, String seatLabel) {
         this.movieTitle = movieTitle;
         this.time = time;
         this.date = date;
         this.seatNo = seatNo;
-        this.user = user;
-        this.bookTime = bookTime;
+        this.seatLabel = seatLabel;
     }
 }

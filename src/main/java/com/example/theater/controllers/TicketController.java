@@ -1,8 +1,10 @@
 package com.example.theater.controllers;
 
+import com.example.theater.entities.Bill;
 import com.example.theater.entities.Comment;
 import com.example.theater.entities.Movie;
 import com.example.theater.entities.Ticket;
+import com.example.theater.repositories.BillRepository;
 import com.example.theater.repositories.CommentRepository;
 import com.example.theater.repositories.MovieRepository;
 import com.example.theater.repositories.TicketRepository;
@@ -20,10 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @Controller
 public class TicketController {
@@ -40,6 +39,9 @@ public class TicketController {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private BillRepository billRepository;
 
     private String movieTitle;
     private String showTime;
@@ -134,8 +136,14 @@ public class TicketController {
     }
 
     @GetMapping ("/bill")
-    public String bookSeat (@RequestParam (value = "selectedSeats", required = false) List <Integer> selectedSeats, @RequestParam ("title") String title, Model model) {
-        if (!movieRepository.findByTitle(title).isNowShowing()) { // người dùng cố gắng truy cập vào phần đặt vé của phim sắp chiếu
+    public String bookSeat (@RequestParam String title,
+                            @RequestParam (required = false) List <Integer> selectedSeats,
+                            @RequestParam (required = false) String[] food,
+                            @RequestParam (required = false) Integer popcornQty,
+                            @RequestParam (required = false) Integer drinkQty,
+                            @RequestParam (required = false) Integer comboQty,
+                            Model model) {
+        if (!movieRepository.findByTitle(title).isNowShowing()) {
             errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
             return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
@@ -146,32 +154,14 @@ public class TicketController {
         errorReport = "";
         List <Integer> unavailableSeats = new ArrayList <>();
         for (int selectedSeat : selectedSeats) {
-            if (ticketRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) { // kiểm tra có người nhanh tay hơn
+            if (ticketRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) {
                 unavailableSeats.add(selectedSeat);
             }
         }
-        errorReport = "Ghế ";
         if (!unavailableSeats.isEmpty()) {
+            errorReport = "Ghế ";
             for (int unavailableSeat : unavailableSeats) {
-                if (unavailableSeat <= 20) {
-                    errorReport += "A";
-                }
-                else if (unavailableSeat <= 40) {
-                    errorReport += "B";
-                }
-                else if (unavailableSeat <= 60) {
-                    errorReport += "C";
-                }
-                else if (unavailableSeat <= 80) {
-                    errorReport += "D";
-                }
-                else if (unavailableSeat <= 100) {
-                    errorReport += "E";
-                }
-                else {
-                    errorReport += "F";
-                }
-                errorReport += (unavailableSeat % 20 == 0 ? 20 : unavailableSeat % 20);
+                errorReport += getSeatLabel(unavailableSeat);
                 if (unavailableSeats.indexOf(unavailableSeat) != unavailableSeats.size() - 1) {
                     errorReport += ", ";
                 }
@@ -180,21 +170,68 @@ public class TicketController {
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         errorReport = "";
-        String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
-        for (int selectedSeat : selectedSeats) {
-            // Lưu thông tin vé bao gồm tên phim, ngày giờ, số ghế vào cơ sở dữ liệu
-            Ticket ticket = new Ticket(movieTitle, showTime, showDate, selectedSeat, SecurityContextHolder.getContext().getAuthentication().getName(), bookTime);
-            ticketRepository.save(ticket);
+
+        int totalPrice = selectedSeats.size() * 50;
+        Map <String, Integer> foods = new HashMap <>();
+        if (food != null) {
+            for (String item : food) {
+                switch (item) {
+                    case "popcorn":
+                        int popcornQuantity = (popcornQty != null) ? popcornQty : 1;
+                        totalPrice += 30 * popcornQuantity;
+                        foods.put("Bỏng ngô", popcornQuantity);
+                        break;
+                    case "drink":
+                        int drinkQuantity = (drinkQty != null) ? drinkQty : 1;
+                        totalPrice += 20 * drinkQuantity;
+                        foods.put("Đồ uống", drinkQuantity);
+                        break;
+                    case "combo":
+                        int comboQuantity = (comboQty != null) ? comboQty : 1;
+                        totalPrice += 40 * comboQuantity;
+                        foods.put("Combo: Bỏng ngô + Đồ uống", comboQuantity);
+                        break;
+                }
+            }
         }
+        String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
+
+        List <Ticket> tickets = new ArrayList <>();
+        for (int selectedSeat : selectedSeats) {
+            Ticket ticket = new Ticket(title, showTime, showDate, selectedSeat, getSeatLabel(selectedSeat));
+            ticketRepository.save(ticket);
+            tickets.add(ticket);
+        }
+
         bookedSeats.clear();
         bookedSeats.addAll(selectedSeats);
-        model.addAttribute("allSelectedSeats", selectedSeats);
-        model.addAttribute("movie", movieRepository.findByTitle(title));
-        model.addAttribute("bookedSeats", bookedSeats);
-        model.addAttribute("showTime", showTime);
-        model.addAttribute("showDate", LocalDate.parse(showDate, dateFormatter).format(dateFormatter));
-        model.addAttribute("bookTime", bookTime);
+
+        Bill bill = new Bill(SecurityContextHolder.getContext().getAuthentication().getName(), totalPrice, bookTime, tickets, foods);
+        billRepository.save(bill);
+
+        model.addAttribute("bill", bill);
         return "bill";
+    }
+
+    private String getSeatLabel (int seatNo) {
+        if (seatNo <= 20) {
+            return "A" + (seatNo % 20 == 0 ? 20 : seatNo % 20);
+        }
+        else if (seatNo <= 40) {
+            return "B" + (seatNo % 20 == 0 ? 20 : seatNo % 20);
+        }
+        else if (seatNo <= 60) {
+            return "C" + (seatNo % 20 == 0 ? 20 : seatNo % 20);
+        }
+        else if (seatNo <= 80) {
+            return "D" + (seatNo % 20 == 0 ? 20 : seatNo % 20);
+        }
+        else if (seatNo <= 100) {
+            return "E" + (seatNo % 20 == 0 ? 20 : seatNo % 20);
+        }
+        else {
+            return "F" + (seatNo % 20 == 0 ? 20 : seatNo % 20);
+        }
     }
 
     @PostMapping ("/cancel-ticket")

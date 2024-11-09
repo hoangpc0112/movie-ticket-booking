@@ -21,8 +21,7 @@
                             <br>
                         </div>
                         <div class = "alert alert-success alert-dismissible fade show" role = "alert" th:if = "${success}">
-                            <strong>Tạo tài khoản thành công!</strong>
-                            <a class = "ms-2" href = "/login">Đăng nhập</a>
+                            <strong>Tạo tài khoản thành công!</strong> <a class = "ms-2" href = "/login">Đăng nhập</a>
                             <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
                         </div>
                         <form method = "post" th:object = "${registerDTO}">

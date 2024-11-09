@@ -3,6 +3,7 @@ package com.example.theater.controllers;
 import com.example.theater.DTOs.RegisterDTO;
 import com.example.theater.entities.AppUser;
 import com.example.theater.repositories.AppUserRepository;
+import com.example.theater.repositories.BillRepository;
 import com.example.theater.repositories.TicketRepository;
 import com.example.theater.services.MailSenderService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +39,8 @@ public class AccountController {
 
     @Autowired
     private MailSenderService mailSenderService;
+    @Autowired
+    private BillRepository billRepository;
 
     @GetMapping ("/register")
     public String register (Model model) {
@@ -75,8 +78,7 @@ public class AccountController {
             model.addAttribute("success", true);
 
             return "verify-email";
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             bindingResult.addError(new FieldError("registerDTO", "email", e.getMessage()));
             return "register";
         }
@@ -105,8 +107,7 @@ public class AccountController {
                 model.addAttribute("registerDTO", new RegisterDTO());
                 model.addAttribute("success", true);
                 return "register";
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 model.addAttribute("error", e.getMessage());
                 return "verify-email";
             }
@@ -125,7 +126,7 @@ public class AccountController {
     @GetMapping ("/profile")
     public String profile (Model model, @RequestParam (value = "successChangePassword", required = false, defaultValue = "false") String successChangePassword, @RequestParam (value = "cancelTicket", required = false, defaultValue = "false") String cancelTicket, @RequestParam (name = "expiredTicket", required = false) String expiredTicket) {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute("orderHistory", ticketRepository.findByUser(currentUser));
+        model.addAttribute("orderHistory", billRepository.findByUser(currentUser));
         model.addAttribute("user", userRepo.findByUsername(currentUser));
         model.addAttribute("successChangePassword", successChangePassword);
         model.addAttribute("cancelTicket", cancelTicket);

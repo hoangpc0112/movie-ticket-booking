@@ -93,15 +93,15 @@
         <div class = "cboxOverlay" id = "cboxOverlay"></div>
         <div class = "colorbox" id = "colorbox">
             <button class = "cboxClose" id = "cboxClose">Close</button>
-            <iframe allow = "autoplay; encrypted-media" allowfullscreen frameborder = "0" height = "360" id = "movieTrailer" loading = "lazy" th:if = "${!movie.trailerUrl.isEmpty()}" th:src = "'https://www.youtube.com/embed/' + ${#strings.substring(movie.trailerUrl, movie.trailerUrl.indexOf('=') + 1)}" width = "640">
-            </iframe>
+            <iframe allow = "autoplay; encrypted-media" allowfullscreen frameborder = "0" height = "360" id = "movieTrailer" loading = "lazy" th:if = "${!movie.trailerUrl.isEmpty()}" th:src = "'https://www.youtube.com/embed/' + ${#strings.substring(movie.trailerUrl, movie.trailerUrl.indexOf('=') + 1)}" width = "640"></iframe>
         </div>
         <footer th:replace = "~{common/footer :: footer}"></footer>
         <script>
             document.getElementById('showTrailerBtn').addEventListener('click', function (event) {
                 if (window.innerWidth < 640) {
                     window.open(this.href, '_blank');
-                } else {
+                }
+                else {
                     event.preventDefault();
                     document.getElementById('cboxOverlay').style.display = 'block';
                     document.getElementById('colorbox').style.display = 'block';

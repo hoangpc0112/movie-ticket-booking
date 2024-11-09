@@ -53,38 +53,61 @@
                     <div class = "profile-header">
                         <h1>Lịch sử đặt vé</h1>
                     </div>
-                    <table class = "table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Tên phim</th>
-                            <th>Ghế</th>
-                            <th>Giờ chiếu</th>
-                            <th>Ngày chiếu</th>
-                            <th>Thời gian đặt</th>
-                            <th>Huỷ vé</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each = "seat : ${orderHistory}">
-                            <td th:text = "${seat.movieTitle}"></td>
-                            <td th:if = "${seat.seatNo <= 20}" th:text = "'A' + ${(seat.seatNo - 1) % 20 + 1}"></td>
-                            <td th:if = "${seat.seatNo <= 40 && seat.seatNo > 20}" th:text = "'B' + ${(seat.seatNo - 1) % 20 + 1}"></td>
-                            <td th:if = "${seat.seatNo <= 60 && seat.seatNo > 40}" th:text = "'C' + ${(seat.seatNo - 1) % 20 + 1}"></td>
-                            <td th:if = "${seat.seatNo <= 80 && seat.seatNo > 60}" th:text = "'D' + ${(seat.seatNo - 1) % 20 + 1}"></td>
-                            <td th:if = "${seat.seatNo <= 100 && seat.seatNo > 80}" th:text = "'E' + ${(seat.seatNo - 1) % 20 + 1}"></td>
-                            <td th:if = "${seat.seatNo <= 120 && seat.seatNo > 100}" th:text = "'F' + ${(seat.seatNo - 1) % 20 + 1}"></td>
-                            <td th:text = "${seat.time}"></td>
-                            <td th:text = "${seat.date}"></td>
-                            <td th:text = "${seat.bookTime}"></td>
-                            <td>
-                                <form method = "post" th:action = "@{/cancel-ticket}">
-                                    <input name = "seatId" th:value = "${seat.id}" type = "hidden">
-                                    <button class = "btn btn-primary" type = "submit">Huỷ vé</button>
-                                </form>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div th:each = "bill : ${orderHistory}">
+                        <div class = "card">
+                            <div class = "card-header" th:attr = "id='heading-' + ${bill.id}">
+                                <h2 class = "mb-0">
+                                    <button class = "btn btn-link" data-bs-toggle = "collapse" style = "text-decoration: none" th:attr = "data-bs-target='#collapse-' + ${bill.id}, aria-controls='collapse-' + ${bill.id}" type = "button">
+                                        Tên phim: [[${bill.tickets[0].movieTitle}]] - Tổng tiền: [[${bill.totalPrice}]].000 - Thời gian đặt: [[${bill.dateCreated}]]
+                                    </button>
+                                </h2>
+                            </div>
+                            <div class = "collapse" data-bs-parent = "#order-history" th:attr = "id='collapse-' + ${bill.id}, aria-labelledby='heading-' + ${bill.id}">
+                                <div class = "card-body">
+                                    <table class = "table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Tên phim</th>
+                                            <th>Ghế</th>
+                                            <th>Giờ chiếu</th>
+                                            <th>Ngày chiếu</th>
+                                            <th>Huỷ vé</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each = "ticket : ${bill.tickets}">
+                                            <td th:text = "${ticket.movieTitle}"></td>
+                                            <td th:text = "${ticket.seatLabel}"></td>
+                                            <td th:text = "${ticket.time}"></td>
+                                            <td th:text = "${ticket.date}"></td>
+                                            <td>
+                                                <form method = "post" th:action = "@{/cancel-ticket}">
+                                                    <input name = "seatId" th:value = "${ticket.id}" type = "hidden">
+                                                    <button class = "btn btn-primary" type = "submit">Huỷ vé</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <br th:if = "${!bill.foods.isEmpty()}">
+                                    <table class = "table table-striped" th:if = "${!bill.foods.isEmpty()}">
+                                        <thead>
+                                        <tr>
+                                            <th>Tên đồ ăn</th>
+                                            <th>Số lượng</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each = "food : ${bill.foods.entrySet()}">
+                                            <td th:text = "${food.key}"></td>
+                                            <td th:text = "${food.value}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
