@@ -14,7 +14,7 @@
             <div class = "d-flex justify-content-center">
                 <ul class = "nav nav-tabs" id = "tab" role = "tablist">
                     <li class = "nav-item" role = "presentation">
-                        <button aria-controls = "change-password" aria-selected = "true" class = "nav-link active" data-bs-target = "#change-password" data-bs-toggle = "tab" id = "change-password-tab" role = "tab" type = "button">Đổi mật khẩu</button>
+                        <button aria-controls = "change-password" aria-selected = "true" class = "nav-link active" data-bs-target = "#change-password" data-bs-toggle = "tab" id = "change-password-tab" role = "tab" type = "button">Thông tin người dùng</button>
                     </li>
                     <li class = "nav-item" role = "presentation">
                         <button aria-controls = "order-history" aria-selected = "false" class = "nav-link" data-bs-target = "#order-history" data-bs-toggle = "tab" id = "order-history-tab" role = "tab" type = "button">Lịch sử đặt vé</button>
@@ -54,16 +54,18 @@
                         <h1>Lịch sử đặt vé</h1>
                     </div>
                     <div th:each = "bill : ${orderHistory}">
-                        <div class = "card">
+                        <div class = "card" style = "margin-bottom: 2%; border: 1px solid dimgrey">
                             <div class = "card-header" th:attr = "id='heading-' + ${bill.id}">
                                 <h2 class = "mb-0">
                                     <button class = "btn btn-link" data-bs-toggle = "collapse" style = "text-decoration: none" th:attr = "data-bs-target='#collapse-' + ${bill.id}, aria-controls='collapse-' + ${bill.id}" type = "button">
-                                        Tên phim: [[${bill.tickets[0].movieTitle}]] - Tổng tiền: [[${bill.totalPrice}]].000 - Thời gian đặt: [[${bill.dateCreated}]]
+                                        <span class = "fs-4"><strong style = "color: #4CAF50">Thời gian:</strong> [[${bill.dateCreated}]]</span>
+                                        <strong style = "color: #4CAF50"> Tên phim:</strong> [[${bill.tickets[0].movieTitle}]] -
+                                        <strong style = "color: #4CAF50">Tổng tiền:</strong> [[${bill.totalPrice}]].000 VNĐ
                                     </button>
                                 </h2>
                             </div>
-                            <div class = "collapse" data-bs-parent = "#order-history" th:attr = "id='collapse-' + ${bill.id}, aria-labelledby='heading-' + ${bill.id}">
-                                <div class = "card-body">
+                            <div class = "collapse" th:attr = "id='collapse-' + ${bill.id}, aria-labelledby='heading-' + ${bill.id}">
+                                <div>
                                     <table class = "table table-striped">
                                         <thead>
                                         <tr>
@@ -90,7 +92,7 @@
                                         </tbody>
                                     </table>
                                     <br th:if = "${!bill.foods.isEmpty()}">
-                                    <table class = "table table-striped" th:if = "${!bill.foods.isEmpty()}">
+                                    <table class = "table table-striped" style = "display: inline-table" th:if = "${!bill.foods.isEmpty()}">
                                         <thead>
                                         <tr>
                                             <th>Tên đồ ăn</th>
