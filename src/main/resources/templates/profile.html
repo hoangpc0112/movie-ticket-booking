@@ -58,7 +58,7 @@
                         <h1>Lịch sử đặt vé</h1>
                     </div>
                     <div th:each = "bill : ${orderHistory}">
-                        <div class = "card" style = "margin-bottom: 2%; border: 1px solid dimgrey">
+                        <div class = "card" style = "margin-bottom: 2%; border: 1px solid dimgrey" th:if = "${!bill.tickets.isEmpty()}">
                             <div class = "card-header" th:attr = "id='heading-' + ${bill.id}">
                                 <h2 class = "mb-0">
                                     <button class = "btn btn-link" data-bs-toggle = "collapse" style = "text-decoration: none" th:attr = "data-bs-target='#collapse-' + ${bill.id}, aria-controls='collapse-' + ${bill.id}" type = "button">
