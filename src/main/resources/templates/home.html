@@ -19,12 +19,14 @@
         <div class = "swiper-container">
             <div class = "swiper-wrapper">
                 <div class = "swiper-slide" th:each = "movie : ${movieList}" th:if = "${!movie.bannerUrl.isEmpty()}">
-                    <form method = "get" style = "text-decoration: none" th:action = "@{/details}">
-                        <input name = "title" th:value = "${movie.title}" type = "hidden">
-                        <button class = "poster-button" type = "submit">
-                            <img decoding = "async" fetchpriority = "high" style = "width: 92%; height: auto" th:alt = "${movie.title}" th:src = "${movie.bannerUrl}">
-                        </button>
-                    </form>
+                    <div style = "width: 100%; aspect-ratio: 1900/900">
+                        <form method = "get" style = "text-decoration: none" th:action = "@{/details}">
+                            <input name = "title" th:value = "${movie.title}" type = "hidden">
+                            <button class = "poster-button" type = "submit">
+                                <img alt = "Movie Banner" decoding = "async" fetchpriority = "high" style = "width: 92%; height: auto" th:src = "${movie.bannerUrl}">
+                            </button>
+                        </form>
+                    </div>
                     <div class = "swiper-button-next"></div>
                     <div class = "swiper-button-prev"></div>
                 </div>
@@ -41,7 +43,7 @@
                     <form method = "get" style = "text-decoration: none" th:action = "@{/details}">
                         <input name = "title" th:value = "${movie.title}" type = "hidden">
                         <button class = "poster-button" type = "submit">
-                            <img class = "img-fluid poster-img" decoding = "async" fetchpriority = "high" loading = "lazy" th:alt = "${movie.title}" th:src = "${movie.posterUrl}">
+                            <img alt = "Movie Poster" class = "img-fluid poster-img" decoding = "async" fetchpriority = "high" loading = "lazy" th:src = "${movie.posterUrl}">
                             <br>
                             <h5 class = "text-center poster-title" th:text = "${movie.title}"></h5>
                         </button>
@@ -60,7 +62,7 @@
                     <form method = "get" style = "text-decoration: none" th:action = "@{/details}">
                         <input name = "title" th:value = "${movie.title}" type = "hidden">
                         <button class = "poster-button" type = "submit">
-                            <img class = "img-fluid poster-img" decoding = "async" fetchpriority = "high" loading = "lazy" th:alt = "${movie.title}" th:src = "${movie.posterUrl}">
+                            <img alt = "Movie Poster" class = "img-fluid poster-img" decoding = "async" fetchpriority = "high" loading = "lazy" th:src = "${movie.posterUrl}">
                             <br>
                             <h5 class = "text-center poster-title" th:text = "${movie.title}"></h5>
                         </button>

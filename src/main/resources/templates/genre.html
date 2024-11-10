@@ -28,7 +28,7 @@
                         <form method = "get" style = "text-decoration: none" th:action = "@{/details}">
                             <input name = "title" th:value = "${movie.title}" type = "hidden">
                             <button class = "poster-button" type = "submit">
-                                <img class = "img-fluid poster-img" decoding = "async" fetchpriority = "high" th:alt = "${movie.title}" th:src = "${movie.posterUrl}">
+                                <img alt = "Movie Poster" class = "img-fluid poster-img" decoding = "async" fetchpriority = "high" th:src = "${movie.posterUrl}">
                                 <br>
                                 <h5 class = "text-center poster-title" th:text = "${movie.title}"></h5>
                             </button>
