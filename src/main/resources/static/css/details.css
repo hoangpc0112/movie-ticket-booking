@@ -9,8 +9,8 @@
 
 .movie-poster {
     border-radius: 5px;
-    width: 100%;
-    height: auto
+    width: auto;
+    max-height: 480px
 }
 
 h1 {
