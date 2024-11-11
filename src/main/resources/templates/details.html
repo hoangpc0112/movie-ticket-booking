@@ -22,7 +22,7 @@
         <div class = "container mt-5">
             <div class = "row movie-details">
                 <div class = "col-md-3 text-center">
-                    <img alt = "Movie Poster" class = "movie-poster img-fluid rounded" decoding = "async" fetchpriority = "high" height = "360px" th:src = "${'https://wsrv.nl/?url=' + movie.posterUrl + '&output=webp' + '&w=315' + '&h=480'}" width = "360px">
+                    <img alt = "Movie Poster" class = "movie-poster img-fluid rounded" decoding = "async" fetchpriority = "high" height = "360px" th:src = "${'https://wsrv.nl/?url=' + movie.posterUrl + '&output=webp'}" width = "360px">
                     <div class = "mt-3 d-flex justify-content-center" style = "margin-bottom: 20px">
                         <form action = "/booking" class = "mr-2" method = "get">
                             <input name = "title" th:value = "${movie.title}" type = "hidden">
