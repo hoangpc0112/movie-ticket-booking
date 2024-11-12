@@ -1,200 +1,170 @@
-<!doctype html>
+<!doctypehtml>
 <html lang = "en" xmlns:th = "https://www.thymeleaf.org">
-    <head>
-        <meta charset = "utf-8">
-        <meta content = "width=device-width, initial-scale=1" name = "viewport">
-        <title>Đặt vé</title>
-        <link href = "https://fonts.googleapis.com" rel = "preconnect">
-        <link crossorigin href = "https://fonts.gstatic.com" rel = "preconnect">
-        <link href = "https://fonts.googleapis.com" rel = "dns-prefetch">
-        <link href = "https://fonts.gstatic.com" rel = "dns-prefetch">
-        <link crossorigin = "anonymous" href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity = "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel = "stylesheet">
-        <link rel = "stylesheet" th:href = "@{/css/common/styles.css}"/>
-        <link rel = "stylesheet" th:href = "@{/css/booking.css}"/>
-    </head>
-    <body>
-        <header th:replace = "~{common/header :: header}"></header>
-        <div style = "height: 6px"></div>
-        <div class = "alert alert-danger alert-dismissible fade show text-center" role = "alert" style = "padding-right: 0" th:if = "${!errorReport.isEmpty()}">
-            <strong style = "font-size: 1.25rem">[[${errorReport}]]</strong>
-            <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
-        </div>
-        <br>
-        <h1 class = "text-center">[[${movie.title}]]</h1>
-        <br>
-        <h2 class = "text-center">Vui lòng chọn ngày và giờ:</h2>
-        <div class = "date_form text-center">
-            <form id = "form" method = "get" th:action = "@{/select}">
-                <input name = "title" th:value = "${movie.title}" type = "hidden">
-                <label for = "timeSelect"></label><select id = "timeSelect" name = "localTime" onchange = "this.form.submit()">
-                <option th:value = "${localTime}">
-                    &#x2794; <span th:text = "${localTime}"></span>
-                </option>
-                <option value = "09:00">09:00</option>
-                <option value = "12:00">12:00</option>
-                <option value = "15:00">15:00</option>
-                <option value = "18:00">18:00</option>
-                <option value = "21:00">21:00</option>
+    <meta charset = "utf-8">
+    <meta content = "width=device-width,initial-scale=1" name = "viewport">
+    <title>Đặt vé</title>
+    <link href = "https://fonts.googleapis.com" rel = "preconnect">
+    <link crossorigin href = "https://fonts.gstatic.com" rel = "preconnect">
+    <link href = "https://fonts.googleapis.com" rel = "dns-prefetch">
+    <link href = "https://fonts.gstatic.com" rel = "dns-prefetch">
+    <link crossorigin = "anonymous" href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity = "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel = "stylesheet">
+    <link rel = "stylesheet" th:href = "@{/css/common/styles.css}">
+    <link rel = "stylesheet" th:href = "@{/css/booking.css}">
+    <header th:replace = "~{common/header :: header}"></header>
+    <div style = height:6px></div>
+    <div class = "text-center alert alert-danger alert-dismissible fade show" role = "alert" style = padding-right:0 th:if = "${!errorReport.isEmpty()}">
+        <strong style = font-size:1.25rem>[[${errorReport}]]</strong>
+        <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
+    </div>
+    <br>
+    <h1 class = "text-center">[[${movie.title}]]</h1><br>
+    <h2 class = "text-center">Vui lòng chọn ngày và giờ:</h2>
+    <div class = "text-center date_form">
+        <form id = "form" th:action = "@{/select}"><input name = "title" th:value = "${movie.title}" type = "hidden">
+            <label for = "timeSelect"></label><select id = "timeSelect" name = "localTime" onchange = this.form.submit()>
+                <option th:value = "${localTime}">➔ <span th:text = "${localTime}"></span>
+                <option value = "09:00">09:00
+                <option value = "12:00">12:00
+                <option value = "15:00">15:00
+                <option value = "18:00">18:00
+                <option value = "21:00">21:00
             </select>
-                <label for = "dateSelect"></label><input id = "dateSelect" name = "localDate" onchange = "this.form.submit()" required = "required" th:value = "${localDate}" type = "date"/>
-            </form>
-        </div>
-        <br>
-        <div class = "jumbotron p-0 js-seat text-center">
-            <h2>Ghế đã chọn:</h2>
-            <div class = "dynamic-seat" id = "seat-dynamic" style = "word-break: break-all; font-size: 24px;"></div>
-            <h2>Tổng tiền:</h2>
-            <label id = "show-price" style = "font-size: 24px;">0</label><span style = "font-size: 24px">.000 VND</span>
-        </div>
-        <div style = "display: flex; justify-content: center">
-            <div class = "screen"></div>
-        </div>
-        <div class = "container mt-5">
-            <form id = "seatForm" method = "get" th:action = "@{/bill}">
-                <input name = "title" th:value = "${movie.title}" type = "hidden">
-                <div class = "checkbox-container">
-                    <div class = "block1">
-                        <th:block th:each = "i : ${#numbers.sequence(1, 60)}">
-                            <input class = "input-btn" hidden = "hidden" name = "selectedSeats" th:checked = "${bookedSeats.contains(i)}" th:disabled = "${bookedSeats.contains(i)}" th:id = "${i}" th:value = "${i}" type = "checkbox">
-                            <label class = "btn btn-success text-center" th:for = "${i}" th:if = "${i <= 20}" th:text = "'A' + ${(i - 1) % 20 + 1}"></label>
-                            <label class = "btn btn-success text-center" th:for = "${i}" th:if = "${i <= 40 && i > 20}" th:text = "'B' + ${(i - 1) % 20 + 1}"></label>
-                            <label class = "btn btn-success text-center" th:for = "${i}" th:if = "${i <= 60 && i > 40}" th:text = "'C' + ${(i - 1) % 20 + 1}"></label>
-                        </th:block>
-                    </div>
-                    <div class = "block2">
-                        <th:block th:each = "i : ${#numbers.sequence(61, 120)}">
-                            <input class = "input-btn" hidden = "hidden" name = "selectedSeats" th:checked = "${bookedSeats.contains(i)}" th:disabled = "${bookedSeats.contains(i)}" th:id = "${i}" th:value = "${i}" type = "checkbox">
-                            <label class = "btn btn-success text-center" th:for = "${i}" th:if = "${i <= 80 && i > 60}" th:text = "'D' + ${(i - 1) % 20 + 1}"></label>
-                            <label class = "btn btn-success text-center" th:for = "${i}" th:if = "${i <= 100 && i > 80}" th:text = "'E' + ${(i - 1) % 20 + 1}"></label>
-                            <label class = "btn btn-success text-center" th:for = "${i}" th:if = "${i <= 120 && i > 100}" th:text = "'F' + ${(i - 1) % 20 + 1}"></label>
-                        </th:block>
-                    </div>
+            <label for = "dateSelect"></label><input id = "dateSelect" name = "localDate" onchange = this.form.submit() required th:value = "${localDate}" type = "date">
+        </form>
+    </div>
+    <br>
+    <div class = "text-center js-seat jumbotron p-0"><h2>Ghế đã chọn:</h2>
+        <div class = "dynamic-seat" id = "seat-dynamic" style = word-break:break-all;font-size:24px></div>
+        <h2>Tổng tiền:</h2>
+        <label id = "show-price" style = font-size:24px>0</label><span style = font-size:24px>.000 VND</span></div>
+    <div style = display:flex;justify-content:center>
+        <div class = "screen"></div>
+    </div>
+    <div class = "container mt-5">
+        <form id = "seatForm" th:action = "@{/bill}"><input name = "title" th:value = "${movie.title}" type = "hidden">
+            <div class = "checkbox-container">
+                <div class = "block1">
+                    <th:block th:each = "i : ${#numbers.sequence(1, 60)}">
+                        <input class = "input-btn" hidden name = "selectedSeats" th:checked = "${bookedSeats.contains(i)}" th:disabled = "${bookedSeats.contains(i)}" th:id = "${i}" th:value = "${i}" type = "checkbox">
+                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 20}" th:text = "'A' + ${(i - 1) % 20 + 1}"></label>
+                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 40 && i > 20}" th:text = "'B' + ${(i - 1) % 20 + 1}"></label>
+                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 60 && i > 40}" th:text = "'C' + ${(i - 1) % 20 + 1}"></label>
+                    </th:block>
                 </div>
-                <br>
-                <div class = "food-selection">
-                    <h2>Chọn đồ ăn:</h2>
-                    <div class = "food-item">
-                        <input id = "popcorn" name = "food" type = "checkbox" value = "popcorn">
-                        <label for = "popcorn">
-                            <img alt = "Bỏng ngô" src = "/images/popcorn.webp">
-                            Bỏng ngô
-                        </label>
-                        <input id = "popcornQty" min = "1" name = "popcornQty" type = "number" value = "1">
-                    </div>
-                    <div class = "food-item">
-                        <input id = "drink" name = "food" type = "checkbox" value = "drink">
-                        <label for = "drink">
-                            <img alt = "Nước" src = "/images/drink.webp">
-                            Nước uống
-                        </label>
-                        <input id = "drinkQty" min = "1" name = "drinkQty" type = "number" value = "1">
-                    </div>
-                    <div class = "food-item">
-                        <input id = "combo" name = "food" type = "checkbox" value = "combo">
-                        <label for = "combo">
-                            <img alt = "Combo bỏng + nước" src = "/images/popcorn+drink.avif">
-                            Combo bỏng ngô + nước uống
-                        </label>
-                        <input id = "comboQty" min = "1" name = "comboQty" type = "number" value = "1">
-                    </div>
+                <div class = "block2">
+                    <th:block th:each = "i : ${#numbers.sequence(61, 120)}">
+                        <input class = "input-btn" hidden name = "selectedSeats" th:checked = "${bookedSeats.contains(i)}" th:disabled = "${bookedSeats.contains(i)}" th:id = "${i}" th:value = "${i}" type = "checkbox">
+                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 80 && i > 60}" th:text = "'D' + ${(i - 1) % 20 + 1}"></label>
+                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 100 && i > 80}" th:text = "'E' + ${(i - 1) % 20 + 1}"></label>
+                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 120 && i > 100}" th:text = "'F' + ${(i - 1) % 20 + 1}"></label>
+                    </th:block>
                 </div>
-                <div class = "text-center">
-                    <button class = "btn1 bookBtn" type = "submit">Thanh toán</button>
-                </div>
-            </form>
-        </div>
-        <br>
-        <footer th:replace = "~{common/footer :: footer}"></footer>
-        <script crossorigin = "anonymous" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            const mySeats = document.getElementById('seat-dynamic');
-            const myPrice = document.getElementById('show-price');
-            const checkBox = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
-            const foodCheckboxes = document.querySelectorAll('.food-selection input[type="checkbox"]');
-            const foodQuantities = document.querySelectorAll('.food-selection input[type="number"]');
-            const bookButton = document.querySelector('.bookBtn');
-            let checkedSeat = [];
-            let seatTotal = 0;
-            let foodTotal = 0;
-            for (let i = 0; i < checkBox.length; i++) {
-                checkBox[i].addEventListener('click', displayValue)
-            }
-            for (let i = 0; i < foodCheckboxes.length; i++) {
-                foodCheckboxes[i].addEventListener('change', updateFoodTotal);
-                foodQuantities[i].addEventListener('input', updateFoodTotal)
-            }
+            </div>
+            <br>
+            <div class = "food-selection"><h2>Chọn đồ ăn:</h2>
+                <div class = "food-item"><input id = "popcorn" name = "food" type = "checkbox" value = "popcorn">
+                    <label for = "popcorn"><img alt = "Bỏng ngô" src = "/images/popcorn.webp"> Bỏng ngô</label>
+                    <input id = "popcornQty" min = "1" name = "popcornQty" type = "number" value = "1"></div>
+                <div class = "food-item"><input id = "drink" name = "food" type = "checkbox" value = "drink">
+                    <label for = "drink"><img alt = "Nước" src = "/images/drink.webp"> Nước uống</label>
+                    <input id = "drinkQty" min = "1" name = "drinkQty" type = "number" value = "1"></div>
+                <div class = "food-item"><input id = "combo" name = "food" type = "checkbox" value = "combo">
+                    <label for = "combo"><img alt = "Combo bỏng + nước" src = "/images/popcorn+drink.avif"> Combo bỏng ngô + nước uống</label>
+                    <input id = "comboQty" min = "1" name = "comboQty" type = "number" value = "1"></div>
+            </div>
+            <div class = "text-center">
+                <button class = "bookBtn btn1" type = "submit">Thanh toán</button>
+            </div>
+        </form>
+    </div>
+    <br>
+    <footer th:replace = "~{common/footer :: footer}"></footer>
+    <script crossorigin = "anonymous" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>const mySeats = document.getElementById('seat-dynamic');
+    const myPrice = document.getElementById('show-price');
+    const checkBox = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
+    const foodCheckboxes = document.querySelectorAll('.food-selection input[type="checkbox"]');
+    const foodQuantities = document.querySelectorAll('.food-selection input[type="number"]');
+    const bookButton = document.querySelector('.bookBtn');
+    let checkedSeat = [];
+    let seatTotal = 0;
+    let foodTotal = 0;
+    for (let i = 0; i < checkBox.length; i++) {
+        checkBox[i].addEventListener('click', displayValue)
+    }
+    for (let i = 0; i < foodCheckboxes.length; i++) {
+        foodCheckboxes[i].addEventListener('change', updateFoodTotal);
+        foodQuantities[i].addEventListener('input', updateFoodTotal)
+    }
 
-            function displayValue(e) {
-                const money = 50;
-                let ans = "";
-                if (e.target.checked) {
-                    checkedSeat.push(" " + getSeatLabel(e.target.id));
-                    seatTotal += money
-                }
-                else {
-                    ans = getSeatLabel(e.target.id);
-                    const index = checkedSeat.indexOf(" " + ans);
-                    if (index > -1) {
-                        checkedSeat.splice(index, 1)
-                    }
-                    seatTotal -= money
-                }
-                mySeats.innerHTML = checkedSeat.join(", ");
-                updateTotal()
+    function displayValue(e) {
+        const money = 50;
+        let ans = "";
+        if (e.target.checked) {
+            checkedSeat.push(" " + getSeatLabel(e.target.id));
+            seatTotal += money
+        }
+        else {
+            ans = getSeatLabel(e.target.id);
+            const index = checkedSeat.indexOf(" " + ans);
+            if (index > -1) {
+                checkedSeat.splice(index, 1)
             }
+            seatTotal -= money
+        }
+        mySeats.innerHTML = checkedSeat.join(", ");
+        updateTotal()
+    }
 
-            function updateFoodTotal() {
-                foodTotal = 0;
-                foodCheckboxes.forEach((checkbox, index) => {
-                    if (checkbox.checked) {
-                        const quantity = foodQuantities[index].value;
-                        let price = 0;
-                        switch (checkbox.value) {
-                            case 'popcorn':
-                                price = 30;
-                                break;
-                            case 'drink':
-                                price = 20;
-                                break;
-                            case 'combo':
-                                price = 40;
-                                break
-                        }
-                        foodTotal += price * quantity
-                    }
-                });
-                updateTotal()
+    function updateFoodTotal() {
+        foodTotal = 0;
+        foodCheckboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                const quantity = foodQuantities[index].value;
+                let price = 0;
+                switch (checkbox.value) {
+                    case 'popcorn':
+                        price = 30;
+                        break;
+                    case 'drink':
+                        price = 20;
+                        break;
+                    case 'combo':
+                        price = 40;
+                        break
+                }
+                foodTotal += price * quantity
             }
+        });
+        updateTotal()
+    }
 
-            function updateTotal() {
-                const total = seatTotal + foodTotal;
-                myPrice.innerHTML = total;
-                bookButton.innerHTML = `Thanh toán: ${total}.000 VNĐ`
-            }
+    function updateTotal() {
+        const total = seatTotal + foodTotal;
+        myPrice.innerHTML = total;
+        bookButton.innerHTML = `Thanh toán: ${total}.000 VNĐ`
+    }
 
-            function getSeatLabel(id) {
-                let label = "";
-                if (id <= 20) {
-                    label += 'A'
-                }
-                else if (id <= 40) {
-                    label += 'B'
-                }
-                else if (id <= 60) {
-                    label += 'C'
-                }
-                else if (id <= 80) {
-                    label += 'D'
-                }
-                else if (id <= 100) {
-                    label += 'E'
-                }
-                else {
-                    label += 'F'
-                }
-                label += (id % 20 === 0) ? 20 : id % 20;
-                return label
-            }
-        </script>
-    </body>
-</html>
+    function getSeatLabel(id) {
+        let label = "";
+        if (id <= 20) {
+            label += 'A'
+        }
+        else if (id <= 40) {
+            label += 'B'
+        }
+        else if (id <= 60) {
+            label += 'C'
+        }
+        else if (id <= 80) {
+            label += 'D'
+        }
+        else if (id <= 100) {
+            label += 'E'
+        }
+        else {
+            label += 'F'
+        }
+        label += (id % 20 === 0) ? 20 : id % 20;
+        return label
+    }</script>
