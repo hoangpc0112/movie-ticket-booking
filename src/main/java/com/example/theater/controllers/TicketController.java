@@ -8,6 +8,7 @@ import com.example.theater.repositories.BillRepository;
 import com.example.theater.repositories.CommentRepository;
 import com.example.theater.repositories.MovieRepository;
 import com.example.theater.repositories.TicketRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,12 +23,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class TicketController {
 
-    private final Set <Integer> bookedSeats = new TreeSet <>();
+    private final List <Integer> bookedSeats = new ArrayList <>();
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -114,7 +118,6 @@ public class TicketController {
             errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
             return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
-        errorReport = "";
         movieTitle = title;
         showTime = localTime;
         showDate = LocalDate.parse(localDate).format(dateFormatter);
@@ -122,12 +125,12 @@ public class TicketController {
             errorReport = "Xin lỗi, bạn đã chọn một thời gian chiếu đã qua. Vui lòng chọn một thời gian khác.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
-        errorReport = "";
         model.addAttribute("title", title);
         model.addAttribute("localTime", localTime);
         model.addAttribute("localDate", LocalDate.parse(showDate, dateFormatter));
         model.addAttribute("movie", movieRepository.findByTitle(title));
         model.addAttribute("errorReport", errorReport);
+        errorReport = "";
 
         bookedSeats.clear();
         bookedSeats.addAll(ticketRepository.findAllSeatNoBy(title, localTime, showDate));
@@ -142,32 +145,38 @@ public class TicketController {
                             @RequestParam (required = false) Integer popcornQty,
                             @RequestParam (required = false) Integer drinkQty,
                             @RequestParam (required = false) Integer comboQty,
-                            Model model) {
+                            Model model,
+                            HttpServletRequest request) {
         if (!movieRepository.findByTitle(title).isNowShowing()) {
             errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
             return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         if (selectedSeats == null || selectedSeats.isEmpty()) {
             errorReport = "Vui lòng chọn ghế.";
-            return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+            if (request.getHeader("Referer").contains("select")) {
+                return "redirect:/select?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&localTime=" + showTime + "&localDate=" + LocalDate.parse(showDate, dateFormatter);
+            }
+            else {
+                return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+            }
         }
         errorReport = "";
         List <Integer> unavailableSeats = new ArrayList <>();
         for (int selectedSeat : selectedSeats) {
             if (ticketRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) {
                 unavailableSeats.add(selectedSeat);
+                errorReport += getSeatLabel(selectedSeat) + ", ";
             }
         }
         if (!unavailableSeats.isEmpty()) {
-            errorReport = "Ghế ";
-            for (int unavailableSeat : unavailableSeats) {
-                errorReport += getSeatLabel(unavailableSeat);
-                if (unavailableSeats.indexOf(unavailableSeat) != unavailableSeats.size() - 1) {
-                    errorReport += ", ";
-                }
-            }
+            errorReport = errorReport.substring(0, errorReport.length() - 2);
             errorReport += " đã có người đặt trước, vui lòng chọn ghế khác.";
-            return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+            if (request.getHeader("Referer").contains("select")) {
+                return "redirect:/select?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&localTime=" + showTime + "&localDate=" + LocalDate.parse(showDate, dateFormatter);
+            }
+            else {
+                return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+            }
         }
         errorReport = "";
 
@@ -202,9 +211,6 @@ public class TicketController {
             ticketRepository.save(ticket);
             tickets.add(ticket);
         }
-
-        bookedSeats.clear();
-        bookedSeats.addAll(selectedSeats);
 
         Bill bill = new Bill(SecurityContextHolder.getContext().getAuthentication().getName(), totalPrice, bookTime, tickets, foods);
         billRepository.save(bill);
