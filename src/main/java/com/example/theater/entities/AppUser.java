@@ -28,4 +28,16 @@ public class AppUser {
 
     @Column (nullable = false)
     private String emailOtp;
+
+    @Column
+    private String firstName;
+
+    @Column
+    private String lastName;
+
+    @Column
+    private String age;
+
+    @Column
+    private String address;
 }

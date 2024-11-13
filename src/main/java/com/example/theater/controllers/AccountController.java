@@ -124,13 +124,14 @@ public class AccountController {
     }
 
     @GetMapping ("/profile")
-    public String profile (Model model, @RequestParam (value = "successChangePassword", required = false, defaultValue = "false") String successChangePassword, @RequestParam (value = "cancelTicket", required = false, defaultValue = "false") String cancelTicket, @RequestParam (name = "expiredTicket", required = false) String expiredTicket) {
+    public String profile (Model model, @RequestParam (value = "successChangePassword", required = false, defaultValue = "false") String successChangePassword, @RequestParam (value = "cancelTicket", required = false, defaultValue = "false") String cancelTicket, @RequestParam (name = "expiredTicket", required = false) String expiredTicket, @RequestParam (name = "updateProfile", required = false) String updateProfile) {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("orderHistory", billRepository.findByUser(currentUser));
         model.addAttribute("user", userRepo.findByUsername(currentUser));
         model.addAttribute("successChangePassword", successChangePassword);
         model.addAttribute("cancelTicket", cancelTicket);
         model.addAttribute("expiredTicket", expiredTicket);
+        model.addAttribute("updateProfile", updateProfile);
         return "profile";
     }
 
@@ -213,5 +214,16 @@ public class AccountController {
     @GetMapping ("/user-manual")
     public String userManual () {
         return "user-manual";
+    }
+
+    @PostMapping ("/update-profile")
+    public String updateProfile (@RequestParam (value = "firstName", required = false) String firstName, @RequestParam (value = "lastName", required = false) String lastName, @RequestParam (value = "age", required = false) String age, @RequestParam (value = "address", required = false) String address, Model model) {
+        AppUser user = userRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setAge(age);
+        user.setAddress(address);
+        userRepo.save(user);
+        return "redirect:/profile?updateProfile=true";
     }
 }
