@@ -30,13 +30,13 @@ public class TheaterController {
 
     @GetMapping ("/now-showing")
     public String nowShowing (Model model) {
-        model.addAttribute("movieList", movieRepository.getAllMoviesByNowShowing(true));
+        model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByNowShowing(true));
         return "now-showing";
     }
 
     @GetMapping ("/coming-soon")
     public String comingSoon (Model model) {
-        model.addAttribute("movieList", movieRepository.getAllMoviesByNowShowing(false));
+        model.addAttribute("comingSoonMovieList", movieRepository.getAllMoviesByNowShowing(false));
         return "coming-soon";
     }
 
