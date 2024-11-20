@@ -27,6 +27,10 @@ public class Comment {
     @JoinColumn (name = "movie_id", referencedColumnName = "id")
     private Movie movie;
 
+    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn (name = "user_id", referencedColumnName = "id")
+    private AppUser user;
+
     public Comment (String commenter, String content, Movie movie) {
         this.commenter = commenter;
         this.content = content;

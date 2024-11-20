@@ -14,15 +14,16 @@ public interface MovieRepository extends JpaRepository <Movie, Long> {
             "ORDER BY STR_TO_DATE(m.releaseDate, '%d/%m/%Y') ASC")
     List <Movie> getAllMoviesByNowShowing (boolean nowShowing);
 
-    @Query ("SELECT m FROM Movie m " +
-            "WHERE (m.title LIKE CONCAT('%', :keyword, '%') " +
-            "OR m.director LIKE CONCAT('%', :keyword, '%') " +
-            "OR m.genre LIKE CONCAT('%', :keyword, '%') " +
-            "OR m.actors LIKE CONCAT('%', :keyword, '%') " +
-            "OR m.language LIKE CONCAT('%', :keyword, '%') " +
-            "OR m.keywords LIKE CONCAT('%', :keyword, '%')) " +
-            "AND m.nowShowing = :nowShowing " +
-            "ORDER BY STR_TO_DATE(m.releaseDate, '%d/%m/%Y') ASC")
+    @Query (value = "SELECT * FROM movies " +
+            "WHERE (title REGEXP CONCAT('\\\\b', :keyword, '\\\\b') OR " +
+            "director REGEXP CONCAT('\\\\b', :keyword, '\\\\b') OR " +
+            "genre REGEXP CONCAT('\\\\b', :keyword, '\\\\b') OR " +
+            "actors REGEXP CONCAT('\\\\b', :keyword, '\\\\b') OR " +
+            "language REGEXP CONCAT('\\\\b', :keyword, '\\\\b') OR " +
+            "keywords LIKE CONCAT('%', :keyword, '%')) " +
+            "AND now_showing = :nowShowing " +
+            "ORDER BY STR_TO_DATE(release_date, '%d/%m/%Y') ASC",
+            nativeQuery = true)
     List <Movie> getAllMoviesByKeyWordAndNowShowing (String keyword, boolean nowShowing);
 
     @Query ("SELECT m FROM Movie m " +

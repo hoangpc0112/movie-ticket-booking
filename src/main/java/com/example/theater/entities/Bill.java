@@ -23,7 +23,7 @@ public class Bill {
     private int totalPrice;
 
     @Column (nullable = false)
-    private String bookTime;
+    private String dateCreated;
 
     @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn (name = "user_id", referencedColumnName = "id")
@@ -35,9 +35,9 @@ public class Bill {
     @OneToMany (mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List <Food> foods;
 
-    public Bill (int totalPrice, String bookTime, AppUser user, List <Ticket> tickets, List <Food> foods) {
+    public Bill (int totalPrice, String dateCreated, AppUser user, List <Ticket> tickets, List <Food> foods) {
         this.totalPrice = totalPrice;
-        this.bookTime = bookTime;
+        this.dateCreated = dateCreated;
         this.user = user;
         this.tickets = tickets;
         this.foods = foods;
