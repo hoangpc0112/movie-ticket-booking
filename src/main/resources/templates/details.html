@@ -18,7 +18,7 @@
     </div>
     <div class = "container mt-5">
         <div class = "movie-details row">
-            <div class = "text-center col-md-3">
+            <div class = "text-center col-md-4">
                 <img alt = "Movie Poster" class = "img-fluid movie-poster rounded" decoding = "async" fetchpriority = "high" height = "360px" th:src = "${'https://wsrv.nl/?url=' + movie.posterUrl + '&output=webp'}" width = "360px">
                 <div class = "d-flex justify-content-center mt-3" style = margin-bottom:20px>
                     <form action = "/booking" class = "mr-2">
@@ -30,13 +30,15 @@
                     </div>
                 </div>
             </div>
-            <div class = "col-md-9"><h1 class = "h2"><strong>[[${movie.title}]]</strong></h1>
+            <div class = "col-md-8"><h1 class = "h2"><strong>[[${movie.title}]]</strong></h1>
                 <h2 class = "h4">
                     <strong>Ngày khởi chiếu: </strong>[[${movie.releaseDate}]]<span th:if = "${movie.releaseDate.isEmpty()}"> (Đang cập nhật)</span>
                 </h2>
-                <h3 class = "h5">
-                    <strong>Nội dung: </strong>[[${movie.description}]]<span th:if = "${movie.description.isEmpty()}"> (Đang cập nhật)</span>
-                </h3>
+                <div class = "movie-details"><p class = "h5" id = "description" onclick = toggleDescription()>
+                    <strong>Nội dung: </strong>[[${movie.description}]]
+                    <span th:if = "${movie.description.isEmpty()}">(Đang cập nhật)</span></p>
+                    <button id = "show-more-btn" onclick = toggleDescription()>Xem thêm</button>
+                </div>
                 <hr class = "my-4">
                 <h4 class = "h5">
                     <strong>Diễn viên: </strong>[[${movie.actors}]]<span th:if = "${movie.actors.isEmpty()}">(Đang cập nhật)</span>
@@ -94,5 +96,14 @@
         document.getElementById("cboxOverlay").style.display = "none", document.getElementById("colorbox").style.display = "none";
         var e = document.getElementById("movieTrailer");
         e.src = e.src
+    })</script>
+    <script>function toggleDescription() {
+        var e = document.getElementById("description"), t = document.getElementById("show-more-btn");
+        "none" === e.style.maxHeight ? (e.style.maxHeight = "9em", t.textContent = "Xem thêm") : (e.style.maxHeight = "none", t.textContent = "Thu gọn")
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var e = document.getElementById("description"), t = document.getElementById("show-more-btn");
+        e.scrollHeight > e.clientHeight && (t.style.display = "block")
     })</script>
     <script crossorigin = "anonymous" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

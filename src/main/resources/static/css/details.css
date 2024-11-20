@@ -3,8 +3,7 @@
 }
 
 .movie-details {
-    margin-bottom: 20px;
-    padding-top: 20px
+    margin-bottom: 20px
 }
 
 .movie-poster {
@@ -196,4 +195,20 @@ h2 {
         width: 650px;
         height: 420px
     }
+}
+
+#description {
+    overflow: hidden;
+    max-height: 9em;
+    line-height: 1.5em;
+    transition: max-height 0.3s ease
+}
+
+#show-more-btn {
+    display: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px
 }
