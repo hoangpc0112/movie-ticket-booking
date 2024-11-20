@@ -1,41 +1,46 @@
-<!doctypehtml>
-<html lang = "en" xmlns:th = "https://www.thymeleaf.org">
-    <title>OOP16 - Đặt Vé Xem Phim Mọi Lúc, Mọi Nơi</title>
-    <div th:replace = "~{fragments/head-tag :: head-tag}"></div>
-    <link href = "https://unpkg.com/swiper/swiper-bundle.min.css" rel = "stylesheet">
-    <link rel = "stylesheet" th:href = "@{/css/movie-styles.css}">
-    <link rel = "stylesheet" th:href = "@{/css/home.css}">
-    <header th:replace = "~{fragments/header :: header}"></header>
-    <div class = "swiper-container">
-        <div class = "swiper-wrapper">
-            <div class = "swiper-slide" th:each = "movie, iterStat : ${movieList}" th:if = "${!movie.bannerUrl.isEmpty()}">
-                <div style = width:100%;aspect-ratio:2>
-                    <form style = text-decoration:none th:action = "@{/details}">
-                        <input name = "title" th:value = "${movie.title}" type = "hidden">
-                        <button class = "poster-button" type = "submit">
-                            <img alt = "Movie Banner" decoding = "async" fetchpriority = "high" style = width:92%;height:auto th:attr = "srcset = |@{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=800'} 800w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1200'} 1200w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1600'} 1600w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp'} 1900w|" th:if = "${iterStat.index <= 3}" th:src = "${'https://wsrv.nl/?url=' + movie.bannerUrl + '&output=webp'}">
-                            <img alt = "Movie Banner" decoding = "async" style = width:92%;height:auto th:attr = "srcset = |@{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=800'} 800w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1200'} 1200w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1600'} 1600w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp'} 1900w|" th:if = "${iterStat.index > 3}" th:src = "${'https://wsrv.nl/?url=' + movie.bannerUrl + '&output=webp'}">
-                        </button>
-                    </form>
+<!DOCTYPE html>
+<html lang = "en" layout:decorate = "~{layout}" xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <title>OOP16 - Đặt Vé Xem Phim Mọi Lúc, Mọi Nơi</title>
+        <link href = "https://unpkg.com/swiper/swiper-bundle.min.css" rel = "stylesheet">
+        <link rel = "stylesheet" th:href = "@{/css/movie-styles.css}">
+        <link rel = "stylesheet" th:href = "@{/css/home.css}">
+    </head>
+    <body>
+        <section layout:fragment = "content">
+            <div class = "swiper-container">
+                <div class = "swiper-wrapper">
+                    <div class = "swiper-slide" th:each = "movie, iterStat : ${movieList}" th:if = "${!movie.bannerUrl.isEmpty()}">
+                        <div style = width:100%;aspect-ratio:2>
+                            <form style = text-decoration:none th:action = "@{/details}">
+                                <input name = "title" th:value = "${movie.title}" type = "hidden">
+                                <button class = "poster-button" type = "submit">
+                                    <img alt = "Movie Banner" decoding = "async" fetchpriority = "high" style = width:92%;height:auto th:attr = "srcset = |@{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=800'} 800w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1200'} 1200w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1600'} 1600w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp'} 1900w|" th:if = "${iterStat.index <= 3}" th:src = "${'https://wsrv.nl/?url=' + movie.bannerUrl + '&output=webp'}">
+                                    <img alt = "Movie Banner" decoding = "async" style = width:92%;height:auto th:attr = "srcset = |@{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=800'} 800w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1200'} 1200w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1600'} 1600w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp'} 1900w|" th:if = "${iterStat.index > 3}" th:src = "${'https://wsrv.nl/?url=' + movie.bannerUrl + '&output=webp'}">
+                                </button>
+                            </form>
+                        </div>
+                        <div class = "swiper-button-next"></div>
+                        <div class = "swiper-button-prev"></div>
+                    </div>
                 </div>
-                <div class = "swiper-button-next"></div>
-                <div class = "swiper-button-prev"></div>
             </div>
-        </div>
-    </div>
-    <br>
-    <div th:replace = "~{fragments/now-showing-movie-list :: now-showing-movie-list}"></div>
-    <br>
-    <div th:replace = "~{fragments/coming-soon-movie-list :: coming-soon-movie-list}"></div>
-    <br>
-    <footer th:replace = "~{fragments/footer :: footer}"></footer>
-    <script crossorigin = "anonymous" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src = "https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script>var swiper = new Swiper(".swiper-container", {
-        slidesPerView: 1,
-        loop: !0,
-        effect: "fade",
-        fadeEffect: {crossFade: !0},
-        navigation: {nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev"},
-        autoplay: {delay: 3e3, disableOnInteraction: !1}
-    })</script>
+            <br>
+            <div th:replace = "~{fragments/now-showing-movie-list :: now-showing-movie-list}"></div>
+            <br>
+            <div th:replace = "~{fragments/coming-soon-movie-list :: coming-soon-movie-list}"></div>
+            <br>
+            <script src = "https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+            <script>
+                var swiper = new Swiper(".swiper-container", {
+                    slidesPerView: 1,
+                    loop: !0,
+                    effect: "fade",
+                    fadeEffect: {crossFade: !0},
+                    navigation: {nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev"},
+                    autoplay: {delay: 3e3, disableOnInteraction: !1}
+                })
+            </script>
+        </section>
+    </body>
+</html>

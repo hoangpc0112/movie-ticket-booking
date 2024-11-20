@@ -1,163 +1,175 @@
-<!doctypehtml>
-<html lang = "en" xmlns:th = "https://www.thymeleaf.org">
-    <title>Đặt vé</title>
-    <div th:replace = "~{fragments/head-tag :: head-tag}"></div>
-    <link rel = "stylesheet" th:href = "@{/css/booking.css}">
-    <header th:replace = "~{fragments/header :: header}"></header>
-    <div style = height:6px></div>
-    <div class = "text-center alert alert-danger alert-dismissible fade show" role = "alert" style = padding-right:0 th:if = "${!errorReport.isEmpty()}">
-        <strong style = font-size:1.25rem>[[${errorReport}]]</strong>
-        <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
-    </div>
-    <br>
-    <h1 class = "text-center">[[${movie.title}]]</h1><br>
-    <h2 class = "text-center">Vui lòng chọn ngày và giờ:</h2>
-    <div class = "text-center date_form">
-        <form id = "form" th:action = "@{/select}"><input name = "title" th:value = "${movie.title}" type = "hidden">
-            <label for = "timeSelect"></label><select id = "timeSelect" name = "localTime" onchange = this.form.submit()>
-                <option th:value = "${localTime}">➔ <span th:text = "${localTime}"></span>
-                <option value = "09:00">09:00
-                <option value = "12:00">12:00
-                <option value = "15:00">15:00
-                <option value = "18:00">18:00
-                <option value = "21:00">21:00
-            </select>
-            <label for = "dateSelect"></label><input id = "dateSelect" name = "localDate" onchange = this.form.submit() required th:value = "${localDate}" type = "date">
-        </form>
-    </div>
-    <br>
-    <div class = "text-center js-seat jumbotron p-0"><h2>Ghế đã chọn:</h2>
-        <div class = "dynamic-seat" id = "seat-dynamic" style = word-break:break-all;font-size:24px></div>
-        <h2>Tổng tiền:</h2>
-        <label id = "show-price" style = font-size:24px>0</label><span style = font-size:24px>.000 VND</span></div>
-    <div style = display:flex;justify-content:center>
-        <div class = "screen"></div>
-    </div>
-    <div class = "container mt-5">
-        <form id = "seatForm" th:action = "@{/bill}"><input name = "title" th:value = "${movie.title}" type = "hidden">
-            <div class = "checkbox-container">
-                <div class = "block1">
-                    <th:block th:each = "i : ${#numbers.sequence(1, 60)}">
-                        <input class = "input-btn" hidden name = "selectedSeats" th:checked = "${bookedSeats.contains(i)}" th:disabled = "${bookedSeats.contains(i)}" th:id = "${i}" th:value = "${i}" type = "checkbox">
-                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 20}" th:text = "'A' + ${(i - 1) % 20 + 1}"></label>
-                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 40 && i > 20}" th:text = "'B' + ${(i - 1) % 20 + 1}"></label>
-                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 60 && i > 40}" th:text = "'C' + ${(i - 1) % 20 + 1}"></label>
-                    </th:block>
-                </div>
-                <div class = "block2">
-                    <th:block th:each = "i : ${#numbers.sequence(61, 120)}">
-                        <input class = "input-btn" hidden name = "selectedSeats" th:checked = "${bookedSeats.contains(i)}" th:disabled = "${bookedSeats.contains(i)}" th:id = "${i}" th:value = "${i}" type = "checkbox">
-                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 80 && i > 60}" th:text = "'D' + ${(i - 1) % 20 + 1}"></label>
-                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 100 && i > 80}" th:text = "'E' + ${(i - 1) % 20 + 1}"></label>
-                        <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 120 && i > 100}" th:text = "'F' + ${(i - 1) % 20 + 1}"></label>
-                    </th:block>
-                </div>
+<!DOCTYPE html>
+<html lang = "en" layout:decorate = "~{layout}" xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <title>Đặt vé</title>
+        <link rel = "stylesheet" th:href = "@{/css/booking.css}">
+    </head>
+    <body>
+        <section layout:fragment = "content">
+            <div style = height:6px></div>
+            <div class = "text-center alert alert-danger alert-dismissible fade show" role = "alert" style = padding-right:0 th:if = "${!errorReport.isEmpty()}">
+                <strong style = font-size:1.25rem>[[${errorReport}]]</strong>
+                <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
             </div>
             <br>
-            <div class = "food-selection"><h2>Chọn đồ ăn:</h2>
-                <div class = "food-item"><input id = "popcorn" name = "food" type = "checkbox" value = "popcorn">
-                    <label for = "popcorn"><img alt = "Bỏng ngô" src = "/images/popcorn.webp"> Bỏng ngô</label>
-                    <input id = "popcornQty" min = "1" name = "popcornQty" type = "number" value = "1"></div>
-                <div class = "food-item"><input id = "drink" name = "food" type = "checkbox" value = "drink">
-                    <label for = "drink"><img alt = "Nước" src = "/images/drink.webp"> Nước uống</label>
-                    <input id = "drinkQty" min = "1" name = "drinkQty" type = "number" value = "1"></div>
-                <div class = "food-item"><input id = "combo" name = "food" type = "checkbox" value = "combo">
-                    <label for = "combo"><img alt = "Combo bỏng + nước" src = "/images/popcorn+drink.avif"> Combo bỏng ngô + nước uống</label>
-                    <input id = "comboQty" min = "1" name = "comboQty" type = "number" value = "1"></div>
+            <h1 class = "text-center">[[${movie.title}]]</h1><br>
+            <h2 class = "text-center">Vui lòng chọn ngày và giờ:</h2>
+            <div class = "text-center date_form">
+                <form id = "form" th:action = "@{/select}">
+                    <input name = "title" th:value = "${movie.title}" type = "hidden">
+                    <label for = "timeSelect"></label><select id = "timeSelect" name = "localTime" onchange = this.form.submit()>
+                    <option th:value = "${localTime}">➔ <span th:text = "${localTime}"></span>
+                    <option value = "09:00">09:00
+                    <option value = "12:00">12:00
+                    <option value = "15:00">15:00
+                    <option value = "18:00">18:00
+                    <option value = "21:00">21:00
+                </select>
+                    <label for = "dateSelect"></label><input id = "dateSelect" name = "localDate" onchange = this.form.submit() required th:value = "${localDate}" type = "date">
+                </form>
             </div>
-            <div class = "text-center">
-                <button class = "bookBtn btn1" type = "submit">Thanh toán</button>
+            <br>
+            <div class = "text-center js-seat jumbotron p-0"><h2>Ghế đã chọn:</h2>
+                <div class = "dynamic-seat" id = "seat-dynamic" style = word-break:break-all;font-size:24px></div>
+                <h2>Tổng tiền:</h2>
+                <label id = "show-price" style = font-size:24px>0</label><span style = font-size:24px>.000 VND</span>
             </div>
-        </form>
-    </div>
-    <br>
-    <footer th:replace = "~{fragments/footer :: footer}"></footer>
-    <script crossorigin = "anonymous" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>const mySeats = document.getElementById('seat-dynamic');
-    const myPrice = document.getElementById('show-price');
-    const checkBox = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
-    const foodCheckboxes = document.querySelectorAll('.food-selection input[type="checkbox"]');
-    const foodQuantities = document.querySelectorAll('.food-selection input[type="number"]');
-    const bookButton = document.querySelector('.bookBtn');
-    let checkedSeat = [];
-    let seatTotal = 0;
-    let foodTotal = 0;
-    for (let i = 0; i < checkBox.length; i++) {
-        checkBox[i].addEventListener('click', displayValue)
-    }
-    for (let i = 0; i < foodCheckboxes.length; i++) {
-        foodCheckboxes[i].addEventListener('change', updateFoodTotal);
-        foodQuantities[i].addEventListener('input', updateFoodTotal)
-    }
-
-    function displayValue(e) {
-        const money = 50;
-        let ans = "";
-        if (e.target.checked) {
-            checkedSeat.push(" " + getSeatLabel(e.target.id));
-            seatTotal += money
-        }
-        else {
-            ans = getSeatLabel(e.target.id);
-            const index = checkedSeat.indexOf(" " + ans);
-            if (index > -1) {
-                checkedSeat.splice(index, 1)
-            }
-            seatTotal -= money
-        }
-        mySeats.innerHTML = checkedSeat.join(", ");
-        updateTotal()
-    }
-
-    function updateFoodTotal() {
-        foodTotal = 0;
-        foodCheckboxes.forEach((checkbox, index) => {
-            if (checkbox.checked) {
-                const quantity = foodQuantities[index].value;
-                let price = 0;
-                switch (checkbox.value) {
-                    case 'popcorn':
-                        price = 30;
-                        break;
-                    case 'drink':
-                        price = 20;
-                        break;
-                    case 'combo':
-                        price = 40;
-                        break
+            <div style = display:flex;justify-content:center>
+                <div class = "screen"></div>
+            </div>
+            <div class = "container mt-5">
+                <form id = "seatForm" th:action = "@{/bill}">
+                    <input name = "title" th:value = "${movie.title}" type = "hidden">
+                    <div class = "checkbox-container">
+                        <div class = "block1">
+                            <th:block th:each = "i : ${#numbers.sequence(1, 60)}">
+                                <input class = "input-btn" hidden name = "selectedSeats" th:checked = "${bookedSeats.contains(i)}" th:disabled = "${bookedSeats.contains(i)}" th:id = "${i}" th:value = "${i}" type = "checkbox">
+                                <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 20}" th:text = "'A' + ${(i - 1) % 20 + 1}"></label>
+                                <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 40 && i > 20}" th:text = "'B' + ${(i - 1) % 20 + 1}"></label>
+                                <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 60 && i > 40}" th:text = "'C' + ${(i - 1) % 20 + 1}"></label>
+                            </th:block>
+                        </div>
+                        <div class = "block2">
+                            <th:block th:each = "i : ${#numbers.sequence(61, 120)}">
+                                <input class = "input-btn" hidden name = "selectedSeats" th:checked = "${bookedSeats.contains(i)}" th:disabled = "${bookedSeats.contains(i)}" th:id = "${i}" th:value = "${i}" type = "checkbox">
+                                <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 80 && i > 60}" th:text = "'D' + ${(i - 1) % 20 + 1}"></label>
+                                <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 100 && i > 80}" th:text = "'E' + ${(i - 1) % 20 + 1}"></label>
+                                <label class = "text-center btn btn-success" th:for = "${i}" th:if = "${i <= 120 && i > 100}" th:text = "'F' + ${(i - 1) % 20 + 1}"></label>
+                            </th:block>
+                        </div>
+                    </div>
+                    <br>
+                    <div class = "food-selection"><h2>Chọn đồ ăn:</h2>
+                        <div class = "food-item">
+                            <input id = "popcorn" name = "food" type = "checkbox" value = "popcorn">
+                            <label for = "popcorn"><img alt = "Bỏng ngô" src = "/images/popcorn.webp"> Bỏng ngô</label>
+                            <input id = "popcornQty" min = "1" name = "popcornQty" type = "number" value = "1">
+                        </div>
+                        <div class = "food-item">
+                            <input id = "drink" name = "food" type = "checkbox" value = "drink">
+                            <label for = "drink"><img alt = "Nước" src = "/images/drink.webp"> Nước uống</label>
+                            <input id = "drinkQty" min = "1" name = "drinkQty" type = "number" value = "1"></div>
+                        <div class = "food-item">
+                            <input id = "combo" name = "food" type = "checkbox" value = "combo">
+                            <label for = "combo"><img alt = "Combo bỏng + nước" src = "/images/popcorn+drink.avif"> Combo bỏng ngô + nước uống</label>
+                            <input id = "comboQty" min = "1" name = "comboQty" type = "number" value = "1"></div>
+                    </div>
+                    <div class = "text-center">
+                        <button class = "bookBtn btn1" type = "submit">Thanh toán</button>
+                    </div>
+                </form>
+            </div>
+            <br>
+            <script>
+                const mySeats = document.getElementById('seat-dynamic');
+                const myPrice = document.getElementById('show-price');
+                const checkBox = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
+                const foodCheckboxes = document.querySelectorAll('.food-selection input[type="checkbox"]');
+                const foodQuantities = document.querySelectorAll('.food-selection input[type="number"]');
+                const bookButton = document.querySelector('.bookBtn');
+                let checkedSeat = [];
+                let seatTotal = 0;
+                let foodTotal = 0;
+                for (let i = 0; i < checkBox.length; i++) {
+                    checkBox[i].addEventListener('click', displayValue)
                 }
-                foodTotal += price * quantity
-            }
-        });
-        updateTotal()
-    }
+                for (let i = 0; i < foodCheckboxes.length; i++) {
+                    foodCheckboxes[i].addEventListener('change', updateFoodTotal);
+                    foodQuantities[i].addEventListener('input', updateFoodTotal)
+                }
 
-    function updateTotal() {
-        const total = seatTotal + foodTotal;
-        myPrice.innerHTML = total;
-        bookButton.innerHTML = `Thanh toán: ${total}.000 VNĐ`
-    }
+                function displayValue(e) {
+                    const money = 50;
+                    let ans = "";
+                    if (e.target.checked) {
+                        checkedSeat.push(" " + getSeatLabel(e.target.id));
+                        seatTotal += money
+                    }
+                    else {
+                        ans = getSeatLabel(e.target.id);
+                        const index = checkedSeat.indexOf(" " + ans);
+                        if (index > -1) {
+                            checkedSeat.splice(index, 1)
+                        }
+                        seatTotal -= money
+                    }
+                    mySeats.innerHTML = checkedSeat.join(", ");
+                    updateTotal()
+                }
 
-    function getSeatLabel(id) {
-        let label = "";
-        if (id <= 20) {
-            label += 'A'
-        }
-        else if (id <= 40) {
-            label += 'B'
-        }
-        else if (id <= 60) {
-            label += 'C'
-        }
-        else if (id <= 80) {
-            label += 'D'
-        }
-        else if (id <= 100) {
-            label += 'E'
-        }
-        else {
-            label += 'F'
-        }
-        label += (id % 20 === 0) ? 20 : id % 20;
-        return label
-    }</script>
+                function updateFoodTotal() {
+                    foodTotal = 0;
+                    foodCheckboxes.forEach((checkbox, index) => {
+                        if (checkbox.checked) {
+                            const quantity = foodQuantities[index].value;
+                            let price = 0;
+                            switch (checkbox.value) {
+                                case 'popcorn':
+                                    price = 30;
+                                    break;
+                                case 'drink':
+                                    price = 20;
+                                    break;
+                                case 'combo':
+                                    price = 40;
+                                    break
+                            }
+                            foodTotal += price * quantity
+                        }
+                    });
+                    updateTotal()
+                }
+
+                function updateTotal() {
+                    const total = seatTotal + foodTotal;
+                    myPrice.innerHTML = total;
+                    bookButton.innerHTML = `Thanh toán: ${total}.000 VNĐ`
+                }
+
+                function getSeatLabel(id) {
+                    let label = "";
+                    if (id <= 20) {
+                        label += 'A'
+                    }
+                    else if (id <= 40) {
+                        label += 'B'
+                    }
+                    else if (id <= 60) {
+                        label += 'C'
+                    }
+                    else if (id <= 80) {
+                        label += 'D'
+                    }
+                    else if (id <= 100) {
+                        label += 'E'
+                    }
+                    else {
+                        label += 'F'
+                    }
+                    label += (id % 20 === 0) ? 20 : id % 20;
+                    return label
+                }
+            </script>
+        </section>
+    </body>
+</html>

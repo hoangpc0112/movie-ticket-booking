@@ -1,22 +1,25 @@
-<!doctypehtml>
-<html lang = "en" xmlns:th = "https://www.thymeleaf.org">
-    <title>Hướng dẫn sử dụng OOP16</title>
-    <div th:replace = "~{fragments/head-tag :: head-tag}"></div>
-    <link rel = "stylesheet" th:href = "@{/css/home.css}">
-    <header th:replace = "~{fragments/header :: header}"></header>
-    <section class = "container mt-5"><h1>Hướng dẫn sử dụng OOP16:</h1><br>
-        <h3>Xem hướng dẫn đặt vé xem phim tại
-            <a href = "https://drive.google.com/file/d/1EsQnWtKfxedZvp3XA7JEjQ86u-qRQdXJ/view" target = "_blank">đây</a>.
-        </h3>
-        <h3>Xem hướng dẫn đăng nhập, đăng ký tại
-            <a href = "https://drive.google.com/file/d/1IaCUB7sDbHyjFa1zNvlAT0e4sU9vDe-A/view" target = "_blank">đây</a>.
-        </h3>
-        <h3>Xem hướng dẫn đổi mật khẩu tại
-            <a href = "https://drive.google.com/file/d/1fcyzqv71a3CasnI5AKEUC1IT0lPvqWTQ/view" target = "_blank">đây</a>.
-        </h3>
-        <h3>Xem hướng dẫn khi quên mật khẩu tại
-            <a href = "https://drive.google.com/file/d/1saG5tBmsPT9qws6XjaHV6RzIvsqazBBq/view" target = "_blank">đây</a>.
-        </h3><br>
-        <h1>Chúc quý khách có trải nghiệm tốt nhất tại OOP16!</h1></section>
-    <footer th:replace = "~{fragments/footer :: footer}"></footer>
-    <script crossorigin = "anonymous" integrity = "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!DOCTYPE html>
+<html lang = "en" layout:decorate = "~{layout}" xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <title>Hướng dẫn sử dụng OOP16</title>
+    </head>
+    <body>
+        <section layout:fragment = "content">
+            <section class = "container mt-5"><h1>Hướng dẫn sử dụng OOP16:</h1><br>
+                <h3>Xem hướng dẫn đặt vé xem phim tại
+                    <a href = "https://drive.google.com/file/d/1EsQnWtKfxedZvp3XA7JEjQ86u-qRQdXJ/view" target = "_blank">đây</a>.
+                </h3>
+                <h3>Xem hướng dẫn đăng nhập, đăng ký tại
+                    <a href = "https://drive.google.com/file/d/1IaCUB7sDbHyjFa1zNvlAT0e4sU9vDe-A/view" target = "_blank">đây</a>.
+                </h3>
+                <h3>Xem hướng dẫn đổi mật khẩu tại
+                    <a href = "https://drive.google.com/file/d/1fcyzqv71a3CasnI5AKEUC1IT0lPvqWTQ/view" target = "_blank">đây</a>.
+                </h3>
+                <h3>Xem hướng dẫn khi quên mật khẩu tại
+                    <a href = "https://drive.google.com/file/d/1saG5tBmsPT9qws6XjaHV6RzIvsqazBBq/view" target = "_blank">đây</a>.
+                </h3><br>
+                <h1>Chúc quý khách có trải nghiệm tốt nhất tại OOP16!</h1>
+            </section>
+        </section>
+    </body>
+</html>
