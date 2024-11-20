@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,7 +28,7 @@ public class AppUser {
     @Column (nullable = false)
     private String password;
 
-    @Column (nullable = false)
+    @Column
     private String emailOtp;
 
     @Column
@@ -40,4 +42,7 @@ public class AppUser {
 
     @Column
     private String address;
+
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List <Bill> bills;
 }

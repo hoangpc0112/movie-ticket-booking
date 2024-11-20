@@ -15,7 +15,7 @@
     <h1 class = "text-center">Đặt vé thành công!</h1><br>
     <div class = "text-center"><h1>Đã đặt: [[${bill.tickets.size()}]] ghế.</h1>
         <h2>Tổng tiền: [[${bill.totalPrice}]].000 VNĐ</h2>
-        <h2>Thời gian đặt: [[${bill.dateCreated}]]</h2><br>
+        <h2>Thời gian đặt: [[${bill.bookTime}]]</h2><br>
         <div class = "container">
             <table class = "booking-table">
                 <thead>
@@ -38,9 +38,9 @@
                 <tr>
                     <th class = "booking-header">Tên đồ ăn
                     <th class = "booking-header">Số lượng
-                <tr th:each = "food : ${bill.foods.entrySet()}">
-                    <td class = "booking-cell" th:text = "${food.key}">
-                    <td class = "booking-cell" th:text = "${food.value}">
+                <tr th:each = "food : ${bill.foods}">
+                    <td class = "booking-cell" th:text = "${food.food_name}">
+                    <td class = "booking-cell" th:text = "${food.quantity}">
             </table>
         </div>
     </div>

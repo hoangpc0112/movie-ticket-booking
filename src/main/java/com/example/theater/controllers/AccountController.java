@@ -32,15 +32,21 @@ public class AccountController {
     private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     @Autowired
-    private AppUserRepository userRepo;
+    private AppUserRepository appUserRepository;
 
     @Autowired
     private TicketRepository ticketRepository;
 
     @Autowired
     private MailSenderService mailSenderService;
+
     @Autowired
     private BillRepository billRepository;
+
+    public AppUser getLoggedUser () {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return appUserRepository.findByUsername(username);
+    }
 
     @GetMapping ("/register")
     public String register (Model model) {
@@ -58,11 +64,11 @@ public class AccountController {
         if (!registerDTO.getPassword().equals(registerDTO.getConfirmPassword())) {
             bindingResult.addError(new FieldError("registerDTO", "confirmPassword", "Mật khẩu và mật khẩu xác nhận lại không giống nhau."));
         }
-        AppUser appUser = userRepo.findByUsername(registerDTO.getUsername());
+        AppUser appUser = appUserRepository.findByUsername(registerDTO.getUsername());
         if (appUser != null) {
             bindingResult.addError(new FieldError("registerDTO", "username", "Username đã có người sử dụng."));
         }
-        appUser = userRepo.findByEmail(registerDTO.getEmail());
+        appUser = appUserRepository.findByEmail(registerDTO.getEmail());
         if (appUser != null) {
             bindingResult.addError(new FieldError("registerDTO", "email", "Email đã có người sử dụng."));
         }
@@ -99,7 +105,7 @@ public class AccountController {
                 user.setUsername(registerDTO.getUsername());
                 user.setPassword(bCryptEncoder.encode(registerDTO.getPassword()));
                 user.setEmailOtp("");
-                userRepo.save(user);
+                appUserRepository.save(user);
 
                 session.removeAttribute("otp");
                 session.removeAttribute("tempUser");
@@ -124,10 +130,14 @@ public class AccountController {
     }
 
     @GetMapping ("/profile")
-    public String profile (Model model, @RequestParam (value = "successChangePassword", required = false, defaultValue = "false") String successChangePassword, @RequestParam (value = "cancelTicket", required = false, defaultValue = "false") String cancelTicket, @RequestParam (name = "expiredTicket", required = false) String expiredTicket, @RequestParam (name = "updateProfile", required = false) String updateProfile) {
-        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute("orderHistory", billRepository.findByUser(currentUser));
-        model.addAttribute("user", userRepo.findByUsername(currentUser));
+    public String profile (Model model,
+                           @RequestParam (value = "successChangePassword", required = false, defaultValue = "false") String successChangePassword,
+                           @RequestParam (value = "cancelTicket", required = false, defaultValue = "false") String cancelTicket,
+                           @RequestParam (name = "expiredTicket", required = false) String expiredTicket,
+                           @RequestParam (name = "updateProfile", required = false) String updateProfile) {
+        AppUser loggedUser = getLoggedUser();
+        model.addAttribute("orderHistory", loggedUser.getBills());
+        model.addAttribute("user", loggedUser);
         model.addAttribute("successChangePassword", successChangePassword);
         model.addAttribute("cancelTicket", cancelTicket);
         model.addAttribute("expiredTicket", expiredTicket);
@@ -143,7 +153,7 @@ public class AccountController {
 
     public void resetOtp (AppUser user) {
         user.setEmailOtp("");
-        userRepo.save(user);
+        appUserRepository.save(user);
     }
 
     @GetMapping ("/forgot-password")
@@ -154,11 +164,11 @@ public class AccountController {
 
     @PostMapping ("/forgot-password")
     public String forgotPassword (@RequestParam ("email") String email, Model model) {
-        if (userRepo.existsByEmail(email)) {
+        if (appUserRepository.existsByEmail(email)) {
             String otp = generateOtp();
-            AppUser user = userRepo.findByEmail(email);
+            AppUser user = appUserRepository.findByEmail(email);
             user.setEmailOtp(otp);
-            userRepo.save(user);
+            appUserRepository.save(user);
             scheduledExecutorService.schedule(() -> resetOtp(user), 5, TimeUnit.MINUTES);
             mailSenderService.sendMail(email, "OTP cho OOP16", "Mã OTP của bạn là: " + otp + ".\n" + "OTP sẽ hết hạn trong 5 phút.");
             model.addAttribute("email", email);
@@ -172,7 +182,7 @@ public class AccountController {
 
     @GetMapping ("/change-password")
     public String changePassword (@RequestParam ("email") String email, @RequestParam ("otp") String otp, Model model) {
-        AppUser user = userRepo.findByEmail(email);
+        AppUser user = appUserRepository.findByEmail(email);
         model.addAttribute("email", email);
         if (user.getEmailOtp().isEmpty()) {
             model.addAttribute("error", "Mã OTP đã hết hạn, vui lòng thử lại.");
@@ -186,7 +196,10 @@ public class AccountController {
     }
 
     @PostMapping ("/change-password")
-    public String changePasswordProcess (@RequestParam ("email") String email, @RequestParam ("password") String password, @RequestParam ("confirmPassword") String confirmPassword, HttpServletRequest request, Model model) {
+    public String changePasswordProcess (@RequestParam ("email") String email,
+                                         @RequestParam ("password") String password,
+                                         @RequestParam ("confirmPassword") String confirmPassword,
+                                         HttpServletRequest request, Model model) {
         if (!password.equals(confirmPassword)) {
             model.addAttribute("error", "Mật khẩu và mật khẩu xác nhận không trùng khớp.");
             model.addAttribute("email", email);
@@ -199,9 +212,9 @@ public class AccountController {
         }
 
         var bCryptEncoder = new BCryptPasswordEncoder();
-        AppUser appUser = userRepo.findByEmail(email);
+        AppUser appUser = appUserRepository.findByEmail(email);
         appUser.setPassword(bCryptEncoder.encode(password));
-        userRepo.save(appUser);
+        appUserRepository.save(appUser);
         model.addAttribute("successChangePassword", true);
 
         HttpSession session = request.getSession(false);
@@ -217,13 +230,17 @@ public class AccountController {
     }
 
     @PostMapping ("/update-profile")
-    public String updateProfile (@RequestParam (value = "firstName", required = false) String firstName, @RequestParam (value = "lastName", required = false) String lastName, @RequestParam (value = "age", required = false) String age, @RequestParam (value = "address", required = false) String address, Model model) {
-        AppUser user = userRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setAge(age);
-        user.setAddress(address);
-        userRepo.save(user);
+    public String updateProfile (@RequestParam (value = "firstName", required = false) String firstName,
+                                 @RequestParam (value = "lastName", required = false) String lastName,
+                                 @RequestParam (value = "age", required = false) String age,
+                                 @RequestParam (value = "address", required = false) String address,
+                                 Model model) {
+        AppUser loggedUser = getLoggedUser();
+        loggedUser.setFirstName(firstName);
+        loggedUser.setLastName(lastName);
+        loggedUser.setAge(age);
+        loggedUser.setAddress(address);
+        appUserRepository.save(loggedUser);
         return "redirect:/profile?updateProfile=true";
     }
 }

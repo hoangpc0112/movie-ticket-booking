@@ -32,6 +32,10 @@ public class Ticket {
     @Column (nullable = false)
     private String seatLabel;
 
+    @ManyToOne
+    @JoinColumn (name = "bill_id", referencedColumnName = "id")
+    private Bill bill;
+
     public Ticket (String movieTitle, String time, String date, int seatNo, String seatLabel) {
         this.movieTitle = movieTitle;
         this.time = time;

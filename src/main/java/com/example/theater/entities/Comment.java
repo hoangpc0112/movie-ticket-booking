@@ -17,19 +17,19 @@ public class Comment {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn (name = "movie_id", referencedColumnName = "id")
-    private Movie movie;
-
     @Column (nullable = false)
     private String commenter;
 
     @Column (columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    public Comment (Movie movie, String commenter, String content) {
-        this.movie = movie;
+    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn (name = "movie_id", referencedColumnName = "id")
+    private Movie movie;
+
+    public Comment (String commenter, String content, Movie movie) {
         this.commenter = commenter;
         this.content = content;
+        this.movie = movie;
     }
 }

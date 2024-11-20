@@ -1,13 +1,7 @@
 package com.example.theater.controllers;
 
-import com.example.theater.entities.Bill;
-import com.example.theater.entities.Comment;
-import com.example.theater.entities.Movie;
-import com.example.theater.entities.Ticket;
-import com.example.theater.repositories.BillRepository;
-import com.example.theater.repositories.CommentRepository;
-import com.example.theater.repositories.MovieRepository;
-import com.example.theater.repositories.TicketRepository;
+import com.example.theater.entities.*;
+import com.example.theater.repositories.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,9 +18,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class TicketController {
@@ -36,10 +28,16 @@ public class TicketController {
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Autowired
+    private AppUserRepository appUserRepository;
+
+    @Autowired
     private MovieRepository movieRepository;
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private FoodRepository foodRepository;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -52,12 +50,17 @@ public class TicketController {
     private String showDate;
     private String errorReport = "";
 
+    public AppUser getLoggedUser () {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return appUserRepository.findByUsername(username);
+    }
+
     @GetMapping ("/details")
     public String test (@RequestParam ("title") String title, Model model) {
         model.addAttribute("errorReport", errorReport);
         Movie movie = movieRepository.findByTitle(title);
         model.addAttribute("movie", movie);
-        model.addAttribute("comments", commentRepository.findAllByMovie(movie));
+        model.addAttribute("comments", movie.getComments());
         errorReport = "";
         return "details";
     }
@@ -65,7 +68,7 @@ public class TicketController {
     @PostMapping ("/details")
     public String details (@RequestParam String title, @RequestParam String content) {
         Movie movie = movieRepository.findByTitle(title);
-        commentRepository.save(new Comment(movie, SecurityContextHolder.getContext().getAuthentication().getName(), content.trim()));
+        commentRepository.save(new Comment(SecurityContextHolder.getContext().getAuthentication().getName(), content.trim(), movie));
         return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
     }
 
@@ -180,40 +183,52 @@ public class TicketController {
         }
         errorReport = "";
 
+        String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
+
         int totalPrice = selectedSeats.size() * 50;
-        Map <String, Integer> foods = new HashMap <>();
+        List <Food> foods = new ArrayList <>();
         if (food != null) {
             for (String item : food) {
                 switch (item) {
                     case "popcorn":
                         int popcornQuantity = (popcornQty != null) ? popcornQty : 1;
                         totalPrice += 30 * popcornQuantity;
-                        foods.put("Bỏng ngô", popcornQuantity);
+                        foods.add(new Food("Bỏng ngô", popcornQuantity));
                         break;
                     case "drink":
                         int drinkQuantity = (drinkQty != null) ? drinkQty : 1;
                         totalPrice += 20 * drinkQuantity;
-                        foods.put("Đồ uống", drinkQuantity);
+                        foods.add(new Food("Đồ uống", drinkQuantity));
                         break;
                     case "combo":
                         int comboQuantity = (comboQty != null) ? comboQty : 1;
                         totalPrice += 40 * comboQuantity;
-                        foods.put("Combo: Bỏng ngô + Đồ uống", comboQuantity);
+                        foods.add(new Food("Combo: Bỏng ngô + Đồ uống", comboQuantity));
+                        break;
+                    default:
                         break;
                 }
             }
         }
-        String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
 
         List <Ticket> tickets = new ArrayList <>();
         for (int selectedSeat : selectedSeats) {
             Ticket ticket = new Ticket(title, showTime, showDate, selectedSeat, getSeatLabel(selectedSeat));
-            ticketRepository.save(ticket);
             tickets.add(ticket);
         }
 
-        Bill bill = new Bill(SecurityContextHolder.getContext().getAuthentication().getName(), totalPrice, bookTime, tickets, foods);
+        Bill bill = new Bill(totalPrice, bookTime, getLoggedUser(), tickets, foods);
+
+        for (Ticket ticket : tickets) {
+            ticket.setBill(bill);
+        }
+        for (Food foodItem : foods) {
+            foodItem.setBill(bill);
+        }
+
         billRepository.save(bill);
+        ticketRepository.saveAll(tickets);
+        foodRepository.saveAll(foods);
 
         model.addAttribute("bill", bill);
         return "bill";
@@ -242,14 +257,19 @@ public class TicketController {
 
     @PostMapping ("/cancel-ticket")
     public String cancelTicket (@RequestParam ("seatId") String seatId) {
-        Ticket seat = ticketRepository.findById(Long.parseLong(seatId));
+        Ticket ticket = ticketRepository.findById(Long.parseLong(seatId));
 
         // không cho huỷ vé nếu đã qua tgian chiếu
-        if (LocalDate.now().isAfter(LocalDate.parse(seat.getDate(), dateFormatter)) || (LocalDate.now().equals(LocalDate.parse(seat.getDate(), dateFormatter)) && LocalTime.now().isAfter(LocalTime.parse(seat.getTime())))) {
+        if (LocalDate.now().isAfter(LocalDate.parse(ticket.getDate(), dateFormatter)) || (LocalDate.now().equals(LocalDate.parse(ticket.getDate(), dateFormatter)) && LocalTime.now().isAfter(LocalTime.parse(ticket.getTime())))) {
             return "redirect:/profile?expiredTicket=true";
         }
 
-        ticketRepository.delete(seat);
+        ticketRepository.delete(ticket);
+
+        Bill bill = ticket.getBill();
+        bill.setTotalPrice(bill.getTotalPrice() - 50); // Trừ tiền vé vừa huỷ
+        billRepository.save(bill);
+
         return "redirect:/profile?cancelTicket=true";
     }
 }

@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 
 @Entity
-@Table (name = "movie")
+@Table (name = "movies")
 public class Movie {
 
     @Id
@@ -58,6 +60,9 @@ public class Movie {
 
     @Column (nullable = false)
     private String keywords;
+
+    @OneToMany (mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List <Comment> comments;
 
     public Movie (String title, String posterUrl, String description, String releaseDate, String nowShowing, String trailerUrl, String genre, String director, String actors, String duration, String language, String rated, String bannerUrl, String keywords) {
         this.title = title;

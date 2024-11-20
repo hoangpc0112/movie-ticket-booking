@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -21,28 +20,25 @@ public class Bill {
     private long id;
 
     @Column (nullable = false)
-    private String user;
-
-    @Column (nullable = false)
     private int totalPrice;
 
     @Column (nullable = false)
-    private String dateCreated;
+    private String bookTime;
 
-    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn (name = "bill_id")
+    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn (name = "user_id", referencedColumnName = "id")
+    private AppUser user;
+
+    @OneToMany (mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List <Ticket> tickets;
 
-    @ElementCollection
-    @CollectionTable (name = "bill_foods", joinColumns = @JoinColumn (name = "bill_id"))
-    @MapKeyColumn (name = "food_name")
-    @Column (name = "quantity")
-    private Map <String, Integer> foods;
+    @OneToMany (mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List <Food> foods;
 
-    public Bill (String user, int totalPrice, String dateCreated, List <Ticket> tickets, Map <String, Integer> foods) {
-        this.user = user;
+    public Bill (int totalPrice, String bookTime, AppUser user, List <Ticket> tickets, List <Food> foods) {
         this.totalPrice = totalPrice;
-        this.dateCreated = dateCreated;
+        this.bookTime = bookTime;
+        this.user = user;
         this.tickets = tickets;
         this.foods = foods;
     }
