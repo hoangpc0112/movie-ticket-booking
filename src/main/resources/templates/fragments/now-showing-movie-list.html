@@ -1,25 +1,16 @@
-<!DOCTYPE html>
-<html lang = "en">
-    <head>
-        <meta charset = "UTF-8">
-        <title>Title</title>
-    </head>
-    <body>
-        <div th:fragment = "now-showing-movie-list">
-            <div class = "title-container"><h1 class = "title">Phim đang chiếu</h1></div>
-            <br>
-            <div class = "container">
-                <div class = "row" style = display:flex;align-content:center;justify-content:center;align-items:center>
-                    <div class = "col-md-4 movie-card" th:each = "movie : ${nowShowingMovieList}">
-                        <form style = text-decoration:none th:action = "@{/details}">
-                            <input name = "title" th:value = "${movie.title}" type = "hidden">
-                            <button class = "poster-button" type = "submit">
-                                <img alt = "Movie Poster" class = "img-fluid poster-img" decoding = "async" loading = "lazy" th:src = "${'https://wsrv.nl/?url=' + movie.posterUrl + '&output=webp'}"><br>
-                                <h5 class = "poster-title text-center" th:text = "${movie.title}"></h5></button>
-                        </form>
-                    </div>
-                </div>
+<div th:fragment = "now-showing-movie-list">
+    <div class = "title-container"><h1 class = "title">Phim đang chiếu</h1></div>
+    <br>
+    <div class = "container">
+        <div class = "row" style = display:flex;align-content:center;justify-content:center;align-items:center>
+            <div class = "col-md-4 movie-card" th:each = "movie : ${nowShowingMovieList}">
+                <form style = text-decoration:none th:action = "@{/details}">
+                    <input name = "title" th:value = "${movie.title}" type = "hidden">
+                    <button class = "poster-button" type = "submit">
+                        <img alt = "Movie Poster" class = "img-fluid poster-img" decoding = "async" loading = "lazy" th:src = "${'https://wsrv.nl/?url=' + movie.posterUrl + '&output=webp'}"><br>
+                        <h5 class = "poster-title text-center" th:text = "${movie.title}"></h5></button>
+                </form>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+</div>
