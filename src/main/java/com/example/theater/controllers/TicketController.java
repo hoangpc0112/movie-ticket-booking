@@ -125,7 +125,7 @@ public class TicketController {
         showTime = localTime;
         showDate = LocalDate.parse(localDate).format(dateFormatter);
         if (LocalDate.now().isAfter(LocalDate.parse(showDate, dateFormatter)) || (LocalDate.now().equals(LocalDate.parse(showDate, dateFormatter)) && LocalTime.now().isAfter(LocalTime.parse(showTime)))) {
-            errorReport = "Xin lỗi, bạn đã chọn một thời gian chiếu đã qua. Vui lòng chọn một thời gian khác.";
+            errorReport = "Xin lỗi, quý khách đã chọn một thời gian chiếu không hợp lệ. Vui lòng chọn một thời gian khác.";
             return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         model.addAttribute("title", title);
