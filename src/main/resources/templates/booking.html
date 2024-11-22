@@ -6,14 +6,16 @@
     </head>
     <body>
         <section layout:fragment = "content">
-            <div style = height:6px></div>
-            <div class = "text-center alert alert-danger alert-dismissible fade show" role = "alert" style = padding-right:0 th:if = "${!errorReport.isEmpty()}">
-                <strong style = font-size:1.25rem>[[${errorReport}]]</strong>
-                <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
+            <div class = "modal" id = "customAlert">
+                <div class = "modal-content">
+                    <p style = "margin: 0; font-size: 1.2rem">
+                        <strong>[[${errorReport}]]</strong>
+                        <span class = "close"></span>
+                    </p>
+                </div>
             </div>
             <br>
-            <h1 class = "text-center">[[${movie.title}]]</h1><br>
-            <h2 class = "text-center">Vui lòng chọn ngày và giờ:</h2>
+            <h1 class = "text-center">[[${movie.title}]]</h1>
             <div class = "text-center date_form">
                 <form id = "form" th:action = "@{/select}">
                     <input name = "title" th:value = "${movie.title}" type = "hidden">
@@ -87,15 +89,30 @@
                 const foodCheckboxes = document.querySelectorAll('.food-selection input[type="checkbox"]');
                 const foodQuantities = document.querySelectorAll('.food-selection input[type="number"]');
                 const bookButton = document.querySelector('.bookBtn');
+
                 let checkedSeat = [];
                 let seatTotal = 0;
                 let foodTotal = 0;
+
                 for (let i = 0; i < checkBox.length; i++) {
                     checkBox[i].addEventListener('click', displayValue)
                 }
                 for (let i = 0; i < foodCheckboxes.length; i++) {
                     foodCheckboxes[i].addEventListener('change', updateFoodTotal);
                     foodQuantities[i].addEventListener('input', updateFoodTotal)
+                }
+
+                const modal = document.getElementById("customAlert");
+
+                const errorReport = "[[${errorReport}]]";
+                if (errorReport) {
+                    modal.style.display = "block";
+                }
+
+                window.onclick = function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                    }
                 }
 
                 function displayValue(e) {

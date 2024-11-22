@@ -138,10 +138,18 @@ public class AccountController {
         AppUser loggedUser = getLoggedUser();
         model.addAttribute("orderHistory", loggedUser.getBills());
         model.addAttribute("user", loggedUser);
-        model.addAttribute("successChangePassword", successChangePassword);
-        model.addAttribute("cancelTicket", cancelTicket);
-        model.addAttribute("expiredTicket", expiredTicket);
-        model.addAttribute("updateProfile", updateProfile);
+        if (successChangePassword != null && successChangePassword.equals("true")) {
+            model.addAttribute("errorReport", "Đổi mật khẩu thành công.");
+        }
+        else if (cancelTicket != null && cancelTicket.equals("true")) {
+            model.addAttribute("errorReport", "Hủy vé thành công.");
+        }
+        else if (expiredTicket != null && expiredTicket.equals("true")) {
+            model.addAttribute("errorReport", "Không thể huỷ vé.");
+        }
+        else if (updateProfile != null && updateProfile.equals("true")) {
+            model.addAttribute("errorReport", "Cập nhật thông tin thành công.");
+        }
         return "profile";
     }
 

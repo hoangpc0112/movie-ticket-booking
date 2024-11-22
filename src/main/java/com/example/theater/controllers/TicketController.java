@@ -155,7 +155,7 @@ public class TicketController {
             return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
         }
         if (selectedSeats == null || selectedSeats.isEmpty()) {
-            errorReport = "Vui lòng chọn ghế.";
+            errorReport = "Quý khách vui lòng chọn ghế trước khi thanh toán.";
             if (request.getHeader("Referer").contains("select")) {
                 return "redirect:/select?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&localTime=" + showTime + "&localDate=" + LocalDate.parse(showDate, dateFormatter);
             }
@@ -163,7 +163,7 @@ public class TicketController {
                 return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
             }
         }
-        errorReport = "";
+        errorReport = "Ghế ";
         List <Integer> unavailableSeats = new ArrayList <>();
         for (int selectedSeat : selectedSeats) {
             if (ticketRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) {

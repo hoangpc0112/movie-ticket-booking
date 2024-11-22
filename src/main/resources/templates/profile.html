@@ -6,6 +6,14 @@
     </head>
     <body>
         <section layout:fragment = "content">
+            <div class = "modal" id = "customAlert">
+                <div class = "modal-content">
+                    <p style = "margin: 0; font-size: 1.2rem">
+                        <strong>[[${errorReport}]]</strong>
+                        <span class = "close"></span>
+                    </p>
+                </div>
+            </div>
             <div class = "container mt-5">
                 <div class = "d-flex justify-content-center">
                     <ul class = "nav nav-tabs" id = "tab" role = "tablist">
@@ -14,22 +22,6 @@
                         <li class = "nav-item" role = "presentation">
                             <button aria-controls = "order-history" aria-selected = "false" class = "nav-link" data-bs-target = "#order-history" data-bs-toggle = "tab" id = "order-history-tab" role = "tab" type = "button">Lịch sử đặt vé</button>
                     </ul>
-                </div>
-                <div class = "fade show alert alert-dismissible text-center alert-success" role = "alert" th:if = "${successChangePassword}">
-                    <strong class = "fs-5 fs-lg-3 fs-md-4">Đổi mật khẩu thành công!</strong>
-                    <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
-                </div>
-                <div class = "fade show alert alert-dismissible text-center alert-success" role = "alert" th:if = "${cancelTicket}">
-                    <strong class = "fs-5 fs-lg-3 fs-md-4">Huỷ vé thành công!</strong>
-                    <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
-                </div>
-                <div class = "fade show alert alert-dismissible text-center alert-danger" role = "alert" th:if = "${expiredTicket}">
-                    <strong class = "fs-5 fs-lg-3 fs-md-4">Không thể huỷ vé do đã qua thời gian chiếu.</strong>
-                    <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
-                </div>
-                <div class = "fade show alert alert-dismissible text-center alert-success" role = "alert" th:if = "${updateProfile}">
-                    <strong class = "fs-5 fs-lg-3 fs-md-4">Cập nhật thông tin người dùng thành công.</strong>
-                    <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
                 </div>
                 <div class = "tab-content" id = "tabContent">
                     <div aria-labelledby = "user-info-tab" class = "fade show active tab-pane" id = "user-info" role = "tabpanel">
@@ -129,6 +121,20 @@
                     </div>
                 </div>
             </div>
+            <script>
+                const modal = document.getElementById("customAlert");
+
+                const errorReport = "[[${errorReport}]]";
+                if (errorReport) {
+                    modal.style.display = "block";
+                }
+
+                window.onclick = function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            </script>
         </section>
     </body>
 </html>

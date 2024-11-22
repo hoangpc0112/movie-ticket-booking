@@ -6,10 +6,13 @@
     </head>
     <body>
         <section layout:fragment = "content">
-            <div style = height:6px></div>
-            <div class = "text-center alert alert-danger alert-dismissible fade show" role = "alert" style = padding-right:0 th:if = "${!errorReport.isEmpty()}">
-                <strong style = font-size:1.25rem>[[${errorReport}]]</strong>
-                <button aria-label = "Close" class = "btn-close" data-bs-dismiss = "alert" type = "button"></button>
+            <div class = "modal" id = "customAlert">
+                <div class = "modal-content">
+                    <p style = "margin: 0; font-size: 1.2rem">
+                        <strong>[[${errorReport}]]</strong>
+                        <span class = "close"></span>
+                    </p>
+                </div>
             </div>
             <div class = "container mt-5">
                 <div class = "movie-details row">
@@ -106,6 +109,20 @@
                     var e = document.getElementById("description"), t = document.getElementById("show-more-btn");
                     e.scrollHeight > e.clientHeight && (t.style.display = "block")
                 })
+            </script>
+            <script>
+                const modal = document.getElementById("customAlert");
+
+                const errorReport = "[[${errorReport}]]";
+                if (errorReport) {
+                    modal.style.display = "block";
+                }
+
+                window.onclick = function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                    }
+                }
             </script>
         </section>
     </body>
