@@ -1,0 +1,8 @@
+<div class = "modal" id = "customAlert" th:fragment = "custom-alert" th:if = "${errorReport != null && !errorReport.isEmpty()}">
+    <div class = "modal-content">
+        <p style = "margin: 0; font-size: 1.2rem">
+            <strong>[[${errorReport}]]</strong>
+            <span class = "close"></span>
+        </p>
+    </div>
+</div>

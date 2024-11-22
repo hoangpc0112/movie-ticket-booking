@@ -6,14 +6,7 @@
     </head>
     <body>
         <section layout:fragment = "content">
-            <div class = "modal" id = "customAlert">
-                <div class = "modal-content">
-                    <p style = "margin: 0; font-size: 1.2rem">
-                        <strong>[[${errorReport}]]</strong>
-                        <span class = "close"></span>
-                    </p>
-                </div>
-            </div>
+            <div th:replace = "~{fragments/custom-alert :: custom-alert}"></div>
             <div class = "container mt-5">
                 <div class = "movie-details row">
                     <div class = "text-center col-md-4">
@@ -82,48 +75,8 @@
                 <button class = "cboxClose" id = "cboxClose">Close</button>
                 <iframe allow = "autoplay; encrypted-media" allowfullscreen frameborder = "0" height = "360" id = "movieTrailer" loading = "lazy" th:if = "${!movie.trailerUrl.isEmpty()}" th:src = "'https://www.youtube.com/embed/' + ${#strings.substring(movie.trailerUrl, movie.trailerUrl.indexOf('=') + 1)}" width = "640"></iframe>
             </div>
-            <script>
-                document.getElementById("showTrailerBtn").addEventListener("click", function (e) {
-                    if (window.innerWidth < 640) window.open(this.href, "_blank"); else {
-                        e.preventDefault(), document.getElementById("cboxOverlay").style.display = "block", document.getElementById("colorbox").style.display = "block";
-                        var t = document.getElementById("movieTrailer");
-                        t.src = t.src
-                    }
-                }), document.getElementById("cboxClose").addEventListener("click", function () {
-                    document.getElementById("cboxOverlay").style.display = "none", document.getElementById("colorbox").style.display = "none";
-                    var e = document.getElementById("movieTrailer");
-                    e.src = e.src
-                }), document.getElementById("cboxOverlay").addEventListener("click", function () {
-                    document.getElementById("cboxOverlay").style.display = "none", document.getElementById("colorbox").style.display = "none";
-                    var e = document.getElementById("movieTrailer");
-                    e.src = e.src
-                })
-            </script>
-            <script>
-                function toggleDescription() {
-                    var e = document.getElementById("description"), t = document.getElementById("show-more-btn");
-                    "none" === e.style.maxHeight ? (e.style.maxHeight = "9em", t.textContent = "Xem thêm") : (e.style.maxHeight = "none", t.textContent = "Thu gọn")
-                }
-
-                document.addEventListener("DOMContentLoaded", function () {
-                    var e = document.getElementById("description"), t = document.getElementById("show-more-btn");
-                    e.scrollHeight > e.clientHeight && (t.style.display = "block")
-                })
-            </script>
-            <script>
-                const modal = document.getElementById("customAlert");
-
-                const errorReport = "[[${errorReport}]]";
-                if (errorReport) {
-                    modal.style.display = "block";
-                }
-
-                window.onclick = function (event) {
-                    if (event.target === modal) {
-                        modal.style.display = "none";
-                    }
-                }
-            </script>
+            <script src = "/js/details.js"></script>
+            <script src = "/js/custom-alert.js"></script>
         </section>
     </body>
 </html>
