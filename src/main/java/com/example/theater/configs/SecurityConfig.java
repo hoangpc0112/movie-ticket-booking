@@ -19,6 +19,7 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
+                        .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/login").permitAll()
