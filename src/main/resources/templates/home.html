@@ -2,7 +2,7 @@
 <html lang = "en" layout:decorate = "~{layout}" xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
         <title>OOP16 - Đặt Vé Xem Phim Mọi Lúc, Mọi Nơi</title>
-        <link href = "https://unpkg.com/swiper/swiper-bundle.min.css" rel = "stylesheet">
+        <link href = "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel = "stylesheet"/>
         <link rel = "stylesheet" th:href = "@{/css/movie-styles.css}">
         <link rel = "stylesheet" th:href = "@{/css/home.css}">
     </head>
@@ -10,13 +10,12 @@
         <section layout:fragment = "content">
             <div class = "swiper-container">
                 <div class = "swiper-wrapper">
-                    <div class = "swiper-slide" th:each = "movie, iterStat : ${movieList}" th:if = "${!movie.bannerUrl.isEmpty()}">
+                    <div class = "swiper-slide" th:each = "movie : ${movieList}" th:if = "${!movie.bannerUrl.isEmpty()}">
                         <div style = width:100%;aspect-ratio:2>
                             <form style = text-decoration:none th:action = "@{/details}">
                                 <input name = "title" th:value = "${movie.title}" type = "hidden">
                                 <button class = "poster-button" type = "submit">
-                                    <img alt = "Movie Banner" decoding = "async" fetchpriority = "high" style = width:92%;height:auto th:attr = "srcset = |@{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=800'} 800w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1200'} 1200w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1600'} 1600w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp'} 1900w|" th:if = "${iterStat.index <= 3}" th:src = "${'https://wsrv.nl/?url=' + movie.bannerUrl + '&output=webp'}">
-                                    <img alt = "Movie Banner" decoding = "async" style = width:92%;height:auto th:attr = "srcset = |@{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=800'} 800w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1200'} 1200w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1600'} 1600w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp'} 1900w|" th:if = "${iterStat.index > 3}" th:src = "${'https://wsrv.nl/?url=' + movie.bannerUrl + '&output=webp'}">
+                                    <img alt = "Movie Banner" decoding = "async" fetchpriority = "high" style = width:92%;height:auto th:attr = "srcset = |@{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=800'} 800w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1200'} 1200w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp' + '&w=1600'} 1600w, @{'https://wsrv.nl/?url=' + ${movie.bannerUrl} + '&output=webp'} 1900w|" th:src = "${'https://wsrv.nl/?url=' + movie.bannerUrl + '&output=webp'}">
                                 </button>
                             </form>
                         </div>
@@ -30,7 +29,7 @@
             <br>
             <div th:replace = "~{fragments/coming-soon-movie-list :: coming-soon-movie-list}"></div>
             <br>
-            <script src = "https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+            <script src = "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
             <script>
                 var swiper = new Swiper(".swiper-container", {
                     slidesPerView: 1,
