@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang = "en" layout:decorate = "~{layout}" xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
-        <title>Đặt vé thất bại</title>
-        <link rel = "stylesheet" th:href = "@{/css/movie-styles.css}">
+        <title>Nhập OTP</title>
     </head>
     <body>
         <section layout:fragment = "content">
-            <h1>đặt vé thất bại</h1>
+            <br><br><br><br><br>
+            <h1 class = "text-center">Đặt vé không thành công. Vui lòng thử lại.</h1>
+            <div class = "text-center button-container">
+                <a th:href = "@{/}">
+                    <button class = "btn btn-primary" type = "submit">Quay về trang chủ</button>
+                </a>
+            </div>
         </section>
     </body>
 </html>
