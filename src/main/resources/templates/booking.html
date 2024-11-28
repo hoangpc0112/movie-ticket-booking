@@ -27,13 +27,13 @@
             <div class = "text-center js-seat jumbotron p-0"><h2>Ghế đã chọn:</h2>
                 <div class = "dynamic-seat" id = "seat-dynamic" style = word-break:break-all;font-size:24px></div>
                 <h2>Tổng tiền:</h2>
-                <label id = "show-price" style = font-size:24px>0</label><span style = font-size:24px>.000 VND</span>
+                <label id = "show-price" style = font-size:24px>0</label><span style = font-size:24px> VND</span>
             </div>
             <div style = display:flex;justify-content:center>
                 <div class = "screen"></div>
             </div>
             <div class = "container mt-5">
-                <form id = "seatForm" th:action = "@{/bill}">
+                <form id = "seatForm" method = "post" th:action = "@{/submitOrder}">
                     <input name = "title" th:value = "${movie.title}" type = "hidden">
                     <div class = "checkbox-container">
                         <div class = "block1">
@@ -69,6 +69,8 @@
                             <label for = "combo"><img alt = "Combo bỏng + nước" src = "/images/popcorn+drink.avif"> Combo bỏng ngô + nước uống</label>
                             <input id = "comboQty" min = "1" name = "comboQty" type = "number" value = "1"></div>
                     </div>
+                    <input id = "totalAmount" name = "amount" type = "hidden">
+                    <input name = "orderInfo" type = "hidden" value = "VNPAY">
                     <div class = "text-center">
                         <button class = "bookBtn btn1" type = "submit">Thanh toán</button>
                     </div>

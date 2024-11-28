@@ -9,7 +9,7 @@
             <br><br>
             <h1 class = "text-center">Đặt vé thành công!</h1><br>
             <div class = "text-center"><h1>Đã đặt: [[${bill.tickets.size()}]] ghế.</h1>
-                <h2>Tổng tiền: [[${bill.totalPrice}]].000 VNĐ</h2>
+                <h2>Tổng tiền: [[${bill.totalPrice}]] VNĐ</h2>
                 <h2>Thời gian đặt: [[${bill.dateCreated}]]</h2><br>
                 <div class = "container">
                     <table class = "booking-table">
@@ -39,7 +39,6 @@
                     </table>
                 </div>
             </div>
-            <br><img alt = "QR Code" class = "center-img" decoding = "async" fetchpriority = "high" th:src = "@{/images/qr.webp}"><br>
             <div class = "text-center button-container">
                 <a th:href = "@{/}">
                     <button class = "btn btn-primary" type = "submit">Quay về trang chủ</button>

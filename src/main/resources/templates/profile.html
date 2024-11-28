@@ -70,9 +70,11 @@
                                 <div class = "card-header" th:attr = "id='heading-' + ${bill.id}">
                                     <h2 class = "mb-0">
                                         <button class = "btn btn-link" data-bs-toggle = "collapse" style = text-decoration:none th:attr = "data-bs-target='#collapse-' + ${bill.id}, aria-controls='collapse-' + ${bill.id}" type = "button">
-                                            <span class = "fs-4"><strong style = color:#4caf50>Thời gian:</strong> [[${bill.dateCreated}]]</span>
-                                            <strong style = color:#4caf50>Tên phim:</strong> [[${bill.tickets[0].movieTitle}]] -
-                                            <strong style = color:#4caf50>Tổng tiền:</strong> [[${bill.totalPrice}]].000 VNĐ
+                                            <div style = "font-size: 1.2rem">
+                                                <strong style = color:#4caf50>Thời gian:</strong> [[${bill.dateCreated}]]
+                                                <strong style = color:#4caf50>Tên phim:</strong> [[${bill.tickets[0].movieTitle}]] -
+                                                <strong style = color:#4caf50>Tổng tiền:</strong> [[${bill.totalPrice}]] VNĐ
+                                            </div>
                                         </button>
                                     </h2>
                                 </div>

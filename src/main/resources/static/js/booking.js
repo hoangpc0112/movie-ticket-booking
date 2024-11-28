@@ -4,36 +4,37 @@ const checkBox = document.querySelectorAll('.checkbox-container input[type="chec
 const foodCheckboxes = document.querySelectorAll('.food-selection input[type="checkbox"]');
 const foodQuantities = document.querySelectorAll('.food-selection input[type="number"]');
 const bookButton = document.querySelector('.bookBtn');
+const totalAmountInput = document.getElementById('totalAmount'); // Thêm thẻ input ẩn để lưu tổng số tiền
 
 let checkedSeat = [];
 let seatTotal = 0;
 let foodTotal = 0;
 
 for (let i = 0; i < checkBox.length; i++) {
-    checkBox[i].addEventListener('click', displayValue)
+    checkBox[i].addEventListener('click', displayValue);
 }
 for (let i = 0; i < foodCheckboxes.length; i++) {
     foodCheckboxes[i].addEventListener('change', updateFoodTotal);
-    foodQuantities[i].addEventListener('input', updateFoodTotal)
+    foodQuantities[i].addEventListener('input', updateFoodTotal);
 }
 
 function displayValue(e) {
-    const money = 50;
+    const money = 50000; // Giá mỗi ghế
     let ans = "";
     if (e.target.checked) {
         checkedSeat.push(" " + getSeatLabel(e.target.id));
-        seatTotal += money
+        seatTotal += money;
     }
     else {
         ans = getSeatLabel(e.target.id);
         const index = checkedSeat.indexOf(" " + ans);
         if (index > -1) {
-            checkedSeat.splice(index, 1)
+            checkedSeat.splice(index, 1);
         }
-        seatTotal -= money
+        seatTotal -= money;
     }
     mySeats.innerHTML = checkedSeat.join(", ");
-    updateTotal()
+    updateTotal();
 }
 
 function updateFoodTotal() {
@@ -44,47 +45,48 @@ function updateFoodTotal() {
             let price = 0;
             switch (checkbox.value) {
                 case 'popcorn':
-                    price = 30;
+                    price = 30000; // Giá bỏng ngô
                     break;
                 case 'drink':
-                    price = 20;
+                    price = 20000; // Giá nước uống
                     break;
                 case 'combo':
-                    price = 40;
-                    break
+                    price = 40000; // Giá combo bỏng ngô + nước uống
+                    break;
             }
-            foodTotal += price * quantity
+            foodTotal += price * quantity;
         }
     });
-    updateTotal()
+    updateTotal();
 }
 
 function updateTotal() {
     const total = seatTotal + foodTotal;
     myPrice.innerHTML = total;
-    bookButton.innerHTML = `Thanh toán: ${total}.000 VNĐ`
+    bookButton.innerHTML = `Thanh toán: ${total} VNĐ`;
+    totalAmountInput.value = total; // Cập nhật giá trị cho thẻ input ẩn
 }
 
 function getSeatLabel(id) {
     let label = "";
     if (id <= 20) {
-        label += 'A'
+        label += 'A';
     }
     else if (id <= 40) {
-        label += 'B'
+        label += 'B';
     }
     else if (id <= 60) {
-        label += 'C'
+        label += 'C';
     }
     else if (id <= 80) {
-        label += 'D'
+        label += 'D';
     }
     else if (id <= 100) {
-        label += 'E'
+        label += 'E';
     }
     else {
-        label += 'F'
+        label += 'F';
     }
     label += (id % 20 === 0) ? 20 : id % 20;
-    return label
+    return label;
 }

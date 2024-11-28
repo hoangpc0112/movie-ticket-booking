@@ -2,6 +2,7 @@ package com.example.theater.controllers;
 
 import com.example.theater.entities.*;
 import com.example.theater.repositories.*;
+import com.example.theater.services.VNPAYService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +45,13 @@ public class TicketController {
 
     @Autowired
     private BillRepository billRepository;
+
+    @Autowired
+    private VNPAYService vnPayService;
+
+    private List <Food> foodList = new ArrayList <>();
+    private List <Ticket> ticketList = new ArrayList <>();
+    private Bill bill = new Bill();
 
     private String movieTitle;
     private String showTime;
@@ -141,99 +149,6 @@ public class TicketController {
         return "booking";
     }
 
-    @GetMapping ("/bill")
-    public String bookSeat (@RequestParam String title,
-                            @RequestParam (required = false) List <Integer> selectedSeats,
-                            @RequestParam (required = false) String[] food,
-                            @RequestParam (required = false) Integer popcornQty,
-                            @RequestParam (required = false) Integer drinkQty,
-                            @RequestParam (required = false) Integer comboQty,
-                            Model model,
-                            HttpServletRequest request) {
-        if (!movieRepository.findByTitle(title).isNowShowing()) {
-            errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
-            return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
-        }
-        if (selectedSeats == null || selectedSeats.isEmpty()) {
-            errorReport = "Quý khách vui lòng chọn ghế trước khi thanh toán.";
-            if (request.getHeader("Referer").contains("select")) {
-                return "redirect:/select?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&localTime=" + showTime + "&localDate=" + LocalDate.parse(showDate, dateFormatter);
-            }
-            else {
-                return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
-            }
-        }
-        errorReport = "Ghế ";
-        List <Integer> unavailableSeats = new ArrayList <>();
-        for (int selectedSeat : selectedSeats) {
-            if (ticketRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) {
-                unavailableSeats.add(selectedSeat);
-                errorReport += getSeatLabel(selectedSeat) + ", ";
-            }
-        }
-        if (!unavailableSeats.isEmpty()) {
-            errorReport = errorReport.substring(0, errorReport.length() - 2);
-            errorReport += " đã có người đặt trước, vui lòng chọn ghế khác.";
-            if (request.getHeader("Referer").contains("select")) {
-                return "redirect:/select?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&localTime=" + showTime + "&localDate=" + LocalDate.parse(showDate, dateFormatter);
-            }
-            else {
-                return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
-            }
-        }
-        errorReport = "";
-
-        String bookTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
-
-        int totalPrice = selectedSeats.size() * 50;
-        List <Food> foods = new ArrayList <>();
-        if (food != null) {
-            for (String item : food) {
-                switch (item) {
-                    case "popcorn":
-                        int popcornQuantity = (popcornQty != null) ? popcornQty : 1;
-                        totalPrice += 30 * popcornQuantity;
-                        foods.add(new Food("Bỏng ngô", popcornQuantity));
-                        break;
-                    case "drink":
-                        int drinkQuantity = (drinkQty != null) ? drinkQty : 1;
-                        totalPrice += 20 * drinkQuantity;
-                        foods.add(new Food("Đồ uống", drinkQuantity));
-                        break;
-                    case "combo":
-                        int comboQuantity = (comboQty != null) ? comboQty : 1;
-                        totalPrice += 40 * comboQuantity;
-                        foods.add(new Food("Combo: Bỏng ngô + Đồ uống", comboQuantity));
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        List <Ticket> tickets = new ArrayList <>();
-        for (int selectedSeat : selectedSeats) {
-            Ticket ticket = new Ticket(title, showTime, showDate, selectedSeat, getSeatLabel(selectedSeat));
-            tickets.add(ticket);
-        }
-
-        Bill bill = new Bill(totalPrice, bookTime, getLoggedUser(), tickets, foods);
-
-        for (Ticket ticket : tickets) {
-            ticket.setBill(bill);
-        }
-        for (Food foodItem : foods) {
-            foodItem.setBill(bill);
-        }
-
-        billRepository.save(bill);
-        ticketRepository.saveAll(tickets);
-        foodRepository.saveAll(foods);
-
-        model.addAttribute("bill", bill);
-        return "bill";
-    }
-
     private String getSeatLabel (int seatNo) {
         if (seatNo <= 20) {
             return "A" + (seatNo % 20 == 0 ? 20 : seatNo % 20);
@@ -271,5 +186,114 @@ public class TicketController {
         billRepository.save(bill);
 
         return "redirect:/profile?cancelTicket=true";
+    }
+
+    // Chuyển hướng người dùng đến cổng thanh toán VNPAY
+    @PostMapping ("/submitOrder")
+    public String submidOrder (@RequestParam String title,
+                               @RequestParam (required = false) List <Integer> selectedSeats,
+                               @RequestParam (required = false) String[] food,
+                               @RequestParam (required = false) Integer popcornQty,
+                               @RequestParam (required = false) Integer drinkQty,
+                               @RequestParam (required = false) Integer comboQty,
+                               @RequestParam ("amount") int orderTotal,
+                               @RequestParam (value = "orderInfo") String orderInfo,
+                               HttpServletRequest request) {
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String vnpayUrl = vnPayService.createOrder(request, orderTotal, orderInfo, baseUrl);
+        if (!movieRepository.findByTitle(title).isNowShowing()) {
+            errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
+            return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+        }
+        if (selectedSeats == null || selectedSeats.isEmpty()) {
+            errorReport = "Quý khách vui lòng chọn ghế trước khi thanh toán.";
+            if (request.getHeader("Referer").contains("select")) {
+                return "redirect:/select?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&localTime=" + showTime + "&localDate=" + LocalDate.parse(showDate, dateFormatter);
+            }
+            else {
+                return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+            }
+        }
+        errorReport = "Ghế ";
+        List <Integer> unavailableSeats = new ArrayList <>();
+        for (int selectedSeat : selectedSeats) {
+            if (ticketRepository.existsBySeatNoAndMovieTitleAndTimeAndDate(selectedSeat, title, showTime, showDate)) {
+                unavailableSeats.add(selectedSeat);
+                errorReport += getSeatLabel(selectedSeat) + ", ";
+            }
+        }
+        if (!unavailableSeats.isEmpty()) {
+            errorReport = errorReport.substring(0, errorReport.length() - 2);
+            errorReport += " đã có người đặt trước, vui lòng chọn ghế khác.";
+            if (request.getHeader("Referer").contains("select")) {
+                return "redirect:/select?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&localTime=" + showTime + "&localDate=" + LocalDate.parse(showDate, dateFormatter);
+            }
+            else {
+                return "redirect:/booking?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+            }
+        }
+        errorReport = "";
+
+        List <Food> foods = new ArrayList <>();
+        List <Ticket> tickets = new ArrayList <>();
+
+        if (food != null) {
+            for (String item : food) {
+                switch (item) {
+                    case "popcorn":
+                        int popcornQuantity = (popcornQty != null) ? popcornQty : 1;
+                        foods.add(new Food("Bỏng ngô", popcornQuantity));
+                        break;
+                    case "drink":
+                        int drinkQuantity = (drinkQty != null) ? drinkQty : 1;
+                        foods.add(new Food("Đồ uống", drinkQuantity));
+                        break;
+                    case "combo":
+                        int comboQuantity = (comboQty != null) ? comboQty : 1;
+                        foods.add(new Food("Combo: Bỏng ngô + Đồ uống", comboQuantity));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        for (int selectedSeat : selectedSeats) {
+            Ticket ticket = new Ticket(title, showTime, showDate, selectedSeat, getSeatLabel(selectedSeat));
+            tickets.add(ticket);
+        }
+
+        foodList = foods;
+        ticketList = tickets;
+
+        return "redirect:" + vnpayUrl;
+    }
+
+    // Sau khi hoàn tất thanh toán, VNPAY sẽ chuyển hướng trình duyệt về URL này
+    @GetMapping ("/vnpay-payment-return")
+    public String paymentCompleted (HttpServletRequest request, Model model) {
+        int paymentStatus = vnPayService.orderReturn(request);
+
+        String paymentTime = request.getParameter("vnp_PayDate");
+        String totalPrice = request.getParameter("vnp_Amount");
+
+        if (paymentStatus == 1) {
+            bill = new Bill(Integer.parseInt(totalPrice) / 100, LocalDateTime.parse(paymentTime, DateTimeFormatter.ofPattern("yyyyMMddHHmmss")).format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")), getLoggedUser(), ticketList, foodList);
+
+            for (Ticket ticket : ticketList) {
+                ticket.setBill(bill);
+            }
+            for (Food foodItem : foodList) {
+                foodItem.setBill(bill);
+            }
+
+            billRepository.save(bill);
+            ticketRepository.saveAll(ticketList);
+            foodRepository.saveAll(foodList);
+        }
+
+        model.addAttribute("bill", bill);
+
+        return paymentStatus == 1 ? "bill" : "orderFailed";
     }
 }
