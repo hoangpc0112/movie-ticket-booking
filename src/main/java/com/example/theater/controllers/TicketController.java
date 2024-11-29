@@ -196,11 +196,9 @@ public class TicketController {
                                @RequestParam (required = false) Integer popcornQty,
                                @RequestParam (required = false) Integer drinkQty,
                                @RequestParam (required = false) Integer comboQty,
-                               @RequestParam ("amount") int orderTotal,
+                               @RequestParam ("amount") String orderTotal,
                                @RequestParam (value = "orderInfo") String orderInfo,
                                HttpServletRequest request) {
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnPayService.createOrder(request, orderTotal, orderInfo, baseUrl);
         if (!movieRepository.findByTitle(title).isNowShowing()) {
             errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
             return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
@@ -233,6 +231,9 @@ public class TicketController {
             }
         }
         errorReport = "";
+
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String vnpayUrl = vnPayService.createOrder(request, Integer.parseInt(orderTotal), orderInfo, baseUrl);
 
         List <Food> foods = new ArrayList <>();
         List <Ticket> tickets = new ArrayList <>();
