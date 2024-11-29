@@ -182,7 +182,7 @@ public class TicketController {
         ticketRepository.delete(ticket);
 
         Bill bill = ticket.getBill();
-        bill.setTotalPrice(bill.getTotalPrice() - 50); // Trừ tiền vé vừa huỷ
+        bill.setTotalPrice(bill.getTotalPrice() - 50000); // Trừ tiền vé vừa huỷ
         billRepository.save(bill);
 
         return "redirect:/profile?cancelTicket=true";
