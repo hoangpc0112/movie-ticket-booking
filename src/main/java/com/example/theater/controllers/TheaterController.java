@@ -19,7 +19,7 @@ public class TheaterController {
     @Autowired
     private AppUserRepository appUserRepository;
 
-    @GetMapping ("/")
+    @GetMapping ("/") // trang chủ
     public String home (Model model) {
         model.addAttribute("movieList", movieRepository.findAll());
         model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByNowShowing(true));
@@ -27,19 +27,19 @@ public class TheaterController {
         return "home";
     }
 
-    @GetMapping ("/now-showing")
+    @GetMapping ("/now-showing") // phim đang chiếu
     public String nowShowing (Model model) {
         model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByNowShowing(true));
         return "now-showing";
     }
 
-    @GetMapping ("/coming-soon")
+    @GetMapping ("/coming-soon") // phim sắp chiếu
     public String comingSoon (Model model) {
         model.addAttribute("comingSoonMovieList", movieRepository.getAllMoviesByNowShowing(false));
         return "coming-soon";
     }
 
-    @GetMapping ("/search")
+    @GetMapping ("/search") // tìm kiếm
     public String search (@RequestParam ("keyword") String keyword, Model model) {
         model.addAttribute("keyword", keyword.trim());
         model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByKeyWordAndNowShowing(keyword.trim(), true));
@@ -47,23 +47,23 @@ public class TheaterController {
         return "search";
     }
 
-    @GetMapping ("/about-us")
+    @GetMapping ("/about-us") // giới thiệu về chúng tôi
     public String aboutUs () {
         return "about-us";
     }
 
-    @GetMapping ("/movie-input")
+    @GetMapping ("/movie-input") // nhập thông tin phim
     public String movieInput () {
         return "movie-input";
     }
 
-    @PostMapping ("/movie-input")
+    @PostMapping ("/movie-input") // xử lý thông tin phim
     public String movieInputProcess (@RequestParam String title, @RequestParam String posterUrl, @RequestParam String description, @RequestParam String releaseDate, @RequestParam String nowShowing, @RequestParam String trailerUrl, @RequestParam String genre, @RequestParam String director, @RequestParam String actors, @RequestParam String duration, @RequestParam String language, @RequestParam String rated, @RequestParam String bannerUrl, @RequestParam String keywords) {
         movieRepository.save(new Movie(title.trim(), posterUrl.trim(), description.trim(), releaseDate.trim(), nowShowing.trim(), trailerUrl.trim(), genre.trim(), director.trim(), actors.trim(), duration.trim(), language.trim(), rated.trim(), bannerUrl.trim(), keywords.trim()));
         return "movie-input";
     }
 
-    @GetMapping ("/genre")
+    @GetMapping ("/genre") // phim theo thể loại
     public String genre (@RequestParam String genre, Model model) {
         model.addAttribute("genre", genre);
         model.addAttribute("nowShowingMovieList", movieRepository.getAllMoviesByGenreAndNowShowing(genre, true));

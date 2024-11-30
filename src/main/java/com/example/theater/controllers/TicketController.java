@@ -61,9 +61,9 @@ public class TicketController {
     public AppUser getLoggedUser () {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return appUserRepository.findByUsername(username);
-    }
+    } // Lấy thông tin người dùng đang đăng nhập
 
-    @GetMapping ("/details")
+    @GetMapping ("/details") // Hiển thị thông tin chi tiết của một bộ phim
     public String test (@RequestParam ("title") String title, Model model) {
         model.addAttribute("errorReport", errorReport);
         Movie movie = movieRepository.findByTitle(title);
@@ -73,14 +73,14 @@ public class TicketController {
         return "details";
     }
 
-    @PostMapping ("/details")
+    @PostMapping ("/details") // Thêm bình luận cho một bộ phim
     public String details (@RequestParam String title, @RequestParam String content) {
         Movie movie = movieRepository.findByTitle(title);
         commentRepository.save(new Comment(SecurityContextHolder.getContext().getAuthentication().getName(), content.trim(), movie));
         return "redirect:/details?title=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
     }
 
-    @GetMapping ("/booking")
+    @GetMapping ("/booking") // Hiển thị trang chọn ghế
     public String booking (@RequestParam ("title") String title, Model model) {
         if (!movieRepository.findByTitle(title).isNowShowing()) {
             errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
@@ -123,7 +123,7 @@ public class TicketController {
         return "booking";
     }
 
-    @GetMapping ("/select")
+    @GetMapping ("/select") // Hiển thị trang chọn ghế theo thời gian và ngày chiếu
     public String select (@RequestParam ("title") String title, @RequestParam ("localTime") String localTime, @RequestParam ("localDate") String localDate, Model model) {
         if (!movieRepository.findByTitle(title).isNowShowing()) {
             errorReport = "Xin lỗi quý khách, phim hiện tại chưa chiếu.";
@@ -168,9 +168,9 @@ public class TicketController {
         else {
             return "F" + (seatNo % 20 == 0 ? 20 : seatNo % 20);
         }
-    }
+    } // Chuyển số ghế thành nhãn ghế
 
-    @PostMapping ("/cancel-ticket")
+    @PostMapping ("/cancel-ticket") // Huỷ vé đã đặt
     public String cancelTicket (@RequestParam ("seatId") String seatId) {
         Ticket ticket = ticketRepository.findById(Long.parseLong(seatId));
 

@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
+    @Bean // cấu hình cho đăng nhập đăng xuất và quyền truy cập
     public DefaultSecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/").permitAll()
@@ -48,12 +48,12 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean
+    @Bean // chuyển hướng sau khi đăng nhập thành công
     public SavedRequestAwareAuthenticationSuccessHandler savedRequestAwareAuthenticationSuccessHandler () {
         return new SavedRequestAwareAuthenticationSuccessHandler();
     }
 
-    @Bean
+    @Bean // mã hóa mật khẩu
     public PasswordEncoder passwordEncoder () {
         return new BCryptPasswordEncoder();
     }

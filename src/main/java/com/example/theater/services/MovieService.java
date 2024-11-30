@@ -16,10 +16,9 @@ public class MovieService {
     private MovieRepository movieRepository;
 
     @Scheduled (cron = "0 0 0 * * *")
-    public void updateMovies () {
+    public void updateMovies () { // cập nhật trạng thái phim khi đến ngày khởi chiếu
         for (Movie movie : movieRepository.findAll()) { // nếu ngày khởi chiếu sau ngày hôm nay thì false, còn lại true
             movie.setNowShowing(!LocalDate.parse(movie.getReleaseDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")).isAfter(LocalDate.now()));
-            // System.out.println(movie.getTitle() + " " + movie.isNowShowing());
             movieRepository.save(movie);
         }
     }

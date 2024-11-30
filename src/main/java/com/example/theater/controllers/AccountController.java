@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 @Controller
 public class AccountController {
 
+    // sử dung ScheduledExecutorService để hủy mã OTP sau 5 phút
     private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     @Autowired
@@ -46,16 +47,16 @@ public class AccountController {
     public AppUser getLoggedUser () {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return appUserRepository.findByUsername(username);
-    }
+    } // lấy thông tin người dùng đang đăng nhập
 
-    @GetMapping ("/register")
+    @GetMapping ("/register") // trả về trang đăng ký
     public String register (Model model) {
         model.addAttribute("registerDTO", new RegisterDTO());
         model.addAttribute("success", false);
         return "register";
     }
 
-    @PostMapping ("/register")
+    @PostMapping ("/register") // xử lý đăng ký
     public String register (@Valid @ModelAttribute ("registerDTO") RegisterDTO registerDTO, BindingResult bindingResult, Model model, HttpSession session) {
         if (registerDTO.getUsername().contains(" ")) {
             bindingResult.addError(new FieldError("registerDTO", "username", "Username không được chứa dấu cách."));
@@ -90,7 +91,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping ("/verify-email")
+    @PostMapping ("/verify-email") // xác thực email
     public String verifyEmail (@RequestParam ("otp") String otp, HttpSession session, Model model) {
         // System.out.println(otp);
 
@@ -124,12 +125,12 @@ public class AccountController {
         }
     }
 
-    @GetMapping ("/login")
+    @GetMapping ("/login") // trả về trang đăng nhập
     public String login () {
         return "login";
     }
 
-    @GetMapping ("/profile")
+    @GetMapping ("/profile") // trả về trang thông tin cá nhân
     public String profile (Model model,
                            @RequestParam (value = "successChangePassword", required = false, defaultValue = "false") String successChangePassword,
                            @RequestParam (value = "cancelTicket", required = false, defaultValue = "false") String cancelTicket,
@@ -157,20 +158,20 @@ public class AccountController {
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
         return String.valueOf(otp);
-    }
+    } // tạo mã OTP
 
     public void resetOtp (AppUser user) {
         user.setEmailOtp("");
         appUserRepository.save(user);
-    }
+    } // hủy mã OTP
 
-    @GetMapping ("/forgot-password")
+    @GetMapping ("/forgot-password") // trả về trang quên mật khẩu
     public String forgotPassword (Model model) {
         model.addAttribute("success", false);
         return "forgot-password";
     }
 
-    @PostMapping ("/forgot-password")
+    @PostMapping ("/forgot-password") // xử lý quên mật khẩu
     public String forgotPassword (@RequestParam ("email") String email, Model model) {
         if (appUserRepository.existsByEmail(email)) {
             String otp = generateOtp();
@@ -188,7 +189,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping ("/change-password")
+    @GetMapping ("/change-password") // trả về trang đổi mật khẩu
     public String changePassword (@RequestParam ("email") String email, @RequestParam ("otp") String otp, Model model) {
         AppUser user = appUserRepository.findByEmail(email);
         model.addAttribute("email", email);
@@ -203,7 +204,7 @@ public class AccountController {
         return "change-password";
     }
 
-    @PostMapping ("/change-password")
+    @PostMapping ("/change-password") // xử lý đổi mật khẩu
     public String changePasswordProcess (@RequestParam ("email") String email,
                                          @RequestParam ("password") String password,
                                          @RequestParam ("confirmPassword") String confirmPassword,
@@ -232,12 +233,12 @@ public class AccountController {
         return "login";
     }
 
-    @GetMapping ("/user-manual")
+    @GetMapping ("/user-manual") // trả về trang hướng dẫn sử dụng
     public String userManual () {
         return "user-manual";
     }
 
-    @PostMapping ("/update-profile")
+    @PostMapping ("/update-profile") // cập nhật thông tin cá nhân
     public String updateProfile (@RequestParam (value = "firstName", required = false) String firstName,
                                  @RequestParam (value = "lastName", required = false) String lastName,
                                  @RequestParam (value = "age", required = false) String age,

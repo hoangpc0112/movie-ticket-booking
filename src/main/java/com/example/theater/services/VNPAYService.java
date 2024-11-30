@@ -82,7 +82,7 @@ public class VNPAYService {
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = VNPAYConfig.vnp_PayUrl + "?" + queryUrl;
         return paymentUrl;
-    }
+    } // tạo đơn hàng
 
     public int orderReturn (HttpServletRequest request) {
         Map fields = new HashMap();
@@ -119,6 +119,6 @@ public class VNPAYService {
         else {
             return -1;
         }
-    }
+    } // kiểm tra trạng thái thanh toán
 
 }
